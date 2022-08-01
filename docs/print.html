@@ -1,0 +1,469 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Gren Programming Language</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="01_why_gren.html"><strong aria-hidden="true">1.</strong> Why Gren?</a></li><li class="chapter-item expanded "><a href="02_hello_world.html"><strong aria-hidden="true">2.</strong> Hello World</a></li><li class="chapter-item expanded "><a href="03_basic_syntax.html"><strong aria-hidden="true">3.</strong> Basic Syntax</a></li><li class="chapter-item expanded "><a href="90_faq.html"><strong aria-hidden="true">4.</strong> FAQ</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Gren Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="why-gren"><a class="header" href="#why-gren">Why Gren?</a></h1>
+<p>Gren is a programming language that helps you write simple and correct software.</p>
+<p>What does that mean?</p>
+<h2 id="simple"><a class="header" href="#simple">Simple</a></h2>
+<p>Gren measures simplicity by how many outcomes an operation can have. Take the following code as an example:</p>
+<pre><code class="language-js">a + b
+</code></pre>
+<p>In some languages, this can mean a lot of different things. Some languages allow you to override the definition of <code>+</code>, which means it might execute an arbitrary function. For some languages, this statement can either append one string to another, or add two numbers together. Some languages might even try to convert <code>a</code> and <code>b</code> to be the same type, before executing the <code>+</code> operation.</p>
+<p>In Gren, the above statement can only mean one thing: <code>a</code> and <code>b</code> are numbers, and the result is that of mathematical addition.</p>
+<p>The fact that this statement can only mean one thing is what makes it simple. When reading the code you can be very certain what the result of this operation is, as long as it compiles.</p>
+<p>Let's consider one more example, this one in JavaScript:</p>
+<pre><code class="language-js">function doubleA(obj) {
+    var a1 = obj.a;
+
+    verify(obj);
+    var a2 = obj.a;
+
+    return a1 + a2;
+}
+</code></pre>
+<p>Try to answer these questions:</p>
+<ol>
+<li>How many function calls do you see?</li>
+<li>Is the value of <code>obj</code> changed by any statement in this function?</li>
+<li>Does <code>a1</code> equal <code>a2</code>?</li>
+<li>What type does this function return?</li>
+<li>Will this function return?</li>
+</ol>
+<p>It might surprise you that, without knowing more of the surrounding context, you can't really answer any of these questions.</p>
+<ol>
+<li>JavaScript has a language feature called <em>getters</em>. This means that a statement like <code>obj.a</code> might actually call a function to compute a value. Without knowing how <code>obj</code> is defined, there's no way of knowing how many functions will be called.</li>
+<li>JavaScript allows mutation. The potential function call <code>obj.a</code>, and the actual function call <code>verify(obj)</code> might end up changing the <code>obj</code> value. You need to know how <code>obj</code> and <code>verify</code> is defined to be certain.</li>
+<li>Since <code>obj</code> can change, there's no way to know without knowing how <code>obj</code> and <code>verify</code> is defined. In languages that support threads, you also need to know if <code>obj</code> is accessible in any other thread.</li>
+<li><code>+</code> works on both numbers and strings. So it probably returns either a number or a string.</li>
+<li>Maybe. Any function call can throw an exception.</li>
+</ol>
+<p>Let's pretend the above code was written in Gren, could we answer the same questions with certainty then?</p>
+<ol>
+<li>Gren doesn't have getters, so the answer is 2 (<code>verify</code> and <code>+</code>).</li>
+<li>Gren doesn't have mutation, so the answer is no.</li>
+<li>Yes, because of (2).</li>
+<li>A number, since <code>+</code> only works on numbers.</li>
+<li>Gren doesn't support exceptions, so the answer is yes, if we ignore the possibility of infinite loops and running out of memory.</li>
+</ol>
+<p>The simplicity of Gren makes it easier to reason about code. Even when the code in question was written by someone else. The value of simplicity grows along with the size of your code base.</p>
+<h2 id="correct"><a class="header" href="#correct">Correct</a></h2>
+<p>There are certain constructs that Gren doesn't have, that are often the source of bugs in other languages. These things are:</p>
+<ol>
+<li>Null</li>
+<li>Exceptions</li>
+<li>Uncontrolled side-effects</li>
+</ol>
+<p>What Gren <em>does have</em> is a flexible, although strict, type system which allows you represent these constructs in a way that let's the compiler help you avoid the most common bugs.</p>
+<p>Instead of <code>null</code>, Gren let's you express the absense of a value by using what is known as a custom type:</p>
+<pre><code class="language-gren">type Maybe a
+  = Just a
+  | Nothing
+</code></pre>
+<p>This type represents a value which may, or may not, exist. Whenever you try to use this value, the compiler will force you to check if you have a <code>Just</code> or <code>Nothing</code>.</p>
+<p>The same principle applies to exceptions. Representing an operation which may cause an error is represented by the type:</p>
+<pre><code class="language-gren">type Result err ok
+  = Ok ok
+  | Err err
+</code></pre>
+<p>If a function returns a <code>Result</code> value, the compiler will force you to handle both the success and the failure condition.</p>
+<p>Consider for a moment what this means. Since Gren is statically typed, that means that whenever you see a function which <em>doesn't</em> return a <code>Maybe</code> or a <code>Result</code> type, you can be certain that you'll always end up with the promised return value.</p>
+<p>The same concept applies to side-effects like performing HTTP calls or saving things to disk. A side effect has to be modelled by the type system, and this also means that you have greater insights into the sort of things a third-party package can do.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>Gren has made a very specific set of trade offs that makes it easy to locate and isolate bugs and side effects. These same trade offs also make the language small in both syntax and concepts. This again reduces the necessary time investment to learn the language, and makes it easy for the compiler to provide detailed and helpful error messages.</p>
+<p>These benefits comes at the cost of brevity. There's a chance that other programming languages will allow you to write less code.</p>
+<p>It is our belief that as your program grows in complexity and scope, the trade offs made by Gren make more and more sense.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hello-world"><a class="header" href="#hello-world">Hello, world!</a></h1>
+<p>Getting a simple program to compile is a good way to verify that you've got everything setup correctly. Let's try to write a Gren program that outputs &quot;Hello, world!&quot; when opened up in browser.</p>
+<p>If you haven't already, make sure you've <a href="/install">installed Gren</a>.</p>
+<p>When you've setup the compiler correctly, it's time to initialize our project. We're going to assume that you've got a bash terminal setup.</p>
+<h2 id="grenjson"><a class="header" href="#grenjson">Gren.json</a></h2>
+<p>Start by creating a <code>hello_world</code> directory, and <code>cd</code> into it.</p>
+<p>Every Gren project contains a <code>gren.json</code> file. This file contains all the information that the compiler needs to compile your program. You can create such a file by running <code>gren init</code>.</p>
+<pre><code class="language-sh">robin@bekk-mac-2715 ~/W/g/tmp&gt; gren init
+Hello! Gren projects always start with an gren.json file. I can create them!
+
+Would you like me to create an gren.json file now? [Y/n]:
+Updating gren-lang/browser... Ok!
+Updating gren-lang/core... Ok!
+Updating gren-lang/html... Ok!
+Updating gren-lang/json... Ok!
+Updating gren-lang/time... Ok!
+Updating gren-lang/url... Ok!
+Updating gren-lang/virtual-dom... Ok!
+Okay, I created it.
+</code></pre>
+<p>The compiler will create a <code>gren.json</code> file for you that lists a few dependencies required to compile a simple browser based application. These dependencies are then downloaded, which explains the output you see above.</p>
+<p>The <code>gren.json</code> file should look something like the following:</p>
+<pre><code class="language-json">{
+    &quot;type&quot;: &quot;application&quot;,
+    &quot;source-directories&quot;: [
+        &quot;src&quot;
+    ],
+    &quot;gren-version&quot;: &quot;0.1.0&quot;,
+    &quot;dependencies&quot;: {
+        &quot;direct&quot;: {
+            &quot;gren-lang/browser&quot;: &quot;1.0.0&quot;,
+            &quot;gren-lang/core&quot;: &quot;1.0.0&quot;,
+            &quot;gren-lang/html&quot;: &quot;1.0.0&quot;
+        },
+        &quot;indirect&quot;: {
+            &quot;gren-lang/json&quot;: &quot;1.0.0&quot;,
+            &quot;gren-lang/time&quot;: &quot;1.0.0&quot;,
+            &quot;gren-lang/url&quot;: &quot;1.0.0&quot;,
+            &quot;gren-lang/virtual-dom&quot;: &quot;1.0.0&quot;
+        }
+    },
+    &quot;test-dependencies&quot;: {
+        &quot;direct&quot;: {},
+        &quot;indirect&quot;: {}
+    }
+}
+</code></pre>
+<p>Let's explain this property by property:</p>
+<ul>
+<li><code>type</code>: this tells the compiler that we're attempting to compile a Gren application, as opposed to a package. Packages have slightly different <code>gren.json</code> files. You can see an example if you run <code>gren init --package</code>.</li>
+<li><code>source-directories</code>: This lists every sub-folder that the compiler should look for Gren source files in. This is usually fine as is.</li>
+<li><code>gren-version</code>: Which version of the compiler is this application compatible with. If you're using an unsupported compiler, it will not compile.</li>
+<li><code>dependencies</code>: Lists the packages required for you application to function. Direct dependencies are those which you application make direct use of, while indirect dependencies are usually required by your direct dependencies.</li>
+<li><code>test-dependencies</code>: Unused for now, as Gren hasn't gotten a test framework yet.</li>
+</ul>
+<p>Your <code>gren.json</code> should be good enough for what we're about to do, so let's write some actual code.</p>
+<h2 id="writing-your-program"><a class="header" href="#writing-your-program">Writing your program</a></h2>
+<p>Create a <code>src/Main.gren</code> file and fill it with the following content:</p>
+<pre><code class="language-gren">module Main exposing (main)
+
+import Html exposing (Html)
+
+main : Html a
+main =
+  Html.text &quot;Hello, world!&quot;
+</code></pre>
+<p>We create a new module, called <code>Main</code> and expose the <code>main</code> constant from it.</p>
+<p>Then, we import the <code>Html</code> module (from the <code>gren-lang/html</code> package listed in our dependencies) and expose the <code>Html</code> type to our module.</p>
+<p>Our <code>main</code> constant represents a <code>Html</code> value, which in this particular case is just the text <code>Hello, world!</code>.</p>
+<p>Compile this using <code>gren make src/Main.gren</code>. This will produce a <code>index.html</code> file which, when opened, displays <code>Hello, world!</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="syntax"><a class="header" href="#syntax">Syntax</a></h1>
+<h2 id="comments"><a class="header" href="#comments">Comments</a></h2>
+<p>Lines starting with <code>--</code> are ignored by the compiler, and are useful for describing somethings to human readers.</p>
+<pre><code class="language-gren">-- Nothing to see here
+</code></pre>
+<p>You can also use <code>{- -}</code> to have comments span multiple lines.</p>
+<pre><code class="language-gren">{- This comment
+spans
+multiple lines
+-}
+</code></pre>
+<h2 id="constants"><a class="header" href="#constants">Constants</a></h2>
+<p>You can attach names to values. Named values are called constants, because once defined those names can never refer to another value.</p>
+<pre><code class="language-gren">theAnswer = 42
+
+aQuestion = &quot;What was the question again?&quot;
+
+helpful = False
+</code></pre>
+<h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
+<p>A function returns different values depending on its input. In Gren, a function will always return the same result if provided the same input.</p>
+<pre><code class="language-gren">sumOf first second =
+    first + second
+
+sumOfFiveAndTwo =
+    sumOf 5 2
+</code></pre>
+<p>Here, <code>sumOf</code> is the name of the function, while <code>first</code> and <code>second</code> are the inputs to the function. The return value of <code>sumOf</code>, is the last computed expression. In this case, the only expression is <code>first + second</code>, the result of which becomes the returned value.</p>
+<h2 id="types"><a class="header" href="#types">Types</a></h2>
+<p>Gren is a staticly typed language, which means that every constant and function are associated with a type, and the use of these types are checked by the compiler to be correct. If you have a function which is defined to accept to integers, the compiler will complain if you were to pass that function something other than two integers.</p>
+<p>You might've noticed that you didn't need to specify types in the examples above. That's because Gren is usually smart enought to figure out the types without your help.</p>
+<pre><code class="language-gren">theAnswer : Int
+theAnswer = 42
+
+aQuestion : String
+aQuestion = &quot;What was the question again?&quot;
+
+helpful : Bool
+helpful = False
+
+sumOf : Int -&gt; Int -&gt; Int
+sumOf first second =
+    first + second
+
+sumOfFiveAndTwo : Int
+sumOfFiveAndTwo =
+    sumOf 5 2
+</code></pre>
+<p><code>:</code> can be read as <code>has type</code>. One way to read the first constant definition in the above example is: theAnswer has type Int. theAnswer equals 42.</p>
+<p>For functions it get's a little bit more complicated. <code>-&gt;</code> can be read as <code>to</code>. So: sumOf has type Int to Int to Int. sumOf first and second equals first + second.</p>
+<p>When reading the type signature of a function, the last <code>-&gt;</code> points to the return value of the function, while the types before represent the inputs.</p>
+<h2 id="arrays"><a class="header" href="#arrays">Arrays</a></h2>
+<p>You can group several values in an array.</p>
+<pre><code class="language-gren">numbers : Array Int
+numbers =
+    [ 1, 2, 3, 4, 5 ]
+</code></pre>
+<p>All values in an array must be of the same type. You cannot have an array of <code>String</code> <em>and</em> <code>Int</code>, for instance.</p>
+<h2 id="records"><a class="header" href="#records">Records</a></h2>
+<p>You can also group different types of named values in a record.</p>
+<pre><code>twoSugars =
+  { ingredient = &quot;Sugar cube&quot;
+  , quantity = 2
+  }
+
+cupOfCoffee =
+  { ingredient = &quot;Cup of coffee&quot;
+  , quantity = 1
+  }
+
+sweetCoffeeCup : Array { ingredient : String, quantity : Int }
+sweetCoffeeCup =
+  [ cupOfCoffee, twoSugars ]
+</code></pre>
+<p>An interesting thing to note is that record types follow the shape of a record. Two records with the same names with the same associated types, are equal, even when defined in different modules.</p>
+<p>The types can become rather painful to write, though, so Gren also supports type aliasing.</p>
+<pre><code>type alias QuantifiedIngredient =
+  { ingredient : String
+  , quantity : Int
+  }
+
+sweetCoffeeCup : Array QuantifiedIngredient
+sweetCoffeeCup =
+  [ cupOfCoffee, twoSugars ]
+</code></pre>
+<p>It can be useful to create a record which contains mostly the same values as some other record, but with a few modifications. Gren supports this through special syntax:</p>
+<pre><code class="language-gren">fourSugars =
+  { twoSugars
+    | quantity = 4
+  }
+</code></pre>
+<p>The above example creates a new record, called <code>fourSugars</code>, which contains the same values as <code>twoSugars</code>, except that the <code>quantity</code> property has a value of <code>4</code> instead of <code>2</code>.</p>
+<h2 id="custom-types"><a class="header" href="#custom-types">Custom Types</a></h2>
+<p>Sometimes it's helpful with values that can be in one of several states. This can be useful to represent values that may be absent, or operations which can succeed and fail, or cases where you'd typically use enums in other languages.</p>
+<p>In Gren, this concept is known as custom types.</p>
+<pre><code class="language-gren">type Maybe a
+    = Just a
+    | Nothing
+</code></pre>
+<p>The type <code>Maybe</code> can be one of two things. Either it's <code>Just a</code> where <code>a</code> is a generic type, or it's <code>Nothing</code> in which case there is no associated data attached.</p>
+<p>On its own, custom types arent very helpful, but in combination with pattern matching they allow for some pretty interesting possibilities.</p>
+<h2 id="pattern-matching"><a class="header" href="#pattern-matching">Pattern matching</a></h2>
+<p>When dealing with custom types, you likely want to do different things based on the actual value of the custom type. The <code>case of</code> expression provides this flexibility.</p>
+<pre><code class="language-gren">explainHeldItem : Maybe String -&gt; String
+explainHeldItem maybeItem =
+    case maybeItem of
+        Nothing -&gt;
+          &quot;You're not holding anything&quot;
+
+        Just item -&gt;
+          &quot;You're holding a &quot; ++ item
+
+
+holdingSword : String
+holdingSword =
+    explainHeldItem (Just &quot;Sword&quot;)
+</code></pre>
+<p>You can use pattern matching on other things than just custom types. Like integers:</p>
+<pre><code class="language-gren">isZero : Int -&gt; Bool
+isZero num =
+    case num of
+        0 -&gt; True
+        _ -&gt; False
+</code></pre>
+<p>Or even records:</p>
+<pre><code class="language-gren">combineIngredients : QuantifiedIngredient -&gt; QuantifiedIngredient -&gt; QuantifiedIngredient
+combineIngredients left right =
+    case { leftQty = left.quantity, rightQty = right.quantity } of
+        { leftQty = 0 } -&gt;
+            right
+
+        { rightQty = 0 } -&gt;
+            left
+
+        _ -&gt;
+            { ingredient = left.ingredient ++ &quot; and &quot; ++ right.ingredient
+            , quantity = left.quantity + right.quantity
+            }
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h1>
+<h2 id="why-is-the-language-called-gren"><a class="header" href="#why-is-the-language-called-gren">Why is the language called Gren?</a></h2>
+<p>Gren is a norwegian word, meaning branch. This pays homage to both of Gren's origins: Norway and Elm.</p>
+<h2 id="why-is-grens-logo-a-bird"><a class="header" href="#why-is-grens-logo-a-bird">Why is Gren's logo a bird?</a></h2>
+<p>The bird is a robin, which happens to be the name of Gren's founder. The robin is placed within the G, which is meant to symbolize that it is sitting on G(ren), which is the norwegian word for branch.</p>
+<h2 id="what-is-the-relationship-between-gren-and-elm"><a class="header" href="#what-is-the-relationship-between-gren-and-elm">What is the relationship between Gren and Elm?</a></h2>
+<p>Gren started as a fork of Elm. This is mostly considered to be an implementation detail, a way to speed up initial development.</p>
+<p>It's not a goal of Gren to become a replacement, or stay compatible in any way, with Elm.</p>
+<h2 id="what-are-the-differences-between-gren-and-elm"><a class="header" href="#what-are-the-differences-between-gren-and-elm">What are the differences between Gren and Elm?</a></h2>
+<p>As of Gren 0.1.0, the main differences is that Gren has:</p>
+<ul>
+<li>A git-based package manager. It's slower, but has access to any github repo that you have, even private ones.</li>
+<li>Extended support for pattern matching on records.</li>
+<li>The default sequential data structure is an immutable array, not a linked list.</li>
+<li>No tuples.</li>
+<li>No automatic constructors for type aliased records.</li>
+<li>No GLSL syntax.</li>
+<li>No reactor.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+    </body>
+</html>
