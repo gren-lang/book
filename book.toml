@@ -1,0 +1,9 @@
+[book]
+authors = ["Robin Heggelund Hansen"]
+language = "en"
+multilingual = false
+src = "src"
+title = "The Gren Programming Language"
+
+[build]
+build-dir = "dist"
