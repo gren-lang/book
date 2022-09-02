@@ -7,3 +7,4 @@ title = "The Gren Programming Language"
 
 [build]
 build-dir = "docs"
+create-missing = false
