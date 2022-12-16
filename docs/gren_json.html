@@ -4,8 +4,10 @@
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>gren.json - The Gren Programming Language</title>
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -16,25 +18,28 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -50,7 +55,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -62,7 +67,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -83,7 +88,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -93,7 +98,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -110,6 +115,7 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -123,8 +129,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -134,58 +141,77 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2 id="grenjson"><a class="header" href="#grenjson">Gren.json</a></h2>
-<p>Start by creating a <code>hello_world</code> directory, and <code>cd</code> into it.</p>
-<p>Every Gren project contains a <code>gren.json</code> file. This file contains all the information that the compiler needs to compile your program. You can create such a file by running <code>gren init</code>.</p>
-<pre><code class="language-sh">robin@bekk-mac-2715 ~/W/g/tmp&gt; gren init
-Hello! Gren projects always start with an gren.json file. I can create them!
-
-Would you like me to create an gren.json file now? [Y/n]:
-Updating gren-lang/browser... Ok!
-Updating gren-lang/core... Ok!
-Updating gren-lang/html... Ok!
-Updating gren-lang/json... Ok!
-Updating gren-lang/time... Ok!
-Updating gren-lang/url... Ok!
-Updating gren-lang/virtual-dom... Ok!
-Okay, I created it.
-</code></pre>
-<p>The compiler will create a <code>gren.json</code> file for you that lists a few dependencies required to compile a simple browser based application. These dependencies are then downloaded, which explains the output you see above.</p>
+                        <h1 id="grenjson"><a class="header" href="#grenjson">Gren.json</a></h1>
+<p>Every Gren project is required to have a <code>gren.json</code> file. This file contains information about how to compile the project, and which platform to compile the project for.</p>
+<p>There are two different types of project: applications and packages.</p>
+<p>Depending on the type of project, the <code>gren.json</code> looks slightly different.</p>
+<h2 id="applications"><a class="header" href="#applications">Applications</a></h2>
 <p>The <code>gren.json</code> file should look something like the following:</p>
 <pre><code class="language-json">{
     &quot;type&quot;: &quot;application&quot;,
+    &quot;platform&quot;: &quot;browser&quot;,
     &quot;source-directories&quot;: [
         &quot;src&quot;
     ],
-    &quot;gren-version&quot;: &quot;0.1.0&quot;,
+    &quot;gren-version&quot;: &quot;0.2.0&quot;,
     &quot;dependencies&quot;: {
         &quot;direct&quot;: {
             &quot;gren-lang/browser&quot;: &quot;1.0.0&quot;,
-            &quot;gren-lang/core&quot;: &quot;1.0.0&quot;,
-            &quot;gren-lang/html&quot;: &quot;1.0.0&quot;
+            &quot;gren-lang/core&quot;: &quot;1.0.0&quot;
         },
         &quot;indirect&quot;: {
-            &quot;gren-lang/json&quot;: &quot;1.0.0&quot;,
-            &quot;gren-lang/time&quot;: &quot;1.0.0&quot;,
-            &quot;gren-lang/url&quot;: &quot;1.0.0&quot;,
-            &quot;gren-lang/virtual-dom&quot;: &quot;1.0.0&quot;
+            &quot;gren-lang/url&quot;: &quot;1.0.0&quot;
         }
-    },
-    &quot;test-dependencies&quot;: {
-        &quot;direct&quot;: {},
-        &quot;indirect&quot;: {}
     }
 }
 </code></pre>
 <p>Let's explain this property by property:</p>
 <ul>
-<li><code>type</code>: this tells the compiler that we're attempting to compile a Gren application, as opposed to a package. Packages have slightly different <code>gren.json</code> files. You can see an example if you run <code>gren init --package</code>.</li>
-<li><code>source-directories</code>: This lists every sub-folder that the compiler should look for Gren source files in. This is usually fine as is.</li>
-<li><code>gren-version</code>: Which version of the compiler is this application compatible with. If you're using an unsupported compiler, it will not compile.</li>
-<li><code>dependencies</code>: Lists the packages required for you application to function. Direct dependencies are those which you application make direct use of, while indirect dependencies are usually required by your direct dependencies.</li>
-<li><code>test-dependencies</code>: Unused for now, as Gren hasn't gotten a test framework yet.</li>
+<li><code>type</code>: This tells the compiler that we're attempting to compile an application.</li>
+<li><code>platform</code>: Which platform are we expecting to run our application on? Can either be <code>browser</code> or <code>node</code>.</li>
+<li><code>source-directories</code>: This lists every sub-folder that the compiler should look for Gren source files in. This is usually fine as-is.</li>
+<li><code>gren-version</code>: Which version of the compiler is this application compatible with. If you're using an unsupported compiler, it will refuse to compile.</li>
+<li><code>dependencies</code>: Lists the packages that your application depends on. Direct dependencies are those which you application make direct use of, while indirect dependencies are required by your direct dependencies. The reason that both types of dependencies are listed in your <code>gren.json</code> file, is to make sure we always retrieve the same version of a given dependency. Each package name resolves to a github <code>author/projcect</code> name. Versions need to be formatted according to the <code>semver</code> specification, and must target a concrete version (no ranges).</li>
 </ul>
-<p>Your <code>gren.json</code> should be good enough for what we're about to do, so let's write some actual code.</p>
+<h2 id="packages"><a class="header" href="#packages">Packages</a></h2>
+<p>The <code>gren.json</code> file for packages should look something like this:</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;package&quot;,
+  &quot;platform&quot;: &quot;common&quot;,
+  &quot;name&quot;: &quot;yarl/stuff&quot;,
+  &quot;summary&quot;: &quot;Yarl's reusable Gren code&quot;,
+  &quot;license&quot;: &quot;BSD-3-Clause&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;gren-version&quot;: &quot;0.2.0 &lt;= v &lt; 0.3.0&quot;,
+  &quot;exposed-modules&quot;: {
+    &quot;Primitives&quot;: [&quot;ModuleOne&quot;, &quot;ModuleTwo&quot;],
+  },
+  &quot;dependencies&quot;: {
+    &quot;gren-lang/core&quot;: &quot;1.0.0 &lt;= v &lt; 2.0.0&quot;
+  }
+}
+</code></pre>
+<p>Let's explain this property by property:</p>
+<ul>
+<li><code>type</code>: This tells the compiler that we're attempting to compile a package. Code that can be reused in other packages and applications.</li>
+<li><code>platform</code>: Which platform is this package compatible with? Can either be <code>browser</code>,<code>node</code> or <code>common</code> which is to say it should work on any platform.</li>
+<li><code>name</code>: The name of the package. This should match the <code>author/project</code> path on Github. Currently, only Github is supported.</li>
+<li><code>summary</code>: A brief (80 characters maximum) summary of what your project does.</li>
+<li><code>license</code>: Specifies how your code is licensed.</li>
+<li><code>version</code>: The current semantic version of the package.</li>
+<li><code>gren-version</code>: Which version range of the compiler is this package compatible with.</li>
+<li><code>exposed-modules</code>: Specifies the modules that are importable in other projects. Can be a list of module names or, as is the case here, an object that categorize the exposed modules. The object format is relevant when generating documentation.</li>
+<li><code>dependencies</code>: Other packages that this package depends on. Notice that packages doesn't have references to indirect dependencies, and that versions are specified in ranges instead of being specific. When compiling your package directly, the lowest specified version will be selected. When compiled as part of another package or application, the lowest compatible version will be selected.</li>
+</ul>
+<h2 id="gren-init"><a class="header" href="#gren-init">gren init</a></h2>
+<p>The compiler includes a command for generating <code>gren.json</code> files for new projects, to simplify setup.</p>
+<p>To generate:</p>
+<ul>
+<li>browser-based application: <code>gren init</code></li>
+<li>browser-based package: <code>gren init --package</code></li>
+<li>any application: <code>gren init --platform &lt;browser|node&gt;</code></li>
+<li>any package: <code>gren init --package --platform &lt;common|browser|node&gt;</code></li>
+</ul>
 
                     </main>
 
@@ -194,9 +220,11 @@ Okay, I created it.
                             <a rel="prev" href="syntax/pattern_matching.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
+
                             <a rel="next" href="faq.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
@@ -206,6 +234,7 @@ Okay, I created it.
                     <a rel="prev" href="syntax/pattern_matching.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
+
                     <a rel="next" href="faq.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
@@ -213,16 +242,40 @@ Okay, I created it.
 
         </div>
 
-        <script type="text/javascript">
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
+
+
     </body>
 </html>
