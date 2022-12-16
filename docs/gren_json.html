@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Hello World - The Gren Programming Language</title>
+        <title>gren.json - The Gren Programming Language</title>
 
 
         <!-- Custom HTML head -->
@@ -80,7 +80,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="why_gren.html"><strong aria-hidden="true">1.</strong> Why Gren?</a></li><li class="chapter-item expanded "><a href="hello_world.html" class="active"><strong aria-hidden="true">2.</strong> Hello World</a></li><li class="chapter-item expanded affix "><li class="part-title">Syntax</li><li class="chapter-item expanded "><a href="syntax/modules.html"><strong aria-hidden="true">3.</strong> Modules</a></li><li class="chapter-item expanded "><a href="syntax/constants.html"><strong aria-hidden="true">4.</strong> Constants</a></li><li class="chapter-item expanded "><a href="syntax/functions.html"><strong aria-hidden="true">5.</strong> Functions</a></li><li class="chapter-item expanded "><a href="syntax/comments.html"><strong aria-hidden="true">6.</strong> Comments</a></li><li class="chapter-item expanded "><a href="syntax/types.html"><strong aria-hidden="true">7.</strong> Types</a></li><li class="chapter-item expanded "><a href="syntax/arrays.html"><strong aria-hidden="true">8.</strong> Arrays</a></li><li class="chapter-item expanded "><a href="syntax/records.html"><strong aria-hidden="true">9.</strong> Records</a></li><li class="chapter-item expanded "><a href="syntax/custom_types.html"><strong aria-hidden="true">10.</strong> Custom Types</a></li><li class="chapter-item expanded "><a href="syntax/pattern_matching.html"><strong aria-hidden="true">11.</strong> Pattern Matching</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="gren_json.html"><strong aria-hidden="true">12.</strong> gren.json</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">13.</strong> FAQ</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="why_gren.html"><strong aria-hidden="true">1.</strong> Why Gren?</a></li><li class="chapter-item expanded "><a href="hello_world.html"><strong aria-hidden="true">2.</strong> Hello World</a></li><li class="chapter-item expanded affix "><li class="part-title">Syntax</li><li class="chapter-item expanded "><a href="syntax/modules.html"><strong aria-hidden="true">3.</strong> Modules</a></li><li class="chapter-item expanded "><a href="syntax/constants.html"><strong aria-hidden="true">4.</strong> Constants</a></li><li class="chapter-item expanded "><a href="syntax/functions.html"><strong aria-hidden="true">5.</strong> Functions</a></li><li class="chapter-item expanded "><a href="syntax/comments.html"><strong aria-hidden="true">6.</strong> Comments</a></li><li class="chapter-item expanded "><a href="syntax/types.html"><strong aria-hidden="true">7.</strong> Types</a></li><li class="chapter-item expanded "><a href="syntax/arrays.html"><strong aria-hidden="true">8.</strong> Arrays</a></li><li class="chapter-item expanded "><a href="syntax/records.html"><strong aria-hidden="true">9.</strong> Records</a></li><li class="chapter-item expanded "><a href="syntax/custom_types.html"><strong aria-hidden="true">10.</strong> Custom Types</a></li><li class="chapter-item expanded "><a href="syntax/pattern_matching.html"><strong aria-hidden="true">11.</strong> Pattern Matching</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="gren_json.html" class="active"><strong aria-hidden="true">12.</strong> gren.json</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">13.</strong> FAQ</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -141,47 +141,87 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="hello-world"><a class="header" href="#hello-world">Hello, world!</a></h1>
-<p>Getting a simple program to compile is a good way to verify that you've got everything setup correctly. Let's try to write a Gren program that outputs &quot;Hello, world!&quot; when opened up in a browser.</p>
-<p>If you haven't already: <a href="/install">install Gren</a>.</p>
-<p>Once you've setup the compiler correctly, it's time to initialize our project. We're going to assume that you've got a bash terminal setup.</p>
-<h2 id="setting-up-your-project"><a class="header" href="#setting-up-your-project">Setting up your project</a></h2>
-<p>Start by creating a <code>hello_world</code> directory, and <code>cd</code> into it.</p>
-<p>Every Gren project has a <code>gren.json</code> file. This file contains all the information that the compiler needs to compile your program. You can create such a file by running <code>gren init</code>.</p>
-<pre><code class="language-sh">~/W/g/hello_world&gt; gren init
-Hello! Gren projects always start with an gren.json file. I can create them!
-
-Would you like me to create an gren.json file now? [Y/n]:
-Retrieving versions for gren-lang/core... Ok!
-Retrieving versions for gren-lang/browser... Ok!
-Okay, I created it.
+                        <h1 id="grenjson"><a class="header" href="#grenjson">Gren.json</a></h1>
+<p>Every Gren project is required to have a <code>gren.json</code> file. This file contains information about how to compile the project, and which platform to compile the project for.</p>
+<p>There are two different types of project: applications and packages.</p>
+<p>Depending on the type of project, the <code>gren.json</code> looks slightly different.</p>
+<h2 id="applications"><a class="header" href="#applications">Applications</a></h2>
+<p>The <code>gren.json</code> file should look something like the following:</p>
+<pre><code class="language-json">{
+    &quot;type&quot;: &quot;application&quot;,
+    &quot;platform&quot;: &quot;browser&quot;,
+    &quot;source-directories&quot;: [
+        &quot;src&quot;
+    ],
+    &quot;gren-version&quot;: &quot;0.2.0&quot;,
+    &quot;dependencies&quot;: {
+        &quot;direct&quot;: {
+            &quot;gren-lang/browser&quot;: &quot;1.0.0&quot;,
+            &quot;gren-lang/core&quot;: &quot;1.0.0&quot;
+        },
+        &quot;indirect&quot;: {
+            &quot;gren-lang/url&quot;: &quot;1.0.0&quot;
+        }
+    }
+}
 </code></pre>
-<p>When run without any arguments, <code>gren init</code> creates a <code>gren.json</code> file in the current directory that defines a browser application. You can read more about the <code>gren.json</code> file in the appendix.</p>
-<h2 id="writing-your-program"><a class="header" href="#writing-your-program">Writing your program</a></h2>
-<p>Create a <code>src/Main.gren</code> file and fill it with the following content:</p>
-<pre><code class="language-gren">module Main exposing (main)
-
-import Html
-
-main =
-  Html.text &quot;Hello, world!&quot;
+<p>Let's explain this property by property:</p>
+<ul>
+<li><code>type</code>: This tells the compiler that we're attempting to compile an application.</li>
+<li><code>platform</code>: Which platform are we expecting to run our application on? Can either be <code>browser</code> or <code>node</code>.</li>
+<li><code>source-directories</code>: This lists every sub-folder that the compiler should look for Gren source files in. This is usually fine as-is.</li>
+<li><code>gren-version</code>: Which version of the compiler is this application compatible with. If you're using an unsupported compiler, it will refuse to compile.</li>
+<li><code>dependencies</code>: Lists the packages that your application depends on. Direct dependencies are those which you application make direct use of, while indirect dependencies are required by your direct dependencies. The reason that both types of dependencies are listed in your <code>gren.json</code> file, is to make sure we always retrieve the same version of a given dependency. Each package name resolves to a github <code>author/projcect</code> name. Versions need to be formatted according to the <code>semver</code> specification, and must target a concrete version (no ranges).</li>
+</ul>
+<h2 id="packages"><a class="header" href="#packages">Packages</a></h2>
+<p>The <code>gren.json</code> file for packages should look something like this:</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;package&quot;,
+  &quot;platform&quot;: &quot;common&quot;,
+  &quot;name&quot;: &quot;yarl/stuff&quot;,
+  &quot;summary&quot;: &quot;Yarl's reusable Gren code&quot;,
+  &quot;license&quot;: &quot;BSD-3-Clause&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;gren-version&quot;: &quot;0.2.0 &lt;= v &lt; 0.3.0&quot;,
+  &quot;exposed-modules&quot;: {
+    &quot;Primitives&quot;: [&quot;ModuleOne&quot;, &quot;ModuleTwo&quot;],
+  },
+  &quot;dependencies&quot;: {
+    &quot;gren-lang/core&quot;: &quot;1.0.0 &lt;= v &lt; 2.0.0&quot;
+  }
+}
 </code></pre>
-<p>We create a new module, called <code>Main</code> and expose the <code>main</code> constant from it.</p>
-<p>Then, we import the <code>Html</code> module. This module contains functions that allows us to define HTML elements. You can see everything that this module contains by reading it's <a href="https://packages.gren-lang.org/package/gren-lang/browser/version/2.0.0/module/Html">documentation</a>.</p>
-<p>In our case, we just want to display some text. The <code>text</code> function is perfect for that. Our main constant, then, contains the value returned by <code>Html.text &quot;Hello, world!&quot;</code>.</p>
-<p>When this Gren program is run in a browser, whatever is returned by the <code>main</code> function is displayed on the page.</p>
-<p>Compile your program using <code>gren make src/Main.gren</code>. This will produce a <code>index.html</code> file in your working directory which, when opened, displays <code>Hello, world!</code>.</p>
-<p>You can now experiment by returning different HTML values from main. Compile and refresh the page to see what happens.</p>
+<p>Let's explain this property by property:</p>
+<ul>
+<li><code>type</code>: This tells the compiler that we're attempting to compile a package. Code that can be reused in other packages and applications.</li>
+<li><code>platform</code>: Which platform is this package compatible with? Can either be <code>browser</code>,<code>node</code> or <code>common</code> which is to say it should work on any platform.</li>
+<li><code>name</code>: The name of the package. This should match the <code>author/project</code> path on Github. Currently, only Github is supported.</li>
+<li><code>summary</code>: A brief (80 characters maximum) summary of what your project does.</li>
+<li><code>license</code>: Specifies how your code is licensed.</li>
+<li><code>version</code>: The current semantic version of the package.</li>
+<li><code>gren-version</code>: Which version range of the compiler is this package compatible with.</li>
+<li><code>exposed-modules</code>: Specifies the modules that are importable in other projects. Can be a list of module names or, as is the case here, an object that categorize the exposed modules. The object format is relevant when generating documentation.</li>
+<li><code>dependencies</code>: Other packages that this package depends on. Notice that packages doesn't have references to indirect dependencies, and that versions are specified in ranges instead of being specific. When compiling your package directly, the lowest specified version will be selected. When compiled as part of another package or application, the lowest compatible version will be selected.</li>
+</ul>
+<h2 id="gren-init"><a class="header" href="#gren-init">gren init</a></h2>
+<p>The compiler includes a command for generating <code>gren.json</code> files for new projects, to simplify setup.</p>
+<p>To generate:</p>
+<ul>
+<li>browser-based application: <code>gren init</code></li>
+<li>browser-based package: <code>gren init --package</code></li>
+<li>any application: <code>gren init --platform &lt;browser|node&gt;</code></li>
+<li>any package: <code>gren init --package --platform &lt;common|browser|node&gt;</code></li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="why_gren.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="syntax/pattern_matching.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="syntax/modules.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="faq.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -191,11 +231,11 @@ main =
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="why_gren.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="syntax/pattern_matching.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="syntax/modules.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="faq.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
