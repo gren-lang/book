@@ -3,17 +3,21 @@
 - [Why Gren?](./why_gren.md)
 - [Hello World](./hello_world.md)
 
-# Syntax
+# The Language
 
-- [Modules](./syntax/modules.md)
+- [Getting started](./syntax/repl.md)
 - [Constants](./syntax/constants.md)
 - [Functions](./syntax/functions.md)
-- [Comments](./syntax/comments.md)
-- [Types](./syntax/types.md)
+- [Numbers](./syntax/numbers.md)
 - [Arrays](./syntax/arrays.md)
+- [Strings](./syntax/strings.md)
 - [Records](./syntax/records.md)
-- [Custom Types](./syntax/custom_types.md)
-- [Pattern Matching](./syntax/pattern_matching.md)
+- [Types](./syntax/types.md)
+- [If expressions](./syntax/ifs.md)
+- [Custom types](./syntax/custom_types.md)
+- [Pattern matching](./syntax/pattern_matching.md)
+- [Modules](./syntax/modules.md)
+- [Comments](./syntax/comments.md)
 
 # Appendix
 

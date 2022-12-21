@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="why_gren.html"><strong aria-hidden="true">1.</strong> Why Gren?</a></li><li class="chapter-item expanded "><a href="hello_world.html"><strong aria-hidden="true">2.</strong> Hello World</a></li><li class="chapter-item expanded affix "><li class="part-title">Syntax</li><li class="chapter-item expanded "><a href="syntax/modules.html"><strong aria-hidden="true">3.</strong> Modules</a></li><li class="chapter-item expanded "><a href="syntax/constants.html"><strong aria-hidden="true">4.</strong> Constants</a></li><li class="chapter-item expanded "><a href="syntax/functions.html"><strong aria-hidden="true">5.</strong> Functions</a></li><li class="chapter-item expanded "><a href="syntax/comments.html"><strong aria-hidden="true">6.</strong> Comments</a></li><li class="chapter-item expanded "><a href="syntax/types.html"><strong aria-hidden="true">7.</strong> Types</a></li><li class="chapter-item expanded "><a href="syntax/arrays.html"><strong aria-hidden="true">8.</strong> Arrays</a></li><li class="chapter-item expanded "><a href="syntax/records.html"><strong aria-hidden="true">9.</strong> Records</a></li><li class="chapter-item expanded "><a href="syntax/custom_types.html"><strong aria-hidden="true">10.</strong> Custom Types</a></li><li class="chapter-item expanded "><a href="syntax/pattern_matching.html"><strong aria-hidden="true">11.</strong> Pattern Matching</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="gren_json.html"><strong aria-hidden="true">12.</strong> gren.json</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">13.</strong> FAQ</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="why_gren.html"><strong aria-hidden="true">1.</strong> Why Gren?</a></li><li class="chapter-item expanded "><a href="hello_world.html"><strong aria-hidden="true">2.</strong> Hello World</a></li><li class="chapter-item expanded affix "><li class="part-title">The Language</li><li class="chapter-item expanded "><a href="syntax/repl.html"><strong aria-hidden="true">3.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="syntax/constants.html"><strong aria-hidden="true">4.</strong> Constants</a></li><li class="chapter-item expanded "><a href="syntax/functions.html"><strong aria-hidden="true">5.</strong> Functions</a></li><li class="chapter-item expanded "><a href="syntax/numbers.html"><strong aria-hidden="true">6.</strong> Numbers</a></li><li class="chapter-item expanded "><a href="syntax/arrays.html"><strong aria-hidden="true">7.</strong> Arrays</a></li><li class="chapter-item expanded "><a href="syntax/strings.html"><strong aria-hidden="true">8.</strong> Strings</a></li><li class="chapter-item expanded "><a href="syntax/records.html"><strong aria-hidden="true">9.</strong> Records</a></li><li class="chapter-item expanded "><a href="syntax/types.html"><strong aria-hidden="true">10.</strong> Types</a></li><li class="chapter-item expanded "><a href="syntax/ifs.html"><strong aria-hidden="true">11.</strong> If expressions</a></li><li class="chapter-item expanded "><a href="syntax/custom_types.html"><strong aria-hidden="true">12.</strong> Custom types</a></li><li class="chapter-item expanded "><a href="syntax/pattern_matching.html"><strong aria-hidden="true">13.</strong> Pattern matching</a></li><li class="chapter-item expanded "><a href="syntax/modules.html"><strong aria-hidden="true">14.</strong> Modules</a></li><li class="chapter-item expanded "><a href="syntax/comments.html"><strong aria-hidden="true">15.</strong> Comments</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="gren_json.html"><strong aria-hidden="true">16.</strong> gren.json</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">17.</strong> FAQ</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -244,33 +244,24 @@ main =
 <p>When this Gren program is run in a browser, whatever is returned by the <code>main</code> function is displayed on the page.</p>
 <p>Compile your program using <code>gren make src/Main.gren</code>. This will produce a <code>index.html</code> file in your working directory which, when opened, displays <code>Hello, world!</code>.</p>
 <p>You can now experiment by returning different HTML values from main. Compile and refresh the page to see what happens.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="modules"><a class="header" href="#modules">Modules</a></h1>
-<p>Every file containing Gren source code, is considered a module.</p>
-<p>A module is required to start with a module header, which at minimum defines the fully qualified module name and a list of exposed definitions. Being exposed means that the definition can be referenced by other modules.</p>
-<p>Here's a minimal example of a module header:</p>
-<pre><code class="language-gren">module MyModule exposing (..)
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
+<p>In order to learn the language, it can be helpful to have a way of running arbitrary Gren expressions without having to setup and compile a full application.</p>
+<p>Thankfully, there is such a tool. It's called a REPL (Read Eval Print Loop). It takes Gren expressions as input (read), compiles and run it (eval), then prints the result (print). It keeps doing this until you exit the progrom (loop).</p>
+<p>Assuming you've already <a href="syntax//install">installed</a> the Gren compiler, you can enter a REPL by running <code>gren repl</code>. It should look something like this:</p>
+<pre><code class="language-sh">&gt; gren repl
+Retrieving versions for gren-lang/core... Ok!
+---- Gren 0.2.0 -----------------------------------------------------------------
+Say :help for help and :exit to exit!
+--------------------------------------------------------------------------------
+&gt;
 </code></pre>
-<h2 id="module-name"><a class="header" href="#module-name">Module name</a></h2>
-<p>The module name <code>MyModule</code> needs to coincide with the modules physical location on disk. In this case <code>MyModule</code> has to be at the top level of the <code>src</code> directory. If <code>MyModule</code> was located in <code>src/Sub/MyModule.gren</code>, then the project would've failed to compile.</p>
-<p>When a module does exist within a sub-directory, like <code>src/Some/Long/Path/For/Module.gren</code>, then the module name should match the path, but with <code>/</code> replaced with <code>.</code>, like <code>Some.Long.Path.For.Module</code>.</p>
-<h2 id="exposing"><a class="header" href="#exposing">Exposing</a></h2>
-<p>The exposing list is a comma seperated list of constants, functions and types that other modules can reference.</p>
-<p>To expose everything from a module, you can use <code>(..)</code>.</p>
-<p>When exposing a custom type, you can either expose just the type, or the type along with its constructors. In the former case you'll add <code>Type</code> to the exposing list, in the latter you'll add <code>Type(..)</code> to the list. You cannot expose select constructors of a custom type, it's all or nothing.</p>
-<h2 id="imports"><a class="header" href="#imports">Imports</a></h2>
-<p>If you want to reference something in another module, you'll need to import it.</p>
-<pre><code class="language-gren">import Some.Other.Module
+<p>For starters, try entering an expression like <code>1 + 2</code>.</p>
+<pre><code class="language-sh">&gt; 1 + 2
+3 : number
+&gt;
 </code></pre>
-<p>This will allow you to reference values in <code>Some.Other.Module</code> by prefix the value with the module prefix.</p>
-<p>Sometimes, as is the case in this example, the module name can be a bit long, in those cases you can specify a shorter alias for the module name:</p>
-<pre><code class="language-gren">import Some.Other.Module as Module
-</code></pre>
-<p>You can now prefix values with <code>Module</code> instead of <code>Some.Other.Module</code>.</p>
-<p>Finally, you can opt in to not requiring specifying a prefix at all for commonly used values, by using an exposing statement:</p>
-<pre><code class="language-gren">import Some.Other.Module exposing (commonFunction)
-</code></pre>
-<p>You can now refer to <code>commonFunction</code> directly, as if it was defined in your module.</p>
-<p>It's also possible to combine a module alias with an exposing list.</p>
+<p>You can see that the result of the expression <code>1 + 2</code> is <code>3</code>, and that <code>3</code> is a <code>number</code>.</p>
+<p>Of course, the REPL can also handle more complicated expressions. As you read the rest of this guide, try entering a few expressions into the REPL along the way.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="constants"><a class="header" href="#constants">Constants</a></h1>
 <p>You can attach names to values. Named values are called constants, because once defined those names can never refer to another value.</p>
 <pre><code class="language-gren">theAnswer = 42
@@ -297,47 +288,8 @@ sumOfFiveAndTwo =
 </code></pre>
 <p>Here, <code>sumOf</code> is the name of the function, while <code>first</code> and <code>second</code> are the inputs to the function. The return value of <code>sumOf</code>, is the last computed expression. In this case, the only expression is <code>first + second</code>, the result of which becomes the returned value.</p>
 <p>Functions can take an arbitrary number of arguments, but must return exactly one value.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="comments"><a class="header" href="#comments">Comments</a></h1>
-<p>Lines starting with <code>--</code> are ignored by the compiler, and are useful for describing something to human readers.</p>
-<pre><code class="language-gren">-- Nothing to see here
-</code></pre>
-<p>You can also use <code>{- -}</code> to have comments span multiple lines.</p>
-<pre><code class="language-gren">{- This comment
-spans
-multiple lines
--}
-</code></pre>
-<p>Comments can be used pretty much everywhere, as they're completely ignored by the compiler.</p>
-<h2 id="documentation-comments"><a class="header" href="#documentation-comments">Documentation comments</a></h2>
-<p>There is a special kind of comments, called documentation comments, which are recognized by the compiler as being documentation for a module or a value.</p>
-<p>These comments are enclosed within <code>{-| -}</code> and will be used to render documentation on <a href="https://packages.gren-lang.org">packages.gren-lang.org</a>.</p>
-<pre><code class="language-gren">{-| This is an approximation of pi
--}
-pi = 3.14
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="types"><a class="header" href="#types">Types</a></h1>
-<p>Gren is a staticly typed language, which means that every constant and function are associated with a type, and the use of these types are checked by the compiler to be correct. If you have a function which is defined to accept to integers, the compiler will complain if you were to pass that function something other than two integers.</p>
-<p>You might've noticed that you didn't need to specify types in the examples above. That's because Gren is usually smart enought to figure out the types without your help.</p>
-<pre><code class="language-gren">theAnswer : Int
-theAnswer = 42
-
-aQuestion : String
-aQuestion = &quot;What was the question again?&quot;
-
-helpful : Bool
-helpful = False
-
-sumOf : Int -&gt; Int -&gt; Int
-sumOf first second =
-    first + second
-
-sumOfFiveAndTwo : Int
-sumOfFiveAndTwo =
-    sumOf 5 2
-</code></pre>
-<p><code>:</code> can be read as <code>has type</code>. One way to read the first constant definition in the above example is: theAnswer has type Int. theAnswer equals 42.</p>
-<p>For functions it get's a little bit more complicated. <code>-&gt;</code> can be read as <code>to</code>. So: sumOf has type Int to Int to Int. sumOf first and second equals first + second.</p>
-<p>When reading the type signature of a function, the last <code>-&gt;</code> points to the return value of the function, while the types before represent the inputs.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="numbers"><a class="header" href="#numbers">Numbers</a></h1>
+<p>TODO</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="arrays"><a class="header" href="#arrays">Arrays</a></h1>
 <p>You can group several values in an array.</p>
 <pre><code class="language-gren">numbers : Array Int
@@ -345,6 +297,8 @@ numbers =
     [ 1, 2, 3, 4, 5 ]
 </code></pre>
 <p>All values in an array must be of the same type. You cannot have an array of <code>String</code> <em>and</em> <code>Int</code>, for instance.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="strings"><a class="header" href="#strings">Strings</a></h1>
+<p>TODO</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="records"><a class="header" href="#records">Records</a></h1>
 <p>You can also group different types of named values in a record.</p>
 <pre><code>twoSugars =
@@ -379,6 +333,31 @@ sweetCoffeeCup =
   }
 </code></pre>
 <p>The above example creates a new record, called <code>fourSugars</code>, which contains the same values as <code>twoSugars</code>, except that the <code>quantity</code> property has a value of <code>4</code> instead of <code>2</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="types"><a class="header" href="#types">Types</a></h1>
+<p>Gren is a staticly typed language, which means that every constant and function are associated with a type, and the use of these types are checked by the compiler to be correct. If you have a function which is defined to accept to integers, the compiler will complain if you were to pass that function something other than two integers.</p>
+<p>You might've noticed that you didn't need to specify types in the examples above. That's because Gren is usually smart enought to figure out the types without your help.</p>
+<pre><code class="language-gren">theAnswer : Int
+theAnswer = 42
+
+aQuestion : String
+aQuestion = &quot;What was the question again?&quot;
+
+helpful : Bool
+helpful = False
+
+sumOf : Int -&gt; Int -&gt; Int
+sumOf first second =
+    first + second
+
+sumOfFiveAndTwo : Int
+sumOfFiveAndTwo =
+    sumOf 5 2
+</code></pre>
+<p><code>:</code> can be read as <code>has type</code>. One way to read the first constant definition in the above example is: theAnswer has type Int. theAnswer equals 42.</p>
+<p>For functions it get's a little bit more complicated. <code>-&gt;</code> can be read as <code>to</code>. So: sumOf has type Int to Int to Int. sumOf first and second equals first + second.</p>
+<p>When reading the type signature of a function, the last <code>-&gt;</code> points to the return value of the function, while the types before represent the inputs.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="if-expressions"><a class="header" href="#if-expressions">If expressions</a></h1>
+<p>TODO</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-types"><a class="header" href="#custom-types">Custom Types</a></h1>
 <p>Sometimes it's helpful with values that can be in one of several states. This can be useful to represent values that may be absent, or operations which can succeed and fail, or cases where you'd typically use enums in other languages.</p>
 <p>In Gren, this concept is known as custom types.</p>
@@ -425,6 +404,51 @@ combineIngredients left right =
             { ingredient = left.ingredient ++ &quot; and &quot; ++ right.ingredient
             , quantity = left.quantity + right.quantity
             }
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="modules"><a class="header" href="#modules">Modules</a></h1>
+<p>Every file containing Gren source code, is considered a module.</p>
+<p>A module is required to start with a module header, which at minimum defines the fully qualified module name and a list of exposed definitions. Being exposed means that the definition can be referenced by other modules.</p>
+<p>Here's a minimal example of a module header:</p>
+<pre><code class="language-gren">module MyModule exposing (..)
+</code></pre>
+<h2 id="module-name"><a class="header" href="#module-name">Module name</a></h2>
+<p>The module name <code>MyModule</code> needs to coincide with the modules physical location on disk. In this case <code>MyModule</code> has to be at the top level of the <code>src</code> directory. If <code>MyModule</code> was located in <code>src/Sub/MyModule.gren</code>, then the project would've failed to compile.</p>
+<p>When a module does exist within a sub-directory, like <code>src/Some/Long/Path/For/Module.gren</code>, then the module name should match the path, but with <code>/</code> replaced with <code>.</code>, like <code>Some.Long.Path.For.Module</code>.</p>
+<h2 id="exposing"><a class="header" href="#exposing">Exposing</a></h2>
+<p>The exposing list is a comma seperated list of constants, functions and types that other modules can reference.</p>
+<p>To expose everything from a module, you can use <code>(..)</code>.</p>
+<p>When exposing a custom type, you can either expose just the type, or the type along with its constructors. In the former case you'll add <code>Type</code> to the exposing list, in the latter you'll add <code>Type(..)</code> to the list. You cannot expose select constructors of a custom type, it's all or nothing.</p>
+<h2 id="imports"><a class="header" href="#imports">Imports</a></h2>
+<p>If you want to reference something in another module, you'll need to import it.</p>
+<pre><code class="language-gren">import Some.Other.Module
+</code></pre>
+<p>This will allow you to reference values in <code>Some.Other.Module</code> by prefix the value with the module prefix.</p>
+<p>Sometimes, as is the case in this example, the module name can be a bit long, in those cases you can specify a shorter alias for the module name:</p>
+<pre><code class="language-gren">import Some.Other.Module as Module
+</code></pre>
+<p>You can now prefix values with <code>Module</code> instead of <code>Some.Other.Module</code>.</p>
+<p>Finally, you can opt in to not requiring specifying a prefix at all for commonly used values, by using an exposing statement:</p>
+<pre><code class="language-gren">import Some.Other.Module exposing (commonFunction)
+</code></pre>
+<p>You can now refer to <code>commonFunction</code> directly, as if it was defined in your module.</p>
+<p>It's also possible to combine a module alias with an exposing list.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="comments"><a class="header" href="#comments">Comments</a></h1>
+<p>Lines starting with <code>--</code> are ignored by the compiler, and are useful for describing something to human readers.</p>
+<pre><code class="language-gren">-- Nothing to see here
+</code></pre>
+<p>You can also use <code>{- -}</code> to have comments span multiple lines.</p>
+<pre><code class="language-gren">{- This comment
+spans
+multiple lines
+-}
+</code></pre>
+<p>Comments can be used pretty much everywhere, as they're completely ignored by the compiler.</p>
+<h2 id="documentation-comments"><a class="header" href="#documentation-comments">Documentation comments</a></h2>
+<p>There is a special kind of comments, called documentation comments, which are recognized by the compiler as being documentation for a module or a value.</p>
+<p>These comments are enclosed within <code>{-| -}</code> and will be used to render documentation on <a href="https://packages.gren-lang.org">packages.gren-lang.org</a>.</p>
+<pre><code class="language-gren">{-| This is an approximation of pi
+-}
+pi = 3.14
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="grenjson"><a class="header" href="#grenjson">Gren.json</a></h1>
 <p>Every Gren project is required to have a <code>gren.json</code> file. This file contains information about how to compile the project, and which platform to compile the project for.</p>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Arrays - The Gren Programming Language</title>
+        <title>Getting started - The Gren Programming Language</title>
 
 
         <!-- Custom HTML head -->
@@ -80,7 +80,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../why_gren.html"><strong aria-hidden="true">1.</strong> Why Gren?</a></li><li class="chapter-item expanded "><a href="../hello_world.html"><strong aria-hidden="true">2.</strong> Hello World</a></li><li class="chapter-item expanded affix "><li class="part-title">The Language</li><li class="chapter-item expanded "><a href="../syntax/repl.html"><strong aria-hidden="true">3.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="../syntax/constants.html"><strong aria-hidden="true">4.</strong> Constants</a></li><li class="chapter-item expanded "><a href="../syntax/functions.html"><strong aria-hidden="true">5.</strong> Functions</a></li><li class="chapter-item expanded "><a href="../syntax/numbers.html"><strong aria-hidden="true">6.</strong> Numbers</a></li><li class="chapter-item expanded "><a href="../syntax/arrays.html" class="active"><strong aria-hidden="true">7.</strong> Arrays</a></li><li class="chapter-item expanded "><a href="../syntax/strings.html"><strong aria-hidden="true">8.</strong> Strings</a></li><li class="chapter-item expanded "><a href="../syntax/records.html"><strong aria-hidden="true">9.</strong> Records</a></li><li class="chapter-item expanded "><a href="../syntax/types.html"><strong aria-hidden="true">10.</strong> Types</a></li><li class="chapter-item expanded "><a href="../syntax/ifs.html"><strong aria-hidden="true">11.</strong> If expressions</a></li><li class="chapter-item expanded "><a href="../syntax/custom_types.html"><strong aria-hidden="true">12.</strong> Custom types</a></li><li class="chapter-item expanded "><a href="../syntax/pattern_matching.html"><strong aria-hidden="true">13.</strong> Pattern matching</a></li><li class="chapter-item expanded "><a href="../syntax/modules.html"><strong aria-hidden="true">14.</strong> Modules</a></li><li class="chapter-item expanded "><a href="../syntax/comments.html"><strong aria-hidden="true">15.</strong> Comments</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="../gren_json.html"><strong aria-hidden="true">16.</strong> gren.json</a></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">17.</strong> FAQ</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../why_gren.html"><strong aria-hidden="true">1.</strong> Why Gren?</a></li><li class="chapter-item expanded "><a href="../hello_world.html"><strong aria-hidden="true">2.</strong> Hello World</a></li><li class="chapter-item expanded affix "><li class="part-title">The Language</li><li class="chapter-item expanded "><a href="../syntax/repl.html" class="active"><strong aria-hidden="true">3.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="../syntax/constants.html"><strong aria-hidden="true">4.</strong> Constants</a></li><li class="chapter-item expanded "><a href="../syntax/functions.html"><strong aria-hidden="true">5.</strong> Functions</a></li><li class="chapter-item expanded "><a href="../syntax/numbers.html"><strong aria-hidden="true">6.</strong> Numbers</a></li><li class="chapter-item expanded "><a href="../syntax/arrays.html"><strong aria-hidden="true">7.</strong> Arrays</a></li><li class="chapter-item expanded "><a href="../syntax/strings.html"><strong aria-hidden="true">8.</strong> Strings</a></li><li class="chapter-item expanded "><a href="../syntax/records.html"><strong aria-hidden="true">9.</strong> Records</a></li><li class="chapter-item expanded "><a href="../syntax/types.html"><strong aria-hidden="true">10.</strong> Types</a></li><li class="chapter-item expanded "><a href="../syntax/ifs.html"><strong aria-hidden="true">11.</strong> If expressions</a></li><li class="chapter-item expanded "><a href="../syntax/custom_types.html"><strong aria-hidden="true">12.</strong> Custom types</a></li><li class="chapter-item expanded "><a href="../syntax/pattern_matching.html"><strong aria-hidden="true">13.</strong> Pattern matching</a></li><li class="chapter-item expanded "><a href="../syntax/modules.html"><strong aria-hidden="true">14.</strong> Modules</a></li><li class="chapter-item expanded "><a href="../syntax/comments.html"><strong aria-hidden="true">15.</strong> Comments</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="../gren_json.html"><strong aria-hidden="true">16.</strong> gren.json</a></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">17.</strong> FAQ</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -141,23 +141,34 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="arrays"><a class="header" href="#arrays">Arrays</a></h1>
-<p>You can group several values in an array.</p>
-<pre><code class="language-gren">numbers : Array Int
-numbers =
-    [ 1, 2, 3, 4, 5 ]
+                        <h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
+<p>In order to learn the language, it can be helpful to have a way of running arbitrary Gren expressions without having to setup and compile a full application.</p>
+<p>Thankfully, there is such a tool. It's called a REPL (Read Eval Print Loop). It takes Gren expressions as input (read), compiles and run it (eval), then prints the result (print). It keeps doing this until you exit the progrom (loop).</p>
+<p>Assuming you've already <a href="/install">installed</a> the Gren compiler, you can enter a REPL by running <code>gren repl</code>. It should look something like this:</p>
+<pre><code class="language-sh">&gt; gren repl
+Retrieving versions for gren-lang/core... Ok!
+---- Gren 0.2.0 -----------------------------------------------------------------
+Say :help for help and :exit to exit!
+--------------------------------------------------------------------------------
+&gt;
 </code></pre>
-<p>All values in an array must be of the same type. You cannot have an array of <code>String</code> <em>and</em> <code>Int</code>, for instance.</p>
+<p>For starters, try entering an expression like <code>1 + 2</code>.</p>
+<pre><code class="language-sh">&gt; 1 + 2
+3 : number
+&gt;
+</code></pre>
+<p>You can see that the result of the expression <code>1 + 2</code> is <code>3</code>, and that <code>3</code> is a <code>number</code>.</p>
+<p>Of course, the REPL can also handle more complicated expressions. As you read the rest of this guide, try entering a few expressions into the REPL along the way.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../syntax/numbers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../hello_world.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../syntax/strings.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../syntax/constants.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -167,11 +178,11 @@ numbers =
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../syntax/numbers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../hello_world.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../syntax/strings.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../syntax/constants.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
