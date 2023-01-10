@@ -1,6 +1,6 @@
 # The Gren Programming Language
 
-This repo contains the source code of "The Gren Programming Language", available to read from [gren-lang.org](https://book.gren-lang.org).
+This repo contains the source code of "The Gren Programming Language", available to read from [gren-lang.org](https://gren-lang.org/book/).
 
 ## Development
 
