@@ -1,6 +1,6 @@
 # Modules
 
-Every file containing Gren source code, is considered a module.
+Every file containing Gren source code is considered a module.
 
 A module is required to start with a module header, which at minimum defines the fully qualified module name and a list of exposed definitions. Being exposed means that the definition can be referenced by other modules.
 
