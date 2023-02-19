@@ -12,5 +12,5 @@ type Maybe a
 
 The type `Maybe` can be one of two things. Either it's `Just a` where `a` is a generic type, or it's `Nothing` in which case there is no associated data attached.
 
-On its own, custom types arent very helpful, but in combination with pattern matching they allow for some pretty interesting possibilities.
+On its own, custom types aren't very helpful, but in combination with pattern matching they allow for some pretty interesting possibilities.
 

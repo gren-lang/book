@@ -246,7 +246,7 @@ main =
 <p>You can now experiment by returning different HTML values from main. Compile and refresh the page to see what happens.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
 <p>In order to learn the language, it can be helpful to have a way of running arbitrary Gren expressions without having to setup and compile a full application.</p>
-<p>Thankfully, there is such a tool. It's called a REPL (Read Eval Print Loop). It takes Gren expressions as input (read), compiles and run it (eval), then prints the result (print). It keeps doing this until you exit the progrom (loop).</p>
+<p>Thankfully, there is such a tool. It's called a REPL (Read Eval Print Loop). It takes Gren expressions as input (read), compiles and run it (eval), then prints the result (print). It keeps doing this until you exit the program (loop).</p>
 <p>Assuming you've already <a href="syntax//install">installed</a> the Gren compiler, you can enter a REPL by running <code>gren repl</code>. It should look something like this:</p>
 <pre><code class="language-sh">&gt; gren repl
 Retrieving versions for gren-lang/core... Ok!
@@ -334,8 +334,8 @@ sweetCoffeeCup =
 </code></pre>
 <p>The above example creates a new record, called <code>fourSugars</code>, which contains the same values as <code>twoSugars</code>, except that the <code>quantity</code> property has a value of <code>4</code> instead of <code>2</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="types"><a class="header" href="#types">Types</a></h1>
-<p>Gren is a staticly typed language, which means that every constant and function are associated with a type, and the use of these types are checked by the compiler to be correct. If you have a function which is defined to accept to integers, the compiler will complain if you were to pass that function something other than two integers.</p>
-<p>You might've noticed that you didn't need to specify types in the examples above. That's because Gren is usually smart enought to figure out the types without your help.</p>
+<p>Gren is a statically typed language, which means that every constant and function are associated with a type, and the use of these types are checked by the compiler to be correct. If you have a function which is defined to accept to integers, the compiler will complain if you were to pass that function something other than two integers.</p>
+<p>You might have noticed that you didn't need to specify types in the examples above. That's because Gren is usually smart enought to figure out the types without your help.</p>
 <pre><code class="language-gren">theAnswer : Int
 theAnswer = 42
 
@@ -366,7 +366,7 @@ sumOfFiveAndTwo =
     | Nothing
 </code></pre>
 <p>The type <code>Maybe</code> can be one of two things. Either it's <code>Just a</code> where <code>a</code> is a generic type, or it's <code>Nothing</code> in which case there is no associated data attached.</p>
-<p>On its own, custom types arent very helpful, but in combination with pattern matching they allow for some pretty interesting possibilities.</p>
+<p>On its own, custom types aren't very helpful, but in combination with pattern matching they allow for some pretty interesting possibilities.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="pattern-matching"><a class="header" href="#pattern-matching">Pattern matching</a></h1>
 <p>When dealing with custom types, you likely want to do different things based on the actual value of the custom type. The <code>case of</code> expression provides this flexibility.</p>
 <pre><code class="language-gren">explainHeldItem : Maybe String -&gt; String
@@ -406,13 +406,13 @@ combineIngredients left right =
             }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="modules"><a class="header" href="#modules">Modules</a></h1>
-<p>Every file containing Gren source code, is considered a module.</p>
+<p>Every file containing Gren source code is considered a module.</p>
 <p>A module is required to start with a module header, which at minimum defines the fully qualified module name and a list of exposed definitions. Being exposed means that the definition can be referenced by other modules.</p>
 <p>Here's a minimal example of a module header:</p>
 <pre><code class="language-gren">module MyModule exposing (..)
 </code></pre>
 <h2 id="module-name"><a class="header" href="#module-name">Module name</a></h2>
-<p>The module name <code>MyModule</code> needs to coincide with the modules physical location on disk. In this case <code>MyModule</code> has to be at the top level of the <code>src</code> directory. If <code>MyModule</code> was located in <code>src/Sub/MyModule.gren</code>, then the project would've failed to compile.</p>
+<p>The module name <code>MyModule</code> needs to coincide with the modules physical location on disk. In this case <code>MyModule</code> has to be at the top level of the <code>src</code> directory. If <code>MyModule</code> was located in <code>src/Sub/MyModule.gren</code>, then the project would have failed to compile.</p>
 <p>When a module does exist within a sub-directory, like <code>src/Some/Long/Path/For/Module.gren</code>, then the module name should match the path, but with <code>/</code> replaced with <code>.</code>, like <code>Some.Long.Path.For.Module</code>.</p>
 <h2 id="exposing"><a class="header" href="#exposing">Exposing</a></h2>
 <p>The exposing list is a comma seperated list of constants, functions and types that other modules can reference.</p>
@@ -480,7 +480,7 @@ pi = 3.14
 <li><code>platform</code>: Which platform are we expecting to run our application on? Can either be <code>browser</code> or <code>node</code>.</li>
 <li><code>source-directories</code>: This lists every sub-folder that the compiler should look for Gren source files in. This is usually fine as-is.</li>
 <li><code>gren-version</code>: Which version of the compiler is this application compatible with. If you're using an unsupported compiler, it will refuse to compile.</li>
-<li><code>dependencies</code>: Lists the packages that your application depends on. Direct dependencies are those which you application make direct use of, while indirect dependencies are required by your direct dependencies. The reason that both types of dependencies are listed in your <code>gren.json</code> file, is to make sure we always retrieve the same version of a given dependency. Each package name resolves to a github <code>author/projcect</code> name. Versions need to be formatted according to the <code>semver</code> specification, and must target a concrete version (no ranges).</li>
+<li><code>dependencies</code>: Lists the packages that your application depends on. Direct dependencies are those which you application make direct use of, while indirect dependencies are required by your direct dependencies. The reason that both types of dependencies are listed in your <code>gren.json</code> file, is to make sure we always retrieve the same version of a given dependency. Each package name resolves to a github <code>author/project</code> name. Versions need to be formatted according to the <code>semver</code> specification, and must target a concrete version (no ranges).</li>
 </ul>
 <h2 id="packages"><a class="header" href="#packages">Packages</a></h2>
 <p>The <code>gren.json</code> file for packages should look something like this:</p>

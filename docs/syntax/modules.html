@@ -142,13 +142,13 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="modules"><a class="header" href="#modules">Modules</a></h1>
-<p>Every file containing Gren source code, is considered a module.</p>
+<p>Every file containing Gren source code is considered a module.</p>
 <p>A module is required to start with a module header, which at minimum defines the fully qualified module name and a list of exposed definitions. Being exposed means that the definition can be referenced by other modules.</p>
 <p>Here's a minimal example of a module header:</p>
 <pre><code class="language-gren">module MyModule exposing (..)
 </code></pre>
 <h2 id="module-name"><a class="header" href="#module-name">Module name</a></h2>
-<p>The module name <code>MyModule</code> needs to coincide with the modules physical location on disk. In this case <code>MyModule</code> has to be at the top level of the <code>src</code> directory. If <code>MyModule</code> was located in <code>src/Sub/MyModule.gren</code>, then the project would've failed to compile.</p>
+<p>The module name <code>MyModule</code> needs to coincide with the modules physical location on disk. In this case <code>MyModule</code> has to be at the top level of the <code>src</code> directory. If <code>MyModule</code> was located in <code>src/Sub/MyModule.gren</code>, then the project would have failed to compile.</p>
 <p>When a module does exist within a sub-directory, like <code>src/Some/Long/Path/For/Module.gren</code>, then the module name should match the path, but with <code>/</code> replaced with <code>.</code>, like <code>Some.Long.Path.For.Module</code>.</p>
 <h2 id="exposing"><a class="header" href="#exposing">Exposing</a></h2>
 <p>The exposing list is a comma seperated list of constants, functions and types that other modules can reference.</p>
