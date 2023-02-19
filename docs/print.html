@@ -366,7 +366,7 @@ sumOfFiveAndTwo =
     | Nothing
 </code></pre>
 <p>The type <code>Maybe</code> can be one of two things. Either it's <code>Just a</code> where <code>a</code> is a generic type, or it's <code>Nothing</code> in which case there is no associated data attached.</p>
-<p>On its own, custom types arent very helpful, but in combination with pattern matching they allow for some pretty interesting possibilities.</p>
+<p>On its own, custom types aren't very helpful, but in combination with pattern matching they allow for some pretty interesting possibilities.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="pattern-matching"><a class="header" href="#pattern-matching">Pattern matching</a></h1>
 <p>When dealing with custom types, you likely want to do different things based on the actual value of the custom type. The <code>case of</code> expression provides this flexibility.</p>
 <pre><code class="language-gren">explainHeldItem : Maybe String -&gt; String
