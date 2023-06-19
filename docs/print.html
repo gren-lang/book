@@ -33,6 +33,7 @@
 
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
@@ -70,10 +71,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -195,7 +198,7 @@
 <li>Uncontrolled side-effects</li>
 </ol>
 <p>What Gren <em>does have</em> is a flexible, although strict, type system which allows you represent these constructs in a way that let's the compiler help you avoid the most common bugs.</p>
-<p>Instead of <code>null</code>, Gren let's you express the absense of a value by using what is known as a custom type:</p>
+<p>Instead of <code>null</code>, Gren lets you express the absence of a value by using what is known as a custom type:</p>
 <pre><code class="language-gren">type Maybe a
   = Just a
   | Nothing
@@ -210,9 +213,9 @@
 <p>Consider for a moment what this means. Since Gren is statically typed, that means that whenever you see a function which <em>doesn't</em> return a <code>Maybe</code> or a <code>Result</code> type, you can be certain that you'll always end up with the promised return value.</p>
 <p>The same concept applies to side-effects like performing HTTP calls or saving things to disk. A side effect has to be modelled by the type system, and this also means that you have greater insights into the sort of things a third-party package can do.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>Gren has made a very specific set of trade offs that makes it easy to locate and isolate bugs and side effects. These same trade offs also make the language small in both syntax and concepts. This again reduces the necessary time investment to learn the language, and makes it easy for the compiler to provide detailed and helpful error messages.</p>
+<p>Gren has made a very specific set of trade-offs that makes it easy to locate and isolate bugs and side effects. These same trade-offs also make the language small in both syntax and concepts. This again reduces the necessary time investment to learn the language, and makes it easy for the compiler to provide detailed and helpful error messages.</p>
 <p>These benefits comes at the cost of brevity. There's a chance that other programming languages will allow you to write less code.</p>
-<p>It is our belief that as your program grows in complexity and scope, the trade offs made by Gren make more and more sense.</p>
+<p>It is our belief that as your program grows in complexity and scope, the trade-offs made by Gren make more and more sense.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hello-world"><a class="header" href="#hello-world">Hello, world!</a></h1>
 <p>Getting a simple program to compile is a good way to verify that you've got everything setup correctly. Let's try to write a Gren program that outputs &quot;Hello, world!&quot; when opened up in a browser.</p>
 <p>If you haven't already: <a href="/install">install Gren</a>.</p>
@@ -250,7 +253,7 @@ main =
 <p>Assuming you've already <a href="syntax//install">installed</a> the Gren compiler, you can enter a REPL by running <code>gren repl</code>. It should look something like this:</p>
 <pre><code class="language-sh">&gt; gren repl
 Retrieving versions for gren-lang/core... Ok!
----- Gren 0.2.0 -----------------------------------------------------------------
+---- Gren 0.3.0 -----------------------------------------------------------------
 Say :help for help and :exit to exit!
 --------------------------------------------------------------------------------
 &gt;
@@ -462,14 +465,14 @@ pi = 3.14
     &quot;source-directories&quot;: [
         &quot;src&quot;
     ],
-    &quot;gren-version&quot;: &quot;0.2.0&quot;,
+    &quot;gren-version&quot;: &quot;0.3.0&quot;,
     &quot;dependencies&quot;: {
         &quot;direct&quot;: {
-            &quot;gren-lang/browser&quot;: &quot;1.0.0&quot;,
-            &quot;gren-lang/core&quot;: &quot;1.0.0&quot;
+            &quot;gren-lang/browser&quot;: &quot;3.0.0&quot;,
+            &quot;gren-lang/core&quot;: &quot;4.0.0&quot;
         },
         &quot;indirect&quot;: {
-            &quot;gren-lang/url&quot;: &quot;1.0.0&quot;
+            &quot;gren-lang/url&quot;: &quot;3.0.0&quot;
         }
     }
 }
@@ -491,12 +494,12 @@ pi = 3.14
   &quot;summary&quot;: &quot;Yarl's reusable Gren code&quot;,
   &quot;license&quot;: &quot;BSD-3-Clause&quot;,
   &quot;version&quot;: &quot;1.0.0&quot;,
-  &quot;gren-version&quot;: &quot;0.2.0 &lt;= v &lt; 0.3.0&quot;,
+  &quot;gren-version&quot;: &quot;0.3.0 &lt;= v &lt; 0.4.0&quot;,
   &quot;exposed-modules&quot;: {
-    &quot;Primitives&quot;: [&quot;ModuleOne&quot;, &quot;ModuleTwo&quot;],
+    &quot;Primitives&quot;: [&quot;ModuleOne&quot;, &quot;ModuleTwo&quot;]
   },
   &quot;dependencies&quot;: {
-    &quot;gren-lang/core&quot;: &quot;1.0.0 &lt;= v &lt; 2.0.0&quot;
+    &quot;gren-lang/core&quot;: &quot;3.0.0 &lt;= v &lt; 4.0.0&quot;
   }
 }
 </code></pre>
@@ -530,7 +533,7 @@ pi = 3.14
 <p>Gren started as a fork of Elm. This is mostly considered to be an implementation detail, a way to speed up initial development.</p>
 <p>It's not a goal of Gren to replace, or stay compatible in any way with, Elm.</p>
 <h2 id="what-are-the-differences-between-gren-and-elm"><a class="header" href="#what-are-the-differences-between-gren-and-elm">What are the differences between Gren and Elm?</a></h2>
-<p>As of Gren 0.2.0, the main differences is that Gren has:</p>
+<p>As of Gren 0.3.0, the main differences is that Gren has:</p>
 <ul>
 <li>A git-based package manager. It's slower, but has access to any github repo that you have, even private ones.</li>
 <li>The default sequential data structure is an immutable array, not a linked list.</li>
@@ -542,6 +545,7 @@ pi = 3.14
 <li>No automatic constructors for type aliased records.</li>
 <li>No GLSL syntax.</li>
 <li>No reactor.</li>
+<li>Sourcemap support for native integration with the JS debugger.</li>
 </ul>
 
                     </main>
@@ -585,5 +589,6 @@ pi = 3.14
         });
         </script>
 
+    </div>
     </body>
 </html>

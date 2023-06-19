@@ -32,6 +32,7 @@
 
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
@@ -69,10 +70,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -153,14 +156,14 @@
     &quot;source-directories&quot;: [
         &quot;src&quot;
     ],
-    &quot;gren-version&quot;: &quot;0.2.0&quot;,
+    &quot;gren-version&quot;: &quot;0.3.0&quot;,
     &quot;dependencies&quot;: {
         &quot;direct&quot;: {
-            &quot;gren-lang/browser&quot;: &quot;1.0.0&quot;,
-            &quot;gren-lang/core&quot;: &quot;1.0.0&quot;
+            &quot;gren-lang/browser&quot;: &quot;3.0.0&quot;,
+            &quot;gren-lang/core&quot;: &quot;4.0.0&quot;
         },
         &quot;indirect&quot;: {
-            &quot;gren-lang/url&quot;: &quot;1.0.0&quot;
+            &quot;gren-lang/url&quot;: &quot;3.0.0&quot;
         }
     }
 }
@@ -182,12 +185,12 @@
   &quot;summary&quot;: &quot;Yarl's reusable Gren code&quot;,
   &quot;license&quot;: &quot;BSD-3-Clause&quot;,
   &quot;version&quot;: &quot;1.0.0&quot;,
-  &quot;gren-version&quot;: &quot;0.2.0 &lt;= v &lt; 0.3.0&quot;,
+  &quot;gren-version&quot;: &quot;0.3.0 &lt;= v &lt; 0.4.0&quot;,
   &quot;exposed-modules&quot;: {
-    &quot;Primitives&quot;: [&quot;ModuleOne&quot;, &quot;ModuleTwo&quot;],
+    &quot;Primitives&quot;: [&quot;ModuleOne&quot;, &quot;ModuleTwo&quot;]
   },
   &quot;dependencies&quot;: {
-    &quot;gren-lang/core&quot;: &quot;1.0.0 &lt;= v &lt; 2.0.0&quot;
+    &quot;gren-lang/core&quot;: &quot;3.0.0 &lt;= v &lt; 4.0.0&quot;
   }
 }
 </code></pre>
@@ -261,5 +264,6 @@
         <!-- Custom JS scripts -->
 
 
+    </div>
     </body>
 </html>

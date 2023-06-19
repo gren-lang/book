@@ -32,6 +32,7 @@
 
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
@@ -69,10 +70,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -150,7 +153,7 @@
 <p>Gren started as a fork of Elm. This is mostly considered to be an implementation detail, a way to speed up initial development.</p>
 <p>It's not a goal of Gren to replace, or stay compatible in any way with, Elm.</p>
 <h2 id="what-are-the-differences-between-gren-and-elm"><a class="header" href="#what-are-the-differences-between-gren-and-elm">What are the differences between Gren and Elm?</a></h2>
-<p>As of Gren 0.2.0, the main differences is that Gren has:</p>
+<p>As of Gren 0.3.0, the main differences is that Gren has:</p>
 <ul>
 <li>A git-based package manager. It's slower, but has access to any github repo that you have, even private ones.</li>
 <li>The default sequential data structure is an immutable array, not a linked list.</li>
@@ -162,6 +165,7 @@
 <li>No automatic constructors for type aliased records.</li>
 <li>No GLSL syntax.</li>
 <li>No reactor.</li>
+<li>Sourcemap support for native integration with the JS debugger.</li>
 </ul>
 
                     </main>
@@ -206,5 +210,6 @@
         <!-- Custom JS scripts -->
 
 
+    </div>
     </body>
 </html>

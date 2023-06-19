@@ -32,6 +32,7 @@
 
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
@@ -69,10 +70,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -194,7 +197,7 @@
 <li>Uncontrolled side-effects</li>
 </ol>
 <p>What Gren <em>does have</em> is a flexible, although strict, type system which allows you represent these constructs in a way that let's the compiler help you avoid the most common bugs.</p>
-<p>Instead of <code>null</code>, Gren let's you express the absense of a value by using what is known as a custom type:</p>
+<p>Instead of <code>null</code>, Gren lets you express the absence of a value by using what is known as a custom type:</p>
 <pre><code class="language-gren">type Maybe a
   = Just a
   | Nothing
@@ -209,9 +212,9 @@
 <p>Consider for a moment what this means. Since Gren is statically typed, that means that whenever you see a function which <em>doesn't</em> return a <code>Maybe</code> or a <code>Result</code> type, you can be certain that you'll always end up with the promised return value.</p>
 <p>The same concept applies to side-effects like performing HTTP calls or saving things to disk. A side effect has to be modelled by the type system, and this also means that you have greater insights into the sort of things a third-party package can do.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>Gren has made a very specific set of trade offs that makes it easy to locate and isolate bugs and side effects. These same trade offs also make the language small in both syntax and concepts. This again reduces the necessary time investment to learn the language, and makes it easy for the compiler to provide detailed and helpful error messages.</p>
+<p>Gren has made a very specific set of trade-offs that makes it easy to locate and isolate bugs and side effects. These same trade-offs also make the language small in both syntax and concepts. This again reduces the necessary time investment to learn the language, and makes it easy for the compiler to provide detailed and helpful error messages.</p>
 <p>These benefits comes at the cost of brevity. There's a chance that other programming languages will allow you to write less code.</p>
-<p>It is our belief that as your program grows in complexity and scope, the trade offs made by Gren make more and more sense.</p>
+<p>It is our belief that as your program grows in complexity and scope, the trade-offs made by Gren make more and more sense.</p>
 
                     </main>
 
@@ -255,5 +258,6 @@
         <!-- Custom JS scripts -->
 
 
+    </div>
     </body>
 </html>
