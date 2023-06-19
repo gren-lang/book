@@ -9,7 +9,7 @@ Assuming you've already [installed](/install) the Gren compiler, you can enter a
 ```sh
 > gren repl
 Retrieving versions for gren-lang/core... Ok!
----- Gren 0.2.0 -----------------------------------------------------------------
+---- Gren 0.3.0 -----------------------------------------------------------------
 Say :help for help and :exit to exit!
 --------------------------------------------------------------------------------
 >

@@ -17,14 +17,14 @@ The `gren.json` file should look something like the following:
     "source-directories": [
         "src"
     ],
-    "gren-version": "0.2.0",
+    "gren-version": "0.3.0",
     "dependencies": {
         "direct": {
-            "gren-lang/browser": "1.0.0",
-            "gren-lang/core": "1.0.0"
+            "gren-lang/browser": "3.0.0",
+            "gren-lang/core": "4.0.0"
         },
         "indirect": {
-            "gren-lang/url": "1.0.0"
+            "gren-lang/url": "3.0.0"
         }
     }
 }
@@ -50,12 +50,12 @@ The `gren.json` file for packages should look something like this:
   "summary": "Yarl's reusable Gren code",
   "license": "BSD-3-Clause",
   "version": "1.0.0",
-  "gren-version": "0.2.0 <= v < 0.3.0",
+  "gren-version": "0.3.0 <= v < 0.4.0",
   "exposed-modules": {
-    "Primitives": ["ModuleOne", "ModuleTwo"],
+    "Primitives": ["ModuleOne", "ModuleTwo"]
   },
   "dependencies": {
-    "gren-lang/core": "1.0.0 <= v < 2.0.0"
+    "gren-lang/core": "3.0.0 <= v < 4.0.0"
   }
 }
 ```

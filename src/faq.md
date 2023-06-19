@@ -16,7 +16,7 @@ It's not a goal of Gren to replace, or stay compatible in any way with, Elm.
 
 ## What are the differences between Gren and Elm?
 
-As of Gren 0.2.0, the main differences is that Gren has:
+As of Gren 0.3.0, the main differences is that Gren has:
 
 * A git-based package manager. It's slower, but has access to any github repo that you have, even private ones.
 * The default sequential data structure is an immutable array, not a linked list.
@@ -28,3 +28,4 @@ As of Gren 0.2.0, the main differences is that Gren has:
 * No automatic constructors for type aliased records.
 * No GLSL syntax.
 * No reactor.
+* Sourcemap support for native integration with the JS debugger.
