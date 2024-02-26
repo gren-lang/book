@@ -24,7 +24,7 @@ As of Gren 0.3.0, the main differences is that Gren has:
 * Any expression that returns a record can be used for record updates.
 * Multiline strings trim leading whitespace on each line.
 * Supports running on NodeJS.
-* No tuples.
+* No tuples. Check out this [video on why tuples were removed](https://youtu.be/Sl9HHo1qDk0?si=wiJjSEMyl0f6HqTn).
 * No automatic constructors for type aliased records.
 * No GLSL syntax.
 * No reactor.

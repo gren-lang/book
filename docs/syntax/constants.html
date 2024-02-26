@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
@@ -31,7 +31,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -61,42 +61,71 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded "><a href="../why_gren.html"><strong aria-hidden="true">1.</strong> Why Gren?</a></li><li class="chapter-item expanded "><a href="../hello_world.html"><strong aria-hidden="true">2.</strong> Hello World</a></li><li class="chapter-item expanded affix "><li class="part-title">The Language</li><li class="chapter-item expanded "><a href="../syntax/repl.html"><strong aria-hidden="true">3.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="../syntax/constants.html" class="active"><strong aria-hidden="true">4.</strong> Constants</a></li><li class="chapter-item expanded "><a href="../syntax/functions.html"><strong aria-hidden="true">5.</strong> Functions</a></li><li class="chapter-item expanded "><a href="../syntax/numbers.html"><strong aria-hidden="true">6.</strong> Numbers</a></li><li class="chapter-item expanded "><a href="../syntax/arrays.html"><strong aria-hidden="true">7.</strong> Arrays</a></li><li class="chapter-item expanded "><a href="../syntax/strings.html"><strong aria-hidden="true">8.</strong> Strings</a></li><li class="chapter-item expanded "><a href="../syntax/records.html"><strong aria-hidden="true">9.</strong> Records</a></li><li class="chapter-item expanded "><a href="../syntax/types.html"><strong aria-hidden="true">10.</strong> Types</a></li><li class="chapter-item expanded "><a href="../syntax/ifs.html"><strong aria-hidden="true">11.</strong> If expressions</a></li><li class="chapter-item expanded "><a href="../syntax/custom_types.html"><strong aria-hidden="true">12.</strong> Custom types</a></li><li class="chapter-item expanded "><a href="../syntax/pattern_matching.html"><strong aria-hidden="true">13.</strong> Pattern matching</a></li><li class="chapter-item expanded "><a href="../syntax/modules.html"><strong aria-hidden="true">14.</strong> Modules</a></li><li class="chapter-item expanded "><a href="../syntax/comments.html"><strong aria-hidden="true">15.</strong> Comments</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="../gren_json.html"><strong aria-hidden="true">16.</strong> gren.json</a></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">17.</strong> FAQ</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -148,7 +177,7 @@
 <p>You can attach names to values. Named values are called constants, because once defined those names can never refer to another value.</p>
 <pre><code class="language-gren">theAnswer = 42
 
-aQuestion = &quot;What is the answer?&quot;
+aQuestion = "What is the answer?"
 
 helpful = False
 </code></pre>
@@ -157,7 +186,7 @@ helpful = False
 <li>Integers (<code>Int</code>): A whole number. Example: <code>42</code>.</li>
 <li>Floating point numbers (<code>Float</code>): An approximation of a fractional number. Example: <code>5.2</code>.</li>
 <li>Characters (<code>Char</code>): A single UTF-16 encoded character. Example: <code>'a'</code>.</li>
-<li>Strings (<code>String</code>): An array of UTF-16 encoded characters. Example: <code>&quot;test&quot;</code>.</li>
+<li>Strings (<code>String</code>): An array of UTF-16 encoded characters. Example: <code>"test"</code>.</li>
 <li>Booleans (<code>Bool</code>): Either <code>True</code> or <code>False</code>.</li>
 </ul>
 
@@ -169,7 +198,7 @@ helpful = False
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../syntax/functions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../syntax/functions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -183,13 +212,29 @@ helpful = False
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../syntax/functions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../syntax/functions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 

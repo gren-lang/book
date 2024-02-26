@@ -1,17 +1,17 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>The Gren Programming Language</title>
-        <meta name="robots" content="noindex" />
+        <meta name="robots" content="noindex">
 
 
         <!-- Custom HTML head -->
         
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -32,7 +32,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -62,42 +62,71 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded "><a href="why_gren.html"><strong aria-hidden="true">1.</strong> Why Gren?</a></li><li class="chapter-item expanded "><a href="hello_world.html"><strong aria-hidden="true">2.</strong> Hello World</a></li><li class="chapter-item expanded affix "><li class="part-title">The Language</li><li class="chapter-item expanded "><a href="syntax/repl.html"><strong aria-hidden="true">3.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="syntax/constants.html"><strong aria-hidden="true">4.</strong> Constants</a></li><li class="chapter-item expanded "><a href="syntax/functions.html"><strong aria-hidden="true">5.</strong> Functions</a></li><li class="chapter-item expanded "><a href="syntax/numbers.html"><strong aria-hidden="true">6.</strong> Numbers</a></li><li class="chapter-item expanded "><a href="syntax/arrays.html"><strong aria-hidden="true">7.</strong> Arrays</a></li><li class="chapter-item expanded "><a href="syntax/strings.html"><strong aria-hidden="true">8.</strong> Strings</a></li><li class="chapter-item expanded "><a href="syntax/records.html"><strong aria-hidden="true">9.</strong> Records</a></li><li class="chapter-item expanded "><a href="syntax/types.html"><strong aria-hidden="true">10.</strong> Types</a></li><li class="chapter-item expanded "><a href="syntax/ifs.html"><strong aria-hidden="true">11.</strong> If expressions</a></li><li class="chapter-item expanded "><a href="syntax/custom_types.html"><strong aria-hidden="true">12.</strong> Custom types</a></li><li class="chapter-item expanded "><a href="syntax/pattern_matching.html"><strong aria-hidden="true">13.</strong> Pattern matching</a></li><li class="chapter-item expanded "><a href="syntax/modules.html"><strong aria-hidden="true">14.</strong> Modules</a></li><li class="chapter-item expanded "><a href="syntax/comments.html"><strong aria-hidden="true">15.</strong> Comments</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="gren_json.html"><strong aria-hidden="true">16.</strong> gren.json</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">17.</strong> FAQ</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -217,7 +246,7 @@
 <p>These benefits comes at the cost of brevity. There's a chance that other programming languages will allow you to write less code.</p>
 <p>It is our belief that as your program grows in complexity and scope, the trade-offs made by Gren make more and more sense.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hello-world"><a class="header" href="#hello-world">Hello, world!</a></h1>
-<p>Getting a simple program to compile is a good way to verify that you've got everything setup correctly. Let's try to write a Gren program that outputs &quot;Hello, world!&quot; when opened up in a browser.</p>
+<p>Getting a simple program to compile is a good way to verify that you've got everything setup correctly. Let's try to write a Gren program that outputs "Hello, world!" when opened up in a browser.</p>
 <p>If you haven't already: <a href="/install">install Gren</a>.</p>
 <p>Once you've setup the compiler correctly, it's time to initialize our project. We're going to assume that you've got a bash terminal setup.</p>
 <h2 id="setting-up-your-project"><a class="header" href="#setting-up-your-project">Setting up your project</a></h2>
@@ -239,11 +268,11 @@ Okay, I created it.
 import Html
 
 main =
-  Html.text &quot;Hello, world!&quot;
+  Html.text "Hello, world!"
 </code></pre>
 <p>We create a new module, called <code>Main</code> and expose the <code>main</code> constant from it.</p>
 <p>Then, we import the <code>Html</code> module. This module contains functions that allows us to define HTML elements. You can see everything that this module contains by reading it's <a href="https://packages.gren-lang.org/package/gren-lang/browser/version/2.0.0/module/Html">documentation</a>.</p>
-<p>In our case, we just want to display some text. The <code>text</code> function is perfect for that. Our main constant, then, contains the value returned by <code>Html.text &quot;Hello, world!&quot;</code>.</p>
+<p>In our case, we just want to display some text. The <code>text</code> function is perfect for that. Our main constant, then, contains the value returned by <code>Html.text "Hello, world!"</code>.</p>
 <p>When this Gren program is run in a browser, whatever is returned by the <code>main</code> function is displayed on the page.</p>
 <p>Compile your program using <code>gren make src/Main.gren</code>. This will produce a <code>index.html</code> file in your working directory which, when opened, displays <code>Hello, world!</code>.</p>
 <p>You can now experiment by returning different HTML values from main. Compile and refresh the page to see what happens.</p>
@@ -269,7 +298,7 @@ Say :help for help and :exit to exit!
 <p>You can attach names to values. Named values are called constants, because once defined those names can never refer to another value.</p>
 <pre><code class="language-gren">theAnswer = 42
 
-aQuestion = &quot;What is the answer?&quot;
+aQuestion = "What is the answer?"
 
 helpful = False
 </code></pre>
@@ -278,7 +307,7 @@ helpful = False
 <li>Integers (<code>Int</code>): A whole number. Example: <code>42</code>.</li>
 <li>Floating point numbers (<code>Float</code>): An approximation of a fractional number. Example: <code>5.2</code>.</li>
 <li>Characters (<code>Char</code>): A single UTF-16 encoded character. Example: <code>'a'</code>.</li>
-<li>Strings (<code>String</code>): An array of UTF-16 encoded characters. Example: <code>&quot;test&quot;</code>.</li>
+<li>Strings (<code>String</code>): An array of UTF-16 encoded characters. Example: <code>"test"</code>.</li>
 <li>Booleans (<code>Bool</code>): Either <code>True</code> or <code>False</code>.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="functions"><a class="header" href="#functions">Functions</a></h1>
@@ -305,12 +334,12 @@ numbers =
 <div style="break-before: page; page-break-before: always;"></div><h1 id="records"><a class="header" href="#records">Records</a></h1>
 <p>You can also group different types of named values in a record.</p>
 <pre><code>twoSugars =
-  { ingredient = &quot;Sugar cube&quot;
+  { ingredient = "Sugar cube"
   , quantity = 2
   }
 
 cupOfCoffee =
-  { ingredient = &quot;Cup of coffee&quot;
+  { ingredient = "Cup of coffee"
   , quantity = 1
   }
 
@@ -343,7 +372,7 @@ sweetCoffeeCup =
 theAnswer = 42
 
 aQuestion : String
-aQuestion = &quot;What was the question again?&quot;
+aQuestion = "What was the question again?"
 
 helpful : Bool
 helpful = False
@@ -376,15 +405,15 @@ sumOfFiveAndTwo =
 explainHeldItem maybeItem =
     case maybeItem of
         Nothing -&gt;
-          &quot;You're not holding anything&quot;
+          "You're not holding anything"
 
         Just item -&gt;
-          &quot;You're holding a &quot; ++ item
+          "You're holding a " ++ item
 
 
 holdingSword : String
 holdingSword =
-    explainHeldItem (Just &quot;Sword&quot;)
+    explainHeldItem (Just "Sword")
 </code></pre>
 <p>You can use pattern matching on other things than just custom types. Like integers:</p>
 <pre><code class="language-gren">isZero : Int -&gt; Bool
@@ -404,7 +433,7 @@ combineIngredients left right =
             left
 
         _ -&gt;
-            { ingredient = left.ingredient ++ &quot; and &quot; ++ right.ingredient
+            { ingredient = left.ingredient ++ " and " ++ right.ingredient
             , quantity = left.quantity + right.quantity
             }
 </code></pre>
@@ -460,19 +489,19 @@ pi = 3.14
 <h2 id="applications"><a class="header" href="#applications">Applications</a></h2>
 <p>The <code>gren.json</code> file should look something like the following:</p>
 <pre><code class="language-json">{
-    &quot;type&quot;: &quot;application&quot;,
-    &quot;platform&quot;: &quot;browser&quot;,
-    &quot;source-directories&quot;: [
-        &quot;src&quot;
+    "type": "application",
+    "platform": "browser",
+    "source-directories": [
+        "src"
     ],
-    &quot;gren-version&quot;: &quot;0.3.0&quot;,
-    &quot;dependencies&quot;: {
-        &quot;direct&quot;: {
-            &quot;gren-lang/browser&quot;: &quot;3.0.0&quot;,
-            &quot;gren-lang/core&quot;: &quot;4.0.0&quot;
+    "gren-version": "0.3.0",
+    "dependencies": {
+        "direct": {
+            "gren-lang/browser": "3.0.0",
+            "gren-lang/core": "4.0.0"
         },
-        &quot;indirect&quot;: {
-            &quot;gren-lang/url&quot;: &quot;3.0.0&quot;
+        "indirect": {
+            "gren-lang/url": "3.0.0"
         }
     }
 }
@@ -488,18 +517,18 @@ pi = 3.14
 <h2 id="packages"><a class="header" href="#packages">Packages</a></h2>
 <p>The <code>gren.json</code> file for packages should look something like this:</p>
 <pre><code class="language-json">{
-  &quot;type&quot;: &quot;package&quot;,
-  &quot;platform&quot;: &quot;common&quot;,
-  &quot;name&quot;: &quot;yarl/stuff&quot;,
-  &quot;summary&quot;: &quot;Yarl's reusable Gren code&quot;,
-  &quot;license&quot;: &quot;BSD-3-Clause&quot;,
-  &quot;version&quot;: &quot;1.0.0&quot;,
-  &quot;gren-version&quot;: &quot;0.3.0 &lt;= v &lt; 0.4.0&quot;,
-  &quot;exposed-modules&quot;: {
-    &quot;Primitives&quot;: [&quot;ModuleOne&quot;, &quot;ModuleTwo&quot;]
+  "type": "package",
+  "platform": "common",
+  "name": "yarl/stuff",
+  "summary": "Yarl's reusable Gren code",
+  "license": "BSD-3-Clause",
+  "version": "1.0.0",
+  "gren-version": "0.3.0 &lt;= v &lt; 0.4.0",
+  "exposed-modules": {
+    "Primitives": ["ModuleOne", "ModuleTwo"]
   },
-  &quot;dependencies&quot;: {
-    &quot;gren-lang/core&quot;: &quot;3.0.0 &lt;= v &lt; 4.0.0&quot;
+  "dependencies": {
+    "gren-lang/core": "3.0.0 &lt;= v &lt; 4.0.0"
   }
 }
 </code></pre>
@@ -541,7 +570,7 @@ pi = 3.14
 <li>Any expression that returns a record can be used for record updates.</li>
 <li>Multiline strings trim leading whitespace on each line.</li>
 <li>Supports running on NodeJS.</li>
-<li>No tuples.</li>
+<li>No tuples. Check out this <a href="https://youtu.be/Sl9HHo1qDk0?si=wiJjSEMyl0f6HqTn">video on why tuples were removed</a>.</li>
 <li>No automatic constructors for type aliased records.</li>
 <li>No GLSL syntax.</li>
 <li>No reactor.</li>
@@ -565,6 +594,22 @@ pi = 3.14
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 
