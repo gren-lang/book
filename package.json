@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "remark": "^14.0.2"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.21.5"
   }
 }
