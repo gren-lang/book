@@ -4,8 +4,28 @@ This repo contains the source code of "The Gren Programming Language", available
 
 ## Development
 
-To build the project, you'll need to have `mdbook` installed. This can be done with homebrew or the cargo build system.
+Built with [Starlight](https://starlight.astro.build). Install with:
 
-To build a new version of the book, execute `mdbook build`. Commiting the changes to master will update the online version.
+```
+npm install
+```
 
-For local development you can instead use `mdbook serve`, which will display the book on `localhost:3000`.
+For local development, start the dev server with:
+
+```
+npm run dev
+```
+
+To generate a production build in `dist/`, run:
+
+```
+npm run build
+```
+
+To preview the production build locally, after running the build:
+
+```
+npm run preview
+```
+
+TODO: deployment to GH pages
