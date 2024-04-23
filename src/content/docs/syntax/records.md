@@ -1,8 +1,11 @@
-# Records
+---
+title: Records
+description: Records in Gren
+---
 
 You can also group different types of named values in a record.
 
-```
+```elm
 twoSugars =
   { ingredient = "Sugar cube"
   , quantity = 2
@@ -22,7 +25,7 @@ An interesting thing to note is that record types follow the shape of a record. 
 
 The types can become rather painful to write, though, so Gren also supports type aliasing.
 
-```
+```elm
 type alias QuantifiedIngredient =
   { ingredient : String
   , quantity : Int
@@ -35,7 +38,7 @@ sweetCoffeeCup =
 
 It can be useful to create a record which contains mostly the same values as some other record, but with a few modifications. Gren supports this through special syntax:
 
-```gren
+```elm
 fourSugars =
   { twoSugars
     | quantity = 4

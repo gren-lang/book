@@ -1,8 +1,11 @@
-# Arrays
+---
+title: Arrays
+description: Arrays in Gren
+---
 
 You can group several values in an array.
 
-```gren
+```elm
 numbers : Array Int
 numbers =
     [ 1, 2, 3, 4, 5 ]

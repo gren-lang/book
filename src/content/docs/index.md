@@ -1,4 +1,7 @@
-# Why Gren?
+---
+title: Why Gren?
+description: What makes gren a programming language that helps you write simple and correct software?
+---
 
 Gren is a programming language that helps you write simple and correct software.
 
@@ -69,7 +72,7 @@ What Gren _does have_ is a flexible, although strict, type system which allows y
 
 Instead of `null`, Gren lets you express the absence of a value by using what is known as a custom type:
 
-```gren
+```elm
 type Maybe a
   = Just a
   | Nothing
@@ -79,7 +82,7 @@ This type represents a value which may, or may not, exist. Whenever you try to u
 
 The same principle applies to exceptions. Representing an operation which may cause an error is represented by the type:
 
-```gren
+```elm
 type Result err ok
   = Ok ok
   | Err err

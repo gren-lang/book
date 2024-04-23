@@ -1,4 +1,7 @@
-# Frequently Asked Questions
+---
+title: Frequently Asked Questions
+description: Frequently asked questions about Gren
+---
 
 ## Why is the language called Gren?
 

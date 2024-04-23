@@ -1,4 +1,7 @@
-# Gren.json
+---
+title: Gren.json
+description: The Gren configuration file
+---
 
 Every Gren project is required to have a `gren.json` file. This file contains information about how to compile the project, and which platform to compile the project for.
 

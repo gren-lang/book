@@ -1,4 +1,7 @@
-# Hello, world!
+---
+title: Hello, world!
+description: A simple Gren program
+---
 
 Getting a simple program to compile is a good way to verify that you've got everything setup correctly. Let's try to write a Gren program that outputs "Hello, world!" when opened up in a browser.
 
@@ -28,7 +31,7 @@ When run without any arguments, `gren init` creates a `gren.json` file in the cu
 
 Create a `src/Main.gren` file and fill it with the following content:
 
-```gren
+```elm
 module Main exposing (main)
 
 import Html

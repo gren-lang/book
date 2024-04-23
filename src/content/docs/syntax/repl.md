@@ -1,4 +1,7 @@
-# Getting started
+---
+title: Getting Started
+description: Getting started with Gren
+---
 
 In order to learn the language, it can be helpful to have a way of running arbitrary Gren expressions without having to setup and compile a full application.
 

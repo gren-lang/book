@@ -1,4 +1,7 @@
-# Modules
+---
+title: Modules
+description: Modules in Gren
+---
 
 Every file containing Gren source code is considered a module.
 
@@ -6,7 +9,7 @@ A module is required to start with a module header, which at minimum defines the
 
 Here's a minimal example of a module header:
 
-```gren
+```elm
 module MyModule exposing (..)
 ```
 
@@ -28,7 +31,7 @@ When exposing a custom type, you can either expose just the type, or the type al
 
 If you want to reference something in another module, you'll need to import it.
 
-```gren
+```elm
 import Some.Other.Module
 ```
 
@@ -36,7 +39,7 @@ This will allow you to reference values in `Some.Other.Module` by prefix the val
 
 Sometimes, as is the case in this example, the module name can be a bit long, in those cases you can specify a shorter alias for the module name:
 
-```gren
+```elm
 import Some.Other.Module as Module
 ```
 
@@ -44,7 +47,7 @@ You can now prefix values with `Module` instead of `Some.Other.Module`.
 
 Finally, you can opt in to not requiring specifying a prefix at all for commonly used values, by using an exposing statement:
 
-```gren
+```elm
 import Some.Other.Module exposing (commonFunction)
 ```
 

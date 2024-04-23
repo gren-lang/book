@@ -1,14 +1,17 @@
-# Comments
+---
+title: Comments
+description: Comments in Gren
+---
 
 Lines starting with `--` are ignored by the compiler, and are useful for describing something to human readers.
 
-```gren
+```elm
 -- Nothing to see here
 ```
 
 You can also use `{- -}` to have comments span multiple lines.
 
-```gren
+```elm
 {- This comment
 spans
 multiple lines
@@ -23,7 +26,7 @@ There is a special kind of comments, called documentation comments, which are re
 
 These comments are enclosed within `{-| -}` and will be used to render documentation on [packages.gren-lang.org](https://packages.gren-lang.org).
 
-```gren
+```elm
 {-| This is an approximation of pi
 -}
 pi = 3.14

@@ -1,8 +1,11 @@
-# Pattern matching
+---
+title: Pattern Matching
+description: Pattern matching in Gren
+---
 
 When dealing with custom types, you likely want to do different things based on the actual value of the custom type. The `case of` expression provides this flexibility.
 
-```gren
+```elm
 explainHeldItem : Maybe String -> String
 explainHeldItem maybeItem =
     case maybeItem of
@@ -20,7 +23,7 @@ holdingSword =
 
 You can use pattern matching on other things than just custom types. Like integers:
 
-```gren
+```elm
 isZero : Int -> Bool
 isZero num =
     case num of
@@ -30,7 +33,7 @@ isZero num =
 
 Or even records:
 
-```gren
+```elm
 combineIngredients : QuantifiedIngredient -> QuantifiedIngredient -> QuantifiedIngredient
 combineIngredients left right =
     case { leftQty = left.quantity, rightQty = right.quantity } of

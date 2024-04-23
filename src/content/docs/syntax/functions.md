@@ -1,8 +1,11 @@
-# Functions
+---
+title: Functions
+description: Functions in Gren
+---
 
 A function returns different values depending on its input. In Gren, a function will always return the same result if provided the same input.
 
-```gren
+```elm
 sumOf first second =
     first + second
 

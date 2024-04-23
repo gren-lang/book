@@ -1,8 +1,11 @@
-# Constants
+---
+title: Constants
+description: Constants in Gren
+---
 
 You can attach names to values. Named values are called constants, because once defined those names can never refer to another value.
 
-```gren
+```elm
 theAnswer = 42
 
 aQuestion = "What is the answer?"
