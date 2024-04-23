@@ -1,8 +1,13 @@
 {
-  "devDependencies": {
-    "remark": "^14.0.2"
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.5.9",
     "@astrojs/starlight": "^0.21.5"
   }
 }
