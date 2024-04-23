@@ -3,9 +3,12 @@ import starlight from "@astrojs/starlight";
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://gren-lang.org/book/',
+  outDir: './docs',
   integrations: [
     starlight({
       title: 'The Gren Programming Language',
+      favicon: '/favicon.png',
       social: {
 				github: 'https://github.com/gren-lang/book',
 				mastodon: 'https://fosstodon.org/@gren_lang',
