@@ -3,7 +3,8 @@ import starlight from "@astrojs/starlight";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://gren-lang.org/book/',
+  site: 'https://gren-lang.org',
+  base: '/book',
   outDir: './docs',
   integrations: [
     starlight({
