@@ -15,7 +15,7 @@ module MyModule exposing (..)
 
 ## Module name
 
-The module name `MyModule` needs to coincide with the modules physical location on disk. In this case `MyModule` has to be at the top level of the `src` directory. If `MyModule` was located in `src/Sub/MyModule.gren`, then the project would have failed to compile.
+The module name `MyModule` needs to coincide with the module's physical location on disk. In this case `MyModule` has to be at the top level of the `src` directory. If `MyModule` was located in `src/Sub/MyModule.gren`, then the project would have failed to compile.
 
 When a module does exist within a sub-directory, like `src/Some/Long/Path/For/Module.gren`, then the module name should match the path, but with `/` replaced with `.`, like `Some.Long.Path.For.Module`.
 

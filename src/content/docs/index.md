@@ -68,7 +68,7 @@ There are certain constructs that Gren doesn't have, that are often the source o
 2. Exceptions
 3. Uncontrolled side-effects
 
-What Gren _does have_ is a flexible, although strict, type system which allows you represent these constructs in a way that let's the compiler help you avoid the most common bugs.
+What Gren _does have_ is a flexible, although strict, type system which allows you to represent these constructs in a way that lets the compiler help you avoid the most common bugs.
 
 Instead of `null`, Gren lets you express the absence of a value by using what is known as a custom type:
 
@@ -98,6 +98,6 @@ The same concept applies to side-effects like performing HTTP calls or saving th
 
 Gren has made a very specific set of trade-offs that makes it easy to locate and isolate bugs and side effects. These same trade-offs also make the language small in both syntax and concepts. This again reduces the necessary time investment to learn the language, and makes it easy for the compiler to provide detailed and helpful error messages.
 
-These benefits comes at the cost of brevity. There's a chance that other programming languages will allow you to write less code.
+These benefits come at the cost of brevity. There's a chance that other programming languages will allow you to write less code.
 
 It is our belief that as your program grows in complexity and scope, the trade-offs made by Gren make more and more sense.
