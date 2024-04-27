@@ -74,3 +74,10 @@ and they were like "Yeah"
 """
 ```
 
+You can combine two strings into one with `++`:
+
+```elm
+greet : String -> String
+greet name =
+  "Hello, " ++ name
+```
