@@ -16,7 +16,7 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'Summary',
+					label: 'Introduction',
 					items: [
 						{ label: 'Why Gren', link: '/' },
 						{ label: 'Hello World', link: '/hello_world/' },
@@ -38,6 +38,12 @@ export default defineConfig({
 						{ label: 'Modules', link: '/syntax/modules/' },
 						{ label: 'Comments', link: '/syntax/comments/' },
 						{ label: 'FAQ', link: '/faq/' },
+					],
+				},
+				{
+					label: 'Appendix',
+					items: [
+						{ label: 'gren.json', link: '/appendix/gren_json' },
 					],
 				},
       ],
