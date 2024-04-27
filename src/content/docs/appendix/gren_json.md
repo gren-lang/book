@@ -39,7 +39,7 @@ Let's explain this property by property:
 * `platform`: Which platform are we expecting to run our application on? Can either be `browser` or `node`.
 * `source-directories`: This lists every sub-folder that the compiler should look for Gren source files in. This is usually fine as-is.
 * `gren-version`: Which version of the compiler is this application compatible with. If you're using an unsupported compiler, it will refuse to compile.
-* `dependencies`: Lists the packages that your application depends on. Direct dependencies are those which you application make direct use of, while indirect dependencies are required by your direct dependencies. The reason that both types of dependencies are listed in your `gren.json` file, is to make sure we always retrieve the same version of a given dependency. Each package name resolves to a github `author/project` name. Versions need to be formatted according to the `semver` specification, and must target a concrete version (no ranges).
+* `dependencies`: Lists the packages that your application depends on. Direct dependencies are those which your application makes direct use of, while indirect dependencies are required by your direct dependencies. The reason that both types of dependencies are listed in your `gren.json` file, is to make sure we always retrieve the same version of a given dependency. Each package name resolves to a github `author/project` name. Versions need to be formatted according to the [semver specification](https://semver.org/), and must target a concrete version (no ranges).
 
 ## Packages
 
