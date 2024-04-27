@@ -35,7 +35,7 @@ If you want to reference something in another module, you'll need to import it.
 import Some.Other.Module
 ```
 
-This will allow you to reference values in `Some.Other.Module` by prefix the value with the module prefix.
+This will allow you to reference values in `Some.Other.Module` by prefixing the value with the module prefix. Like this: `Some.Other.Module.someValue`.
 
 Sometimes, as is the case in this example, the module name can be a bit long, in those cases you can specify a shorter alias for the module name:
 
