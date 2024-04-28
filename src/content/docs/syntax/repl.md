@@ -5,7 +5,7 @@ description: Getting started with Gren
 
 In order to learn the language, it can be helpful to have a way of running arbitrary Gren expressions without having to setup and compile a full application.
 
-Thankfully, there is such a tool. It's called a REPL (Read Eval Print Loop). It takes Gren expressions as input (read), compiles and run it (eval), then prints the result (print). It keeps doing this until you exit the program (loop).
+Thankfully, there is such a tool. It's called a REPL (Read Eval Print Loop). It takes Gren expressions as input (read), compiles and runs it (eval), then prints the result (print). It keeps doing this until you exit the program (loop).
 
 Assuming you've already [installed](/install) the Gren compiler, you can enter a REPL by running `gren repl`. It should look something like this:
 

@@ -15,7 +15,7 @@ module MyModule exposing (..)
 
 ## Module name
 
-The module name `MyModule` needs to coincide with the modules physical location on disk. In this case `MyModule` has to be at the top level of the `src` directory. If `MyModule` was located in `src/Sub/MyModule.gren`, then the project would have failed to compile.
+The module name `MyModule` needs to coincide with the module's physical location on disk. In this case `MyModule` has to be at the top level of the `src` directory. If `MyModule` was located in `src/Sub/MyModule.gren`, then the project would have failed to compile.
 
 When a module does exist within a sub-directory, like `src/Some/Long/Path/For/Module.gren`, then the module name should match the path, but with `/` replaced with `.`, like `Some.Long.Path.For.Module`.
 
@@ -35,7 +35,7 @@ If you want to reference something in another module, you'll need to import it.
 import Some.Other.Module
 ```
 
-This will allow you to reference values in `Some.Other.Module` by prefix the value with the module prefix.
+This will allow you to reference values in `Some.Other.Module` by prefixing the value with the module prefix. Like this: `Some.Other.Module.someValue`.
 
 Sometimes, as is the case in this example, the module name can be a bit long, in those cases you can specify a shorter alias for the module name:
 

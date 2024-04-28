@@ -3,11 +3,11 @@ title: Hello, world!
 description: A simple Gren program
 ---
 
-Getting a simple program to compile is a good way to verify that you've got everything setup correctly. Let's try to write a Gren program that outputs "Hello, world!" when opened up in a browser.
+Getting a simple program to compile is a good way to verify that you've got everything set up correctly. Let's try to write a Gren program that outputs "Hello, world!" when opened up in a browser.
 
 If you haven't already: [install Gren](/install).
 
-Once you've setup the compiler correctly, it's time to initialize our project. We're going to assume that you've got a bash terminal setup.
+Once you've set up the compiler correctly, it's time to initialize our project. We're going to assume that you've got a bash terminal set up.
 
 ## Setting up your project
 
@@ -25,7 +25,7 @@ Retrieving versions for gren-lang/browser... Ok!
 Okay, I created it.
 ```
 
-When run without any arguments, `gren init` creates a `gren.json` file in the current directory that defines a browser application. You can read more about the `gren.json` file in the appendix.
+When run without any arguments, `gren init` creates a `gren.json` file in the current directory that defines a browser application. You can read more about the `gren.json` file in the [appendix](/book/appendix/gren_json/).
 
 ## Writing your program
 
@@ -42,7 +42,7 @@ main =
 
 We create a new module, called `Main` and expose the `main` constant from it.
 
-Then, we import the `Html` module. This module contains functions that allows us to define HTML elements. You can see everything that this module contains by reading it's [documentation](https://packages.gren-lang.org/package/gren-lang/browser/version/2.0.0/module/Html).
+Then, we import the `Html` module. This module contains functions that allows us to define HTML elements. You can see everything that this module contains by reading its [documentation](https://packages.gren-lang.org/package/gren-lang/browser/version/2.0.0/module/Html).
 
 In our case, we just want to display some text. The `text` function is perfect for that. Our main constant, then, contains the value returned by `Html.text "Hello, world!"`.
 

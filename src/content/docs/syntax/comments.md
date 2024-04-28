@@ -22,7 +22,7 @@ Comments can be used pretty much everywhere, as they're completely ignored by th
 
 ## Documentation comments
 
-There is a special kind of comments, called documentation comments, which are recognized by the compiler as being documentation for a module or a value.
+There are special kinds of comments, called documentation comments, which are recognized by the compiler as being documentation for a module or a value.
 
 These comments are enclosed within `{-| -}` and will be used to render documentation on [packages.gren-lang.org](https://packages.gren-lang.org).
 

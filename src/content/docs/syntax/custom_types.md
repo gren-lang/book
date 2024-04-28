@@ -3,7 +3,7 @@ title: Custom Types
 description: Custom Types in Gren
 ---
 
-Sometimes it's helpful with values that can be in one of several states. This can be useful to represent values that may be absent, or operations which can succeed and fail, or cases where you'd typically use enums in other languages.
+Sometimes it's helpful to have values that can be in one of several states. This can be useful to represent values that may be absent, or operations which can succeed and fail, or cases where you'd typically use enums in other languages.
 
 In Gren, this concept is known as custom types.
 

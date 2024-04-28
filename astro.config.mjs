@@ -16,7 +16,7 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'Summary',
+					label: 'Introduction',
 					items: [
 						{ label: 'Why Gren', link: '/' },
 						{ label: 'Hello World', link: '/hello_world/' },
@@ -31,13 +31,20 @@ export default defineConfig({
 						{ label: 'Numbers', link: '/syntax/numbers/' },
 						{ label: 'Arrays', link: '/syntax/arrays/' },
 						{ label: 'Strings', link: '/syntax/strings/' },
+            { label: 'Records', link: '/syntax/records/' },
 						{ label: 'Types', link: '/syntax/types/' },
 						{ label: 'If expressions', link: '/syntax/ifs/' },
 						{ label: 'Custom types', link: '/syntax/custom_types/' },
 						{ label: 'Pattern matching', link: '/syntax/pattern_matching/' },
 						{ label: 'Modules', link: '/syntax/modules/' },
 						{ label: 'Comments', link: '/syntax/comments/' },
-						{ label: 'FAQ', link: '/faq/' },
+					],
+				},
+				{
+					label: 'Appendix',
+					items: [
+						{ label: 'gren.json', link: '/appendix/gren_json/' },
+						{ label: 'FAQ', link: '/appendix/faq/' },
 					],
 				},
       ],
