@@ -81,3 +81,5 @@ greet : String -> String
 greet name =
   "Hello, " ++ name
 ```
+
+To see what else you can do with strings, check the [String module documentation](https://packages.gren-lang.org/package/gren-lang/core/latest/module/String).
