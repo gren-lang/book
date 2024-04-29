@@ -40,3 +40,41 @@ double : number -> number
 double n =
     n * 2
 ```
+
+## Math
+
+You can perfrom basic math operations on numbers using the typical operators:
+
+```bash
+> 1 + 2
+3 : number
+> 2 - 1
+1 : number
+> 2 * 3
+6 : number
+> 6 / 2
+3 : Float
+```
+
+Notice that the division operator returns floats:
+
+```bash
+> 6 / 4
+1.5 : Float
+```
+
+You can perform integer division with `//`:
+
+```bash
+> 6 // 4
+1 : Int
+```
+
+For exponentation, use `^`:
+
+```bash
+> 3 ^ 2
+9 : number
+```
+
+For other math operations, see [the Math module documentation](https://packages.gren-lang.org/package/gren-lang/core/latest/module/Math).
