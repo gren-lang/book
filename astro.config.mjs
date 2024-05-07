@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from "@astrojs/starlight";
 import rehypeMermaid from "rehype-mermaid";
+import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,6 +12,11 @@ export default defineConfig({
     starlight({
       title: 'The Gren Programming Language',
       favicon: '/favicon.png',
+      expressiveCode: {
+        plugins: [
+          pluginLineNumbers()
+        ],
+      },
       social: {
         github: 'https://github.com/gren-lang/book',
         mastodon: 'https://fosstodon.org/@gren_lang',
@@ -42,6 +48,14 @@ export default defineConfig({
             { label: 'Destructuring', link: '/syntax/destructuring/' },
             { label: 'Modules', link: '/syntax/modules/' },
             { label: 'Comments', link: '/syntax/comments/' },
+          ],
+        },
+        {
+          label: 'Applications',
+          items: [
+            { label: 'The Elm Architecture', link: '/applications/tea/' },
+            { label: 'Browser Applications', link: '/applications/browser/' },
+            { label: 'Node Applications', link: '/applications/node/' },
           ],
         },
         {
