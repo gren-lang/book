@@ -71,7 +71,7 @@ type Maybe a
 ```
 
 Here `a` is a type variable and could have been any word starting with a lowercase letter.
-So `Maybe` can be one of two things: Either it's `Just a` where `a` is a generic type for whatever data its holding, or it's `Nothing` in which case there is no associated data attached.
+So `Maybe` can be one of two things: Either it's `Just a` where `a` is a generic type for whatever data it's holding, or it's `Nothing` in which case there is no associated data attached.
 
 ```elm frame=terminal
 > Just "Hello"
