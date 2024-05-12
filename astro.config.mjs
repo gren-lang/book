@@ -34,6 +34,7 @@ export default defineConfig({
             { label: 'Records', link: '/syntax/records/' },
 						{ label: 'Types', link: '/syntax/types/' },
 						{ label: 'If expressions', link: '/syntax/ifs/' },
+						{ label: 'Let expressions', link: '/syntax/lets/' },
 						{ label: 'Custom types', link: '/syntax/custom_types/' },
 						{ label: 'Pattern matching', link: '/syntax/pattern_matching/' },
 						{ label: 'Modules', link: '/syntax/modules/' },
