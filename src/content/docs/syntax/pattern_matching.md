@@ -3,22 +3,39 @@ title: Pattern Matching
 description: Pattern matching in Gren
 ---
 
-When dealing with custom types, you likely want to do different things based on the actual value of the custom type. The `case of` expression provides this flexibility.
+When dealing with [custom types](/book/syntax/custom_types/), you likely want to do different things based on the actual value of the custom type. The `case of` expression provides this flexibility.
 
 ```elm
-explainHeldItem : Maybe String -> String
-explainHeldItem maybeItem =
-    case maybeItem of
-        Nothing ->
-          "You're not holding anything"
+type Role
+  = Viewer
+  | Editor
+  | Admin
 
-        Just item ->
-          "You're holding a " ++ item
+canEdit : Role -> Bool
+canEdit role =
+    case role of
+        Viewer ->
+            False
+        
+        Editor ->
+            True
+        
+        Admin ->
+            True
+```
 
+In gren, pattern matching is exhaustive.
+That means the compiler will complain if you don't cover all possible cases.
+This is very helpful, since you can add a variant to your custom type without worrying that you forgot to handle it somewhere.
 
-holdingSword : String
-holdingSword =
-    explainHeldItem (Just "Sword")
+If you don't need to handle all possible cases explicitly, you can use `_` as a catch-all:
+
+```elm
+canAddUser : Role -> Bool
+canAddUser role =
+    case role of
+        Admin -> True
+        _ -> False
 ```
 
 You can use pattern matching on other things than just custom types. Like integers:
@@ -48,3 +65,45 @@ combineIngredients left right =
             , quantity = left.quantity + right.quantity
             }
 ```
+
+## Patterns with Data
+
+You can use pattern matching to extract nested data from your values.
+
+If you have a [custom type with data](/book/syntax/custom_types/#types-with-data), you can give that data a name and use it in the branch for that pattern:
+
+```elm
+explainHeldItem : Maybe String -> String
+explainHeldItem maybeItem =
+    case maybeItem of
+        Nothing ->
+          "You're not holding anything"
+
+        Just item ->
+          "You're holding a " ++ item
+
+
+holdingSword : String
+holdingSword =
+    explainHeldItem (Just "Sword")
+```
+
+You can get data from other types of values as well:
+
+```elm
+run : Array String -> String
+run args =
+    case args of
+        [] ->
+           "No arguments provided."
+            
+        [ "greet", name ] ->
+            "Hello, " ++ name ++ "!"
+        
+        [ "flip", first, second ] ->
+            second ++ first 
+            
+        _ ->
+          "Unrecognized arguments."
+```
+
