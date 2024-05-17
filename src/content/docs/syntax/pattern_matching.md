@@ -88,22 +88,4 @@ holdingSword =
     explainHeldItem (Just "Sword")
 ```
 
-You can get data from other types of values as well:
-
-```elm
-run : Array String -> String
-run args =
-    case args of
-        [] ->
-           "No arguments provided."
-            
-        [ "greet", name ] ->
-            "Hello, " ++ name ++ "!"
-        
-        [ "flip", first, second ] ->
-            second ++ first 
-            
-        _ ->
-          "Unrecognized arguments."
-```
-
+Extracting nested data like this is called _desctructuring_.
