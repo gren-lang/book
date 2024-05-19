@@ -5,8 +5,6 @@ description: Destructuring in Gren
 
 Destructuring is a way to extract nested data from values.
 
-## Destructuring Custom Types
-
 In the [pattern matching section](/book/syntax/pattern_matching/#patterns-with-data) you destructured a custom type with case/of:
 
 ```elm
@@ -20,7 +18,7 @@ welcome user =
             "Welcome, " ++ name
 ```
 
-You can also destructure with [let/in](/book/syntax/lets/):
+Since this custom type only has one variant, you can also destructure it with [let/in](/book/syntax/lets/):
 
 ```elm
 welcome : User -> String
@@ -28,6 +26,14 @@ welcome user =
     let
         (User name) = user
     in
+    "Welcome, " ++ name
+```
+
+Or even directly in your function arguments:
+
+```elm
+welcome : User -> String
+welcome (User user) =
     "Welcome, " ++ name
 ```
 
@@ -69,18 +75,21 @@ inStock item =
         name ++ " is out of stock"
 ```
 
-You can even destructure directly in your function arguments:
+You can give your destructured data an alias with the `as` keyword:
 
 ```elm
 inStock : Item -> String
-inStock { name, count } =
-    if count > 0 then
-        name ++ " is in stock"
+inStock item =
+    let
+        ({ name, count } as myItem) = item
+    in
+    if myItem.count > 0 then
+        myItem.name ++ " is in stock"
     else
-        name ++ " is out of stock"
+        myItem.name ++ " is out of stock"
 ```
 
-All of these techniques also work for [case/of expressions](/book/pattern-matching).
+All of these techniques also work with function arguments and [case/of expressions](/book/pattern-matching).
 
 ## Destructuring Arrays
 
