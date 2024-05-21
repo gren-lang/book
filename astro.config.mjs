@@ -37,6 +37,7 @@ export default defineConfig({
 						{ label: 'Let expressions', link: '/syntax/lets/' },
 						{ label: 'Custom types', link: '/syntax/custom_types/' },
 						{ label: 'Pattern matching', link: '/syntax/pattern_matching/' },
+						{ label: 'Destructuring', link: '/syntax/destructuring/' },
 						{ label: 'Modules', link: '/syntax/modules/' },
 						{ label: 'Comments', link: '/syntax/comments/' },
 					],

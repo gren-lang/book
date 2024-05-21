@@ -26,6 +26,13 @@ Success : MyResult
 Failure : MyResult
 ```
 
+You can also create types with only one variant.
+
+```elm
+type User =
+    User
+```
+
 ## Types with Data
 
 Custom types can also hold data.
