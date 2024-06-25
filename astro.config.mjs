@@ -14,6 +14,7 @@ export default defineConfig({
       social: {
         github: 'https://github.com/gren-lang/book',
         mastodon: 'https://fosstodon.org/@gren_lang',
+        discord: 'https://discord.gg/Chb9YB9Vmh',
       },
       sidebar: [
         {
