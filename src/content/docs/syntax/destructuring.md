@@ -33,7 +33,7 @@ Or even directly in your function arguments:
 
 ```elm
 welcome : User -> String
-welcome (User user) =
+welcome (User name) =
     "Welcome, " ++ name
 ```
 
