@@ -2,9 +2,11 @@
 
 This repo contains the source code of "The Gren Programming Language", available to read from [gren-lang.org](https://gren-lang.org/book/).
 
+Built with [Starlight](https://starlight.astro.build). 
+
 ## Development
 
-Built with [Starlight](https://starlight.astro.build). Install with:
+Install [nodejs](https://nodejs.org/) or start a [devbox](https://www.jetify.com/devbox) shell. Then:
 
 ```
 npm install
