@@ -126,10 +126,11 @@ main =
 When you compile an application, Gren expects a `main` function with your program definition.
 Here we're defining a [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) program.
 That means it cannot affect or be affected by "the outside world".
-The only events are those explicitly triggered by the user.
-In our case, clicking the plus or minus buttons.
+The only events are those explicitly triggered by the user,
+in our case, clicking the plus or minus buttons,
+and the only effects are changes to our model.
 
-We're defining the program with a record that points to our `init`, `update`, and `view` functions.
+We're defining the program with a [record](/book/syntax/records/) that points to our `init`, `update`, and `view` functions.
 These correspond to the components of [the elm architecture](/book/applications/tea/) and we'll describe them next.
 
 #### The Model
