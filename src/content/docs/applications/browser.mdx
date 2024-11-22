@@ -14,7 +14,7 @@ gren init
 This will create a `gren.json` with `"type": "application"` and `"platform": "browser"`.
 It also created a `src` directory where gren will look for your source code.
 
-## Create a sandbox application
+## Sandbox Programs
 
 The simplest type of browser application is a [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox).
 
@@ -153,5 +153,103 @@ The `init` function returns the initial value of the model when the program star
 In this case, we're starting at zero.
 
 ### Update
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=26
+type Msg
+    = Increment
+    | Decrement
+
+
+update : Msg -> Model -> Model
+update msg model =
+    case msg of
+        Increment ->
+            model + 1
+
+        Decrement ->
+            model - 1
+```
+
+This is the "update" part of [the elm architecture](/book/applications/tea/).
+`Msg` is a [custom type](/book/syntax/custom_types/) holding all the events that can happen in the system.
+When a user triggers one of those messages from [the view](#view), Gren calls `update` to get a new model and will update the view accordingly.
+Here we're [pattern matching](/book/syntax/pattern_matching/) on the message to return a new model that's either incremented or decremented by 1.
+
+### View
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=41
+view : Model -> Html Msg
+view model =
+    Html.div []
+        [ Html.button
+            [ Event.onClick Decrement ]
+            [ Html.text "-" ]
+        , Html.text (String.fromInt model)
+        , Html.button
+            [ Event.onClick Increment ]
+            [ Html.text "+" ]
+        ]
+```
+
+This is the "view" part of [the elm architecture](/book/applications/tea/).
+It's a function that, given the current model, returns a UI: a visual representation of your current application state, with triggers to fire messages that can [update](#update) that state.
+
+For browser applications Gren expects the view to return HTML.
+Gren's [Html module](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html) has functions for all of the HTML elements.
+Most of them take two parameters: an [array](/book/syntax/arrays/) of [attributes](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html.Attributes), and the contents of the element (for many the contents will be another array of elements).
+
+Here we're returning a `div` with three elements:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {2-4}
+    Html.div []
+        [ Html.button
+            [ Event.onClick Decrement ]
+            [ Html.text "-" ]
+        , Html.text (String.fromInt model)
+        , Html.button
+            [ Event.onClick Increment ]
+            [ Html.text "+" ]
+        ]
+```
+
+The first element of our `div` is a [button](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html#button).
+The first parameter passed to the button function is an array holding one attribute: an [onClick event](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html.Events#onClick) so when a user clicks the button, our `update` function will be called with our `Decrement` message.
+The second parameter is another array for the contents of the button.
+In our case that's just some [text](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html#text) with a minus sign.
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {5}
+    Html.div []
+        [ Html.button
+            [ Event.onClick Decrement ]
+            [ Html.text "-" ]
+        , Html.text (String.fromInt model)
+        , Html.button
+            [ Event.onClick Increment ]
+            [ Html.text "+" ]
+        ]
+```
+
+The second element of our `div` is some more text showing the current count.
+We get that by converting our model (an Int) to a string.
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {6-8}
+    Html.div []
+        [ Html.button
+            [ Event.onClick Decrement ]
+            [ Html.text "-" ]
+        , Html.text (String.fromInt model)
+        , Html.button
+            [ Event.onClick Increment ]
+            [ Html.text "+" ]
+        ]
+```
+
+The third element of our `div` is another button.
+It's similar to the first, but clicking it will send the `Increment` message.
+
+This should be enough to get you started writing browser applications in Gren.
+Always [reach out](https://gren-lang.org/community/) if you have any questions.
+
+## Element Programs
 
 TODO
