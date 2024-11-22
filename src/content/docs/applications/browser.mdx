@@ -88,11 +88,9 @@ You should see something like this:
 
 Clicking the plus and minus buttons should increment and decrement the count respectively.
 
-### Explanation
-
 We'll explain how that works by looking at each part of the program above.
 
-#### Module definition
+### Module definition
 
 ```elm title="src/Main.gren" showLineNumbers
 module Main exposing (main)
@@ -101,7 +99,7 @@ module Main exposing (main)
 This is your [module declaration](/book/syntax/modules/) and it is exposing your `main` function.
 `main` is where Gren expects to find your program definition, which we'll get to in a bit.
 
-#### Imports
+### Imports
 
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=3
 import Browser
@@ -112,7 +110,7 @@ import Html.Events as Event
 
 Here we're [importing](/book/syntax/modules/#imports) other modules we will need and creating some helpful aliases for the longer ones.
 
-#### Main function
+### Main function
 
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=3
 main =
@@ -125,14 +123,35 @@ main =
 
 When you compile an application, Gren expects a `main` function with your program definition.
 Here we're defining a [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) program.
-That means it cannot affect or be affected by "the outside world".
+A sandbox cannot affect or be affected by "the outside world".
 The only events are those explicitly triggered by the user,
 in our case, clicking the plus or minus buttons,
 and the only effects are changes to our model.
+We'll go over other types of programs in the later sections.
 
 We're defining the program with a [record](/book/syntax/records/) that points to our `init`, `update`, and `view` functions.
 These correspond to the components of [the elm architecture](/book/applications/tea/) and we'll describe them next.
 
-#### The Model
+### The Model
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=17
+type alias Model =
+    Int
+
+
+init : Model
+init =
+    0
+```
+
+Here we're defining a [type alias](/book/syntax/types/#type-aliases) for our Model.
+
+Your model holds your application state and can be anything.
+Often you will use a record to hold multiple values, but in our case we only care about the current value of the counter, so we're just aliasing an Int.
+
+The `init` function returns the initial value of the model when the program starts.
+In this case, we're starting at zero.
+
+### Update
 
 TODO

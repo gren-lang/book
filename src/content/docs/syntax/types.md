@@ -31,3 +31,25 @@ sumOfFiveAndTwo =
 For functions it get's a little bit more complicated. `->` can be read as `to`. So: sumOf has type Int to Int to Int. sumOf first and second equals first + second.
 
 When reading the type signature of a function, the last `->` points to the return value of the function, while the types before represent the inputs.
+
+## Type Aliases
+
+You can give another name to a type with a type alias:
+
+```elm
+type alias Id =
+    Int
+
+nextId : Id -> Id
+nextId id =
+    id + 1
+```
+
+You will often see aliases for [record](/book/syntax/records/) types:
+
+```elm
+type alias User =
+    { id : Id
+    , name : String
+    }
+```
