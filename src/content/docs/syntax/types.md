@@ -34,8 +34,6 @@ When reading the type signature of a function, the last `->` points to the retur
 
 ## Type Aliases
 
-You can give another name to a type with a type alias:
-
 ```elm
 type alias Id =
     Int
@@ -44,6 +42,9 @@ nextId : Id -> Id
 nextId id =
     id + 1
 ```
+
+A type alias is just that: an alias.
+In the example above, the compiler be happy to accept an `Int` anywhere it sees the `Id` type, and vice-versa.
 
 You will often see aliases for [record](/book/syntax/records/) types:
 

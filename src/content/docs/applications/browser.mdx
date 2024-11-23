@@ -5,22 +5,27 @@ description: Writing browser applications in Gren.
 
 ## Initialize a project
 
-To create an application in Gren that will run in the browser, after [installing gren](https://gren-lang.org/install/), start by initializing a project directory, and answer yes when asked about creating a `gren.json` file:
+To create a Gren application that will run in the browser, in an empty directory, run:
 
 ```sh
 gren init
 ```
 
-This will create a `gren.json` with `"type": "application"` and `"platform": "browser"`.
-It also created a `src` directory where gren will look for your source code.
+This will create a `gren.json` file and a `src` directory to hold your source code.
 
 ## Sandbox Programs
 
-The simplest type of browser application is a [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox).
+A [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) is a simplified type of program that can update HTML and react to user interaction, but not much else.
+We'll go over the other types of programs in later sections.
 
-Here's a full sandbox application with some interactivity.
-Save the following in `src/Main.gren`.
-It's ok if you don't understand it yet, we will go through it piece by piece.
+Below is an example sandbox program with buttons to increase or decrease a number.
+It will look like this:
+
+![Plus and minus buttons with a zero between them](../../../assets/counter.png)
+
+Here's the full program.
+It's ok if you don't understand it yet, we will go through it piece by piece in later sections.
+For now, save the following in `src/Main.gren`:
 
 ```elm title="src/Main.gren" showLineNumbers
 module Main exposing (main)
@@ -83,12 +88,8 @@ gren make src/Main.gren
 open index.html
 ```
 
-You should see something like this:
-![Plus and minus buttons with a zero between them](../../../assets/counter.png)
-
-Clicking the plus and minus buttons should increment and decrement the count respectively.
-
-We'll explain how that works by looking at each part of the program above.
+Try clicking the buttons and you should see the number increase and decrease.
+In the following sections we'll go over each part of the program to see how it works.
 
 ### Module definition
 
@@ -123,11 +124,6 @@ main =
 
 When you compile an application, Gren expects a `main` function with your program definition.
 Here we're defining a [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) program.
-A sandbox cannot affect or be affected by "the outside world".
-The only events are those explicitly triggered by the user,
-in our case, clicking the plus or minus buttons,
-and the only effects are changes to our model.
-We'll go over other types of programs in the later sections.
 
 We're defining the program with a [record](/book/syntax/records/) that points to our `init`, `update`, and `view` functions.
 These correspond to the components of [the elm architecture](/book/applications/tea/) and we'll describe them next.
