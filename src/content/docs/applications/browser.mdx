@@ -13,7 +13,7 @@ gren init
 
 This will create a `gren.json` file and a `src` directory to hold your source code.
 
-## Sandbox Programs
+## Create a Program
 
 A [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) is a simplified type of program that can update HTML and react to user interaction, but not much else.
 We'll go over the other types of programs in later sections.
@@ -25,7 +25,6 @@ It will look like this:
 
 Here's the full program.
 It's ok if you don't understand it yet, we will go through it piece by piece in later sections.
-For now, save the following in `src/Main.gren`:
 
 ```elm title="src/Main.gren" showLineNumbers
 module Main exposing (main)
@@ -81,7 +80,11 @@ view model =
         ]
 ```
 
-Now compile and open the resulting html file:
+### Compile
+
+To run the program you need to compile it.
+First, save the above code in `src/Main.gren`.
+Then compile and open the resulting html file:
 
 ```sh
 gren make src/Main.gren
@@ -246,6 +249,122 @@ It's similar to the first, but clicking it will send the `Increment` message.
 This should be enough to get you started writing browser applications in Gren.
 Always [reach out](https://gren-lang.org/community/) if you have any questions.
 
-## Element Programs
+## Commands
+
+In Gren, functions always have the same output for any given input, they can't raise exceptions, and they can't change anything.
+So how do you do things like get a random number? or make an HTTP call?
+That requires interacting with the [Gren Runtime](/book/applications/runtime/).
+One way of doing that is by sending [commands](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Cmd).
+
+To explain this, we're going to create a new program with a button that generates random numbers.
+Below is the whole program, and we'll explain it piece by piece in the next sections.
+
+```elm showLineNumbers
+module Main exposing (main)
+
+import Browser
+import Html exposing (Html)
+import Html.Attributes as Attribute
+import Html.Events as Event
+import Random
+
+
+main =
+    Browser.element
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        }
+
+
+type alias Model =
+    Int
+
+
+init : {} -> { model : Model, command : Cmd Msg }
+init _ =
+    { model = 0
+    , command = Cmd.none
+    }
+
+
+type Msg
+    = ClickedButton
+    | GotRandomNumber Int
+
+
+getRandomNumber : Cmd Msg
+getRandomNumber =
+    Random.generate GotRandomNumber (Random.int 0 100)
+
+
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        ClickedButton ->
+            { model = model
+            , command = getRandomNumber
+            }
+
+        GotRandomNumber n ->
+            { model = n
+            , command = Cmd.none
+            }
+
+
+view : Model -> Html Msg
+view model =
+    Html.div []
+        [ Html.button
+            [ Event.onClick ClickedButton ]
+            [ Html.text "Get random number" ]
+        , Html.text " "
+        , Html.text (String.fromInt model)
+        ]
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+```
+
+You can save the above to `src/Main.gren` and [compile and run it](#compile) the same way you did the sandbox program above.
+
+### Browser.element
+
+Notice that we changed from a sanbox program to an element:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=10 del={2} ins={3,7}
+main =
+    Browser.sandbox
+    Browser.element
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        }
+```
 
 TODO
+
+## Tasks
+
+TODO: Time...
+
+## Subscriptions
+
+TODO: Time.every...
+
+## Flags
+
+TODO: Get time from JS
+
+## Ports
+
+TODO: TODO
+
+## Navigation
+
+TODO: Browser.application
+
