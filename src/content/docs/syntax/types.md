@@ -44,7 +44,7 @@ nextId id =
 ```
 
 A type alias is just that: an alias.
-In the example above, the compiler be happy to accept an `Int` anywhere it sees the `Id` type, and vice-versa.
+In the example above, the compiler will be happy to accept an `Int` anywhere it sees the `Id` type, and vice-versa.
 
 You will often see aliases for [record](/book/syntax/records/) types:
 
