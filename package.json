@@ -10,7 +10,9 @@
   "dependencies": {
     "@astrojs/check": "^0.5.9",
     "@astrojs/starlight": "^0.22.1",
+    "@expressive-code/plugin-line-numbers": "^0.38.3",
     "playwright": "^1.44.0",
-    "rehype-mermaid": "^2.1.0"
+    "rehype-mermaid": "^2.1.0",
+    "sharp": "^0.33.5"
   }
 }
