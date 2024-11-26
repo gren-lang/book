@@ -3,9 +3,10 @@ title: Browser Applications
 description: Writing browser applications in Gren.
 ---
 
-## Initialize a project
+Gren has a few different ways you can write browser applications.
+We'll go over each one here, starting with the simplest: sandboxes.
 
-To create a Gren application that will run in the browser, in an empty directory, run:
+First we need to [init a new project](/book/hello_world/). In an empty directory, run:
 
 ```sh
 gren init
@@ -13,7 +14,7 @@ gren init
 
 This will create a `gren.json` file and a `src` directory to hold your source code.
 
-## Create a Program
+## Sandbox Programs
 
 A [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) is a simplified type of program that can update HTML and react to user interaction, but not much else.
 We'll go over the other types of programs in later sections.
