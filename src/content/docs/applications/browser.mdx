@@ -336,7 +336,7 @@ You can save the above to `src/Main.gren` and [compile and run it](#compile) the
 
 Notice that we changed from a sandbox program to an element:
 
-```elm title="src/Main.gren" showLineNumbers=false del={2} ins={3,7}
+```elm showLineNumbers=false del={2} ins={3,7}
 main =
     Browser.sandbox
     Browser.element
@@ -347,15 +347,75 @@ main =
         }
 ```
 
-TODO
+Unlike a sandbox, elements have the ability to send commands and subscriptions to the [Gren Runtime](/book/applications/runtime/).
 
-## Tasks
+#### Init
 
-TODO: Time...
+One of the places you can send commands is from `init`.
+For now we don't want to do anything on init, so we're sending [`Cmd.none`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Cmd#none):
+
+
+```elm showLineNumbers=false {4}
+init : {} -> { model : Model, command : Cmd Msg }
+init _ =
+    { model = 0
+    , command = Cmd.none
+    }
+```
+
+#### Update
+
+The other place we can send commands is `update`.
+
+```elm showLineNumbers=false {3,8}
+        ClickedButton ->
+            { model = model
+            , command = getRandomNumber
+            }
+
+        GotRandomNumber n ->
+            { model = n
+            , command = Cmd.none
+            }
+```
+
+When the user clicks the button, `update` is called with a `ClickedButton` message, and we respond with a call to another function we wrote, `getRandomNumber`.
+
+#### Random Numbers
+
+Because Gren functions must always return the same value for a given input, we can't write a function that returns a random number directly.
+Instead, we write a function that returns a command to the runtime, and the runtime calls our `update` function with a message holding the random value.
+This may seem convoluted at first, but it's a way that Gren keeps your code easier to understand and maintain, since all side effects will go through your `update` function in a way that's deterministic and covers every edge case.
+
+Here's where we're creating the command to get random numbers:
+
+```elm showLineNumbers=false
+getRandomNumber : Cmd Msg
+getRandomNumber =
+    Random.generate GotRandomNumber (Random.int 0 100)
+```
+
+This might look confusing, so we'll take it one step at a time.
+
+`getRandomNumber : Cmd Msg`: The signature tells us this function returns a command, and that command could trigger one of our `Msg` variants.
+
+`Random.generate`: This is [a function in Gren's core package](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Random#generate).
+It takes a generator that says what type of random value we want, and a message to trigger with that random value.
+
+`(Random.int 0 100)`: This creates a [generator](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Random#Generator) that produces random integers between 0 and 100.
+
+`GotRandomNumber`: This is the message we want to receive from the runtime with our random number.
+It's one of the variants of our `Msg` [custom type that can hold an integer](/book/syntax/custom_types/#types-with-data).
+
+TODO: diagram of init, update, subscriptions, and runtime?
 
 ## Subscriptions
 
 TODO: Time.every...
+
+## Tasks
+
+TODO: Time...
 
 ## Flags
 
