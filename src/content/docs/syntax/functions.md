@@ -17,3 +17,13 @@ Here, `sumOf` is the name of the function, while `first` and `second` are the in
 
 Functions can take an arbitrary number of arguments, but must return exactly one value.
 
+When you call a function, the arguments can span multiple lines:
+
+```elm
+sumOfFiveAndTwo =
+    sumOf
+        5
+        2
+```
+
+Looks kind of silly here, but it is helpful to know this when you're reading code with longer arguments that may be formatted this way.
