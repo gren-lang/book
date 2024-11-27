@@ -369,7 +369,10 @@ We're not using flags in this program so we use `{}` in the type signature and `
 
 The other place we can send commands is `update`.
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {3,8}
+```elm title="src/Main.gren" showLineNumbers startLineNumber=40 {6,11}
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
         ClickedButton ->
             { model = model
             , command = getRandomNumber
@@ -435,7 +438,43 @@ See [the subscriptions chapter](/book/application/subscriptions/) if you want to
 
 ## Browser.document
 
-TODO
+The third type of browser program is a Document.
+You would use this if you need to control the `<title>` tag.
+
+To change the above program to a Document, update your main function to call [`Browser.document`](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser#document):
+
+```elm showLineNumbers=false del={2} ins={3,7}
+main =
+    Browser.element
+    Browser.document
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        }
+```
+
+And update the view to return a record with the page's title and an array of elements for the body:
+
+```elm showLineNumbers=false del={1} ins={2,4-10}
+view : Model -> Html Msg
+view : Model -> { title : String, body : Array (Html Msg) }
+view model =
+    { title = "Random Number Generator"
+    , body = body
+    }
+
+
+body : Array (Html Msg)
+body =
+    Html.div []
+        [ Html.button
+            [ Event.onClick ClickedButton ]
+            [ Html.text "Get random number" ]
+        , Html.text " "
+        , Html.text (String.fromInt model)
+        ]
+```
 
 ## Browser.application
 
