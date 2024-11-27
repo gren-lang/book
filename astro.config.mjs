@@ -57,6 +57,11 @@ export default defineConfig({
             { label: 'The Gren Runtime', link: '/applications/runtime/' },
             { label: 'Browser Applications', link: '/applications/browser/' },
             { label: 'Node Applications', link: '/applications/node/' },
+            { label: 'Commands', link: '/applications/commands/' },
+            { label: 'Tasks', link: '/applications/tasks/' },
+            { label: 'Subscriptions', link: '/applications/subscriptions/' },
+            { label: 'Flags', link: '/applications/flags/' },
+            { label: 'Ports', link: '/applications/ports/' },
           ],
         },
         {
