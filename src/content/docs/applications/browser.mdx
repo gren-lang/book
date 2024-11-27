@@ -14,7 +14,7 @@ gren init
 
 This will create a `gren.json` file and a `src` directory to hold your source code.
 
-## Sandbox Programs
+## Browser.sandbox
 
 A [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) is a simplified type of program that can update HTML and react to user interaction, but not much else.
 We'll go over the other types of programs in later sections.
@@ -198,7 +198,9 @@ For browser applications Gren expects the view to return HTML.
 Gren's [Html module](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html) has functions for all of the HTML elements.
 Most of them take two parameters: an [array](/book/syntax/arrays/) of [attributes](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html.Attributes), and the contents of the element (for many the contents will be another array of elements).
 
-Here we're returning a `div` with three elements:
+Our view returns a `div` with three elements.
+
+The first element in the `div` is a [button](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html#button):
 
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {2-4}
     Html.div []
@@ -212,10 +214,12 @@ Here we're returning a `div` with three elements:
         ]
 ```
 
-The first element of our `div` is a [button](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html#button).
 The first parameter passed to the button function is an array holding one attribute: an [onClick event](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html.Events#onClick) so when a user clicks the button, our `update` function will be called with our `Decrement` message.
 The second parameter is another array for the contents of the button.
 In our case that's just some [text](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html#text) with a minus sign.
+
+The second element of our `div` is some more text showing the current count.
+We get that by converting our model (an Int) to a string:
 
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {5}
     Html.div []
@@ -229,8 +233,8 @@ In our case that's just some [text](https://packages.gren-lang.org/package/gren-
         ]
 ```
 
-The second element of our `div` is some more text showing the current count.
-We get that by converting our model (an Int) to a string.
+The third element of our `div` is another button.
+It's similar to the first, but clicking it will send the `Increment` message:
 
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {6-8}
     Html.div []
@@ -244,18 +248,15 @@ We get that by converting our model (an Int) to a string.
         ]
 ```
 
-The third element of our `div` is another button.
-It's similar to the first, but clicking it will send the `Increment` message.
-
 This should be enough to get you started writing browser applications in Gren.
 Always [reach out](https://gren-lang.org/community/) if you have any questions.
 
-## Commands
+## Browser.element
 
 In Gren, functions always have the same output for any given input, they can't raise exceptions, and they can't change anything.
 So how do you do things like get a random number? or make an HTTP call?
 That requires interacting with the [Gren Runtime](/book/applications/runtime/).
-One way of doing that is by sending [commands](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Cmd).
+One way of doing that is by sending [commands](/book/applications/commands/).
 
 To explain this, we're going to create a new program with a button that generates random numbers.
 Below is the whole program, and we'll explain it piece by piece in the next sections.
@@ -332,8 +333,6 @@ subscriptions _ =
 
 You can save the above to `src/Main.gren` and [compile and run it](#compile) the same way you did the sandbox program above.
 
-### Browser.element
-
 Notice that we changed from a sandbox program to an element:
 
 ```elm showLineNumbers=false del={2} ins={3,7}
@@ -347,15 +346,15 @@ main =
         }
 ```
 
-Unlike a sandbox, elements have the ability to send commands and subscriptions to the [Gren Runtime](/book/applications/runtime/).
+Unlike a sandbox, elements have the ability to send commands from the init and update functions.
+We'll cover those in the next sections, as well as that new `subscriptions` function.
 
-#### Init
+### Init
 
 One of the places you can send commands is from `init`.
 For now we don't want to do anything on init, so we're sending [`Cmd.none`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Cmd#none):
 
-
-```elm showLineNumbers=false {4}
+```elm title="src/Main.gren" showLineNumbers startLineNumber=23 {4}
 init : {} -> { model : Model, command : Cmd Msg }
 init _ =
     { model = 0
@@ -363,11 +362,14 @@ init _ =
     }
 ```
 
-#### Update
+That new parameter to `init` is a [flag](/book/application/flags/).
+We're not using flags in this program so we use `{}` in the type signature and `_` as the name, which is usually what you see for parameters that are required but aren't used.
+
+### Update
 
 The other place we can send commands is `update`.
 
-```elm showLineNumbers=false {3,8}
+```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {3,8}
         ClickedButton ->
             { model = model
             , command = getRandomNumber
@@ -379,17 +381,21 @@ The other place we can send commands is `update`.
             }
 ```
 
-When the user clicks the button, `update` is called with a `ClickedButton` message, and we respond with a call to another function we wrote, `getRandomNumber`.
+When the user clicks the button, `update` is called with a `ClickedButton` message, and we respond with a call to another function we wrote, `getRandomNumber` that will give us a command that tells the runtime what kind of random number we want, and what type of message to send it back to us with.
+We'll explain that function in the next section.
 
-#### Random Numbers
+The `GotRandomNumber` case will be triggered when we get the random number from the previous case.
+We're [destructuring](/book/syntax/destructuring/) it to get the number and update the model.
+
+### Random Numbers
 
 Because Gren functions must always return the same value for a given input, we can't write a function that returns a random number directly.
 Instead, we write a function that returns a command to the runtime, and the runtime calls our `update` function with a message holding the random value.
-This may seem convoluted at first, but it's a way that Gren keeps your code easier to understand and maintain, since all side effects will go through your `update` function in a way that's deterministic and covers every edge case.
+This may seem convoluted at first, but it's a common pattern in Gren that helps keep your code deterministic, and therefore more reliable and easier to reason about.
 
 Here's where we're creating the command to get random numbers:
 
-```elm showLineNumbers=false
+```elm title="src/Main.gren" showLineNumbers startLineNumber=35
 getRandomNumber : Cmd Msg
 getRandomNumber =
     Random.generate GotRandomNumber (Random.int 0 100)
@@ -400,32 +406,38 @@ This might look confusing, so we'll take it one step at a time.
 `getRandomNumber : Cmd Msg`: The signature tells us this function returns a command, and that command could trigger one of our `Msg` variants.
 
 `Random.generate`: This is [a function in Gren's core package](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Random#generate).
-It takes a generator that says what type of random value we want, and a message to trigger with that random value.
+It takes two parameters: the message we want to receive that will hold our random number, and a generator that says what type of random value we want.
+
+`GotRandomNumber`: This is the message we want to receive from the runtime with our random number.
+It's one of the variants of our `Msg` type [that can hold an integer](/book/syntax/custom_types/#types-with-data):
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=30 {3}
+type Msg
+    = ClickedButton
+    | GotRandomNumber Int
+```
 
 `(Random.int 0 100)`: This creates a [generator](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Random#Generator) that produces random integers between 0 and 100.
 
-`GotRandomNumber`: This is the message we want to receive from the runtime with our random number.
-It's one of the variants of our `Msg` [custom type that can hold an integer](/book/syntax/custom_types/#types-with-data).
+### Subscriptions
 
-TODO: diagram of init, update, subscriptions, and runtime?
+The other difference `element` and `sandbox` is the subscription function:
 
-## Subscriptions
+```elm title="src/Main.gren" showLineNumbers startLineNumber=65
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+```
 
-TODO: Time.every...
+We're not using subscriptions in this program so we're returning [`Sub.none`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Sub#none).
 
-## Tasks
+See [the subscriptions chapter](/book/application/subscriptions/) if you want to know how they work.
 
-TODO: Time...
+## Browser.document
 
-## Flags
+TODO
 
-TODO: Get time from JS
+## Browser.application
 
-## Ports
-
-TODO: TODO
-
-## Navigation
-
-TODO: Browser.application
+TODO
 
