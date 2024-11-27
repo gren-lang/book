@@ -478,5 +478,117 @@ body =
 
 ## Browser.application
 
-TODO
+The last type of browser program is an [application](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#application).
+This is appriate for single-page applications (SPA) where you want to manage navigation and serve all the pages client-side.
 
+Here's a full application with two pages.
+We'll go through the differences between it and a document application in the next sections.
+
+```elm showLineNumbers=false
+module Main exposing (main)
+
+import Browser exposing (Document, UrlRequest(..))
+import Browser.Navigation as Nav
+import Html exposing (Html)
+import Html.Attributes as Attribute
+import Html.Events as Event
+import Url exposing (Url)
+
+
+main =
+    Browser.application
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        , onUrlRequest = UrlRequested
+        , onUrlChange = UrlChanged
+        }
+
+
+type alias Model =
+    { page : Page
+    , navKey : Nav.Key
+    }
+
+
+type Page
+    = Home
+    | About
+    | NotFound
+
+
+pageFromUrl : Url -> Page
+pageFromUrl url =
+    case url.path of
+        "/" -> Home
+        "/about" -> About
+        _ -> NotFound
+
+
+init : {} -> Url -> Nav.Key -> { model : Model, command : Cmd Msg }
+init _ url key =
+    { model = 
+        { page = pageFromUrl url
+        , navKey = key
+        }
+    , command = Cmd.none
+    }
+
+
+type Msg
+    = UrlRequested UrlRequest
+    | UrlChanged Url
+
+
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        UrlRequested urlRequest ->
+            { model = model
+            , command =
+                case urlRequest of
+                    Internal url ->
+                        Nav.pushUrl model.navKey (Url.toString url)
+
+                    External url ->
+                        Nav.load url
+            }
+
+        UrlChanged url ->
+            { model = { model | page = pageFromUrl url }
+            , command = Cmd.none
+            }
+
+
+view : Model -> Document Msg
+view model =
+    case model.page of
+        Home ->
+            { title = "Home"
+            , body = [ Html.text "Welcome to my home page" ]
+            }
+
+        About -> 
+            { title = "About"
+            , body = [ Html.text "This is an example website" ]
+            }
+
+        NotFound ->
+            { title = "Not Found"
+            , body = [ Html.text "Can't find that url" ]
+            }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+```
+
+TODO: `gren package install gren-lang/url`
+
+TODO: real http server (browser can't handle `file:///`): `npm install serve` and `npx serve -s`
+
+TODO: explain differences from document
+
+TODO: link to nested tea page
