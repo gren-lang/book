@@ -484,7 +484,7 @@ This is appriate for single-page applications (SPA) where you want to manage nav
 Here's a full application with two pages.
 We'll go through the differences between it and a document application in the next sections.
 
-```elm showLineNumbers=false
+```elm showLineNumbers
 module Main exposing (main)
 
 import Browser exposing (Document, UrlRequest(..))
@@ -585,9 +585,39 @@ subscriptions _ =
     Sub.none
 ```
 
-TODO: `gren package install gren-lang/url`
+### Running the application
 
-TODO: real http server (browser can't handle `file:///`): `npm install serve` and `npx serve -s`
+We'll compile this program just like the others:
+
+```sh
+gren make src/Main.gren
+```
+
+But we also need to install the [url package](https://packages.gren-lang.org/package/gren-lang/url/version/latest/overview) so we can work with URLs:
+
+```sh
+gren package install gren-lang/url
+```
+
+Next, we need a real HTTP server.
+`Browser.application` gives you full control over the URL and address bar, which won't work with the `file:///` URLs we've been using so far.
+We'll use the [serve](https://www.npmjs.com/package/serve) package on npm for that:
+
+```sh
+npm install serve
+```
+
+and run it in SPA-mode, which will direct all URL requests to our `index.html` file:
+
+```
+npx serve -s
+```
+
+You can now try out the routes:
+
+* http://localhost:3000/
+* http://localhost:3000/about
+* http://localhost:3000/asdf
 
 TODO: explain differences from document
 
