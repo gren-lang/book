@@ -479,12 +479,12 @@ body =
 ## Browser.application
 
 The last type of browser program is an [application](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#application).
-This is appriate for single-page applications (SPA) where you want to manage navigation and serve all the pages client-side.
+This is appropriate for single-page applications (SPA) where you want to manage navigation and serve all the pages client-side.
 
 Here's a full application with two pages.
-We'll go through the differences between it and a document application in the next sections.
+We'll go through the differences between it and a document program in the next sections.
 
-```elm showLineNumbers
+```elm title="src/Main.gren" showLineNumbers
 module Main exposing (main)
 
 import Browser exposing (Document, UrlRequest(..))
@@ -613,12 +613,136 @@ and run it in SPA-mode, which will direct all URL requests to our `index.html` f
 npx serve -s
 ```
 
-You can now try out the routes:
+Now you can try out the routes:
 
 * http://localhost:3000/
 * http://localhost:3000/about
 * http://localhost:3000/asdf
 
-TODO: explain differences from document
+### Navigation
 
-TODO: link to nested tea page
+The biggest difference between an applicatino and a document is an application will capture link clicks and URL changes and send us messages instead of reloading the page, so we can handle them however we want.
+So we need to tell Gren what messages we expect:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=11 {7-8}
+main =
+    Browser.application
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        , onUrlRequest = UrlRequested
+        , onUrlChange = UrlChanged
+        }
+```
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=52 {2-3}
+type Msg
+    = UrlRequested UrlRequest
+    | UrlChanged Url
+```
+
+The `onUrlRequest` message will be triggered when someone clicks a link.
+The `onUrlChange` message will be triggered when we programmatically change the URL.
+We will handle those messages in our `update` function, which we'll cover later.
+
+We also wrote a custom type to track which page we're on, and a function to route [URL](https://packages.gren-lang.org/package/gren-lang/url/version/latest/module/Url) paths to the appropriate page:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=28
+type Page
+    = Home
+    | About
+    | NotFound
+
+
+pageFromUrl : Url -> Page
+pageFromUrl url =
+    case url.path of
+        "/" -> Home
+        "/about" -> About
+        _ -> NotFound
+```
+
+### Init
+
+Our init function is doing more now:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=42
+init : {} -> Url -> Nav.Key -> { model : Model, command : Cmd Msg }
+init _ url key =
+    { model =
+        { page = pageFromUrl url
+        , navKey = key
+        }
+    , command = Cmd.none
+    }
+```
+
+It's receiving the initial URL, which we're using to set the starting page for our site.
+
+It also receives a [navigation key](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser.Navigation#Key).
+We're saving it because Gren requires this key to call functions that change the URL.
+This is to make sure only `Browser.application` programs, which are equipped to detect URL changes, can change the URL and affect history.
+
+### Update
+
+This is where we respond to link clicks and URL changes:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=57 {"1":4} {"2":9} {"3":12} {"4":17}
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        UrlRequested urlRequest ->
+            { model = model
+            , command =
+                case urlRequest of
+                    Internal url ->
+                        Nav.pushUrl model.navKey (Url.toString url)
+
+                    External url ->
+                        Nav.load url
+            }
+
+
+        UrlChanged url ->
+            { model = { model | page = pageFromUrl url }
+            , command = Cmd.none
+            }
+```
+
+1. When someone clicks a link, we told Gren that we'd like to receive this `UrlRequested` message.
+   It will [hold](/book/syntax/custom_types/#types-with-data) a [`Browser.UrlRequest`](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser#UrlRequest).
+2. If the URL request is internal - meaning a path on this domain - we send a [pushUrl](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser.Navigation#pushUrl) command to the runtime.
+   This will change the URL and add a new entry to the browser history, but it won't reload the page (instead, we'll get our `UrlChanged` message).
+3. If the URL request is external - meaning a path on a different domain - we send a [load](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser.Navigation#load) command.
+   This will make the browser navigate to that URL.
+4. When the URL changes via `pushUrl`, we told Gren that we'd like to receive this `UrlChanged` message.
+   All we do is update the page value on our model.
+   The view will handle rendering the appropriate page, all without a page reload!
+
+### View
+
+The view is very similar to the document version, but we're [matching](/book/syntax/pattern_matching/) the page on our model to decide what the title and body should be:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=77
+view : Model -> Document Msg
+view model =
+    case model.page of
+        Home ->
+            { title = "Home"
+            , body = [ Html.text "Welcome to my home page" ]
+            }
+
+        About ->
+            { title = "About"
+            , body = [ Html.text "This is an example website" ]
+            }
+
+        NotFound ->
+            { title = "Not Found"
+            , body = [ Html.text "Can't find that url" ]
+            }
+```
+
+If your pages start to become more complicated, you may want to put them in their own modules.
+This is explained on the [nested TEA](/book/applications/nested-tea/) page.
