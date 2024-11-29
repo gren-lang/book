@@ -101,8 +101,7 @@ In the following sections we'll go over each part of the program to see how it w
 module Main exposing (main)
 ```
 
-This is your [module declaration](/book/syntax/modules/) and it is exposing your `main` function.
-`main` is where Gren expects to find your program definition, which we'll get to in a bit.
+This is our [module declaration](/book/syntax/modules/) and it is exposing our `main` function which has our program definition.
 
 ### Imports
 
@@ -126,7 +125,7 @@ main =
         }
 ```
 
-When you compile an application, Gren expects a `main` function with your program definition.
+The `main` function is where Gren expects to find your program definition.
 Here we're defining a [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) program.
 
 We're defining the program with a [record](/book/syntax/records/) that points to our `init`, `update`, and `view` functions.
@@ -194,8 +193,8 @@ view model =
 This is the "view" part of [the elm architecture](/book/applications/tea/).
 It's a function that, given the current model, returns a UI: a visual representation of your current application state, with triggers to fire messages that can [update](#update) that state.
 
-For browser applications Gren expects the view to return HTML.
-Gren's [Html module](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html) has functions for all of the HTML elements.
+For browser applications, the view needs to return HTML.
+The [Html module](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html) has functions for all of the HTML elements.
 Most of them take two parameters: an [array](/book/syntax/arrays/) of [attributes](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html.Attributes), and the contents of the element (for many the contents will be another array of elements).
 
 Our view returns a `div` with three elements.
@@ -253,13 +252,12 @@ Always [reach out](https://gren-lang.org/community/) if you have any questions.
 
 ## Browser.element
 
-In Gren, functions always have the same output for any given input, they can't raise exceptions, and they can't change anything.
-So how do you do things like get a random number? or make an HTTP call?
+If functions always have the same output for any given input, can't raise exceptions, and can't change anything, how do you do things like get a random number? or make an HTTP call?
 That requires interacting with the [Gren Runtime](/book/applications/runtime/).
-One way of doing that is by sending [commands](/book/applications/commands/).
+This is what [`Browser.element`](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser#element) allows us to do.
 
-To explain this, we're going to create a new program with a button that generates random numbers.
-Below is the whole program, and we'll explain it piece by piece in the next sections.
+Here's a new program using `Browser.element` that generates random numbers.
+We'll explain it piece by piece in the next sections.
 
 ```elm showLineNumbers
 module Main exposing (main)
@@ -392,7 +390,7 @@ We're [destructuring](/book/syntax/destructuring/) it to get the number and upda
 
 ### Random Numbers
 
-Because Gren functions must always return the same value for a given input, we can't write a function that returns a random number directly.
+Because functions must always return the same value for a given input, we can't write a function that returns a random number directly.
 Instead, we write a function that returns a command to the runtime, and the runtime calls our `update` function with a message holding the random value.
 This may seem convoluted at first, but it's a common pattern in Gren that helps keep your code deterministic, and therefore more reliable and easier to reason about.
 
@@ -408,7 +406,7 @@ This might look confusing, so we'll take it one step at a time.
 
 `getRandomNumber : Cmd Msg`: The signature tells us this function returns a command, and that command could trigger one of our `Msg` variants.
 
-`Random.generate`: This is [a function in Gren's core package](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Random#generate).
+`Random.generate`: This is [a function in the core package](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Random#generate).
 It takes two parameters: the message we want to receive that will hold our random number, and a generator that says what type of random value we want.
 
 `GotRandomNumber`: This is the message we want to receive from the runtime with our random number.
@@ -621,8 +619,8 @@ Now you can try out the routes:
 
 ### Navigation
 
-The biggest difference between an applicatino and a document is an application will capture link clicks and URL changes and send us messages instead of reloading the page, so we can handle them however we want.
-So we need to tell Gren what messages we expect:
+The biggest difference between an application and a document is an application will capture link clicks and URL changes and send us messages instead of reloading the page, so we can handle them however we want.
+So we need to specify the messages we expect:
 
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=11 {7-8}
 main =
@@ -681,14 +679,14 @@ init _ url key =
 It's receiving the initial URL, which we're using to set the starting page for our site.
 
 It also receives a [navigation key](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser.Navigation#Key).
-We're saving it because Gren requires this key to call functions that change the URL.
+We're saving it because it's required to call functions that change the URL.
 This is to make sure only `Browser.application` programs, which are equipped to detect URL changes, can change the URL and affect history.
 
 ### Update
 
 This is where we respond to link clicks and URL changes:
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=57 {"1":4} {"2":9} {"3":12} {"4":17}
+```elm title="src/Main.gren" showLineNumbers startLineNumber=57 {"1":4} {"2":9} {"3":12} {"4":16}
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
     case msg of
@@ -710,14 +708,14 @@ update msg model =
             }
 ```
 
-1. When someone clicks a link, we told Gren that we'd like to receive this `UrlRequested` message.
-   It will [hold](/book/syntax/custom_types/#types-with-data) a [`Browser.UrlRequest`](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser#UrlRequest).
+1. This is the message we receive when someone clicks a link (because we set `onUrlRequest = UrlRequested` in `main`).
+   It holds a [`Browser.UrlRequest`](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser#UrlRequest).
 2. If the URL request is internal - meaning a path on this domain - we send a [pushUrl](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser.Navigation#pushUrl) command to the runtime.
    This will change the URL and add a new entry to the browser history, but it won't reload the page (instead, we'll get our `UrlChanged` message).
 3. If the URL request is external - meaning a path on a different domain - we send a [load](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser.Navigation#load) command.
    This will make the browser navigate to that URL.
-4. When the URL changes via `pushUrl`, we told Gren that we'd like to receive this `UrlChanged` message.
-   All we do is update the page value on our model.
+4. This is the message we receive when the URL changes via `pushUrl` (because we set `onUrlChange = UrlChanged` in `main`).
+   It holds a [`Url`](https://packages.gren-lang.org/package/gren-lang/url/version/latest/module/Url#Url) and we use that to update the page value on our model.
    The view will handle rendering the appropriate page, all without a page reload!
 
 ### View
