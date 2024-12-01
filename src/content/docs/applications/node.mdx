@@ -1,0 +1,133 @@
+---
+title: Node Applications
+description: Writing node applications in Gren.
+---
+
+Gren has a couple different ways you can write applications that run on nodejs.
+We'll go over each one here, starting with simple programs.
+
+First we need to [init a new project](/book/hello_world/).
+But this time, we will target the node platform.
+In an empty directory, run:
+
+```sh
+gren init --platform=node
+```
+
+This will create a `gren.json` file configured for node and a `src` directory to hold your source code.
+
+## Simple Program
+
+[Node.defineSimpleProgram](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) is good for short-lived programs or scripts.
+We'll go over regular programs in a later section.
+
+Below is an example of the classic Hello World program.
+It's ok if you don't understand it yet, we will go through it piece by piece in the next sections.
+
+```elm title="src/Main.gren" showLineNumbers
+module Main exposing (main)
+
+import Init
+import Node exposing (Environment)
+import Stream
+import Task
+
+
+main : Node.SimpleProgram a
+main =
+    Node.defineSimpleProgram init
+
+
+init : Environment -> Init.Task (Cmd a)
+init env =
+    "Hello, World!"
+        |> Stream.sendLine env.stdout
+        |> Task.execute
+        |> Node.endWithCmd
+```
+
+### Compile
+
+To run the program you need to compile it.
+First, save the above code in `src/Main.gren`.
+Then compile and run the resulting js file:
+
+```sh
+gren make src/Main.gren
+node app
+```
+
+You should see:
+
+```
+Hello, World!
+```
+
+In the following sections we'll go over each part of the program to see how it works.
+
+### Module definition
+
+```elm title="src/Main.gren" showLineNumbers
+module Main exposing (main)
+```
+
+This is our [module declaration](/book/syntax/modules/) and it is exposing our `main` function which has our program definition.
+
+### Imports
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=3
+import Init
+import Node exposing (Environment)
+import Stream
+import Task
+```
+
+Here we're [importing](/book/syntax/modules/#imports) other modules we will need.
+The docs for each of these are helpful if you want to understand more:
+
+* [Init](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Init)
+* [Node](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node)
+* [Stream](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Stream)
+* [Task](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Task)
+
+### Main function
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=9
+main : Node.SimpleProgram a
+main =
+    Node.defineSimpleProgram init
+```
+
+The `main` function is where Gren expects to find your program definition.
+Here we're defining a [SimpleProgram](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node#SimpleProgram).
+All it needs is an init function.
+
+### Init
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=14 {"1":4} {"2":5} {"3":6}
+init : Environment -> Init.Task (Cmd a)
+init env =
+    "Hello, World!"
+        |> Stream.sendLine env.stdout
+        |> Task.execute
+        |> Node.endWithCmd
+```
+
+Here is the heart of our program.
+
+1. We start with a string being passed to [`Stream.sendLine`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Stream#sendLine).
+   The first argument to `sendLine` is the stream we want to send it to, in our case that's stdout, which is available in the [`Environment`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node#Environment) that's passed in.
+   The result of this call is a [task](/book/applications/tasks/) that tells Gren to output our string on that stream.
+2. Here we are turning the stream task into a [command](/book/applications/commands/) with [`Task.execute`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Task#execute).
+   Commands are how we trigger effects in the [Gren Runtime](/book/applications/runtime/).
+3. Finally, we pass that command to [`Node.endWithCmd`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node#endWithCmd) to end the program.
+   `endWithCmd` is specific to `SimpleProgram`.
+   We'll cover other ways to end programs in a later section.
+
+This should be enough to get you started making simple programs.
+As always, [reach out](https://gren-lang.org/community) if you need help.
+Or read on to learn about creating long-lived programs.
+
+## Program
+
+TODO
