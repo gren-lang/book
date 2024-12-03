@@ -257,9 +257,9 @@ type alias Model =
 
 Our model will hold our [Server](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#Server).
 It's not guaranteed that our server will start (e.g. maybe the port is being used) so we have to hold it in a [Maybe](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Maybe).
-A `Maybe` is a built-in [custom type](/book/syntax/custom_types/) with two variants: `Just something` where `something` is the value you want, or `Nothing`.
+`Maybe` is core [custom type](/book/syntax/custom_types/) with two variants: `Just something` where `something` is the value you want, or `Nothing`.
 
-This is a constant we're defining as a convenience to hold our server configuration:
+Next, we define a constant to hold our server configuration:
 
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=25
 serverConfig =
@@ -299,11 +299,11 @@ This gives us permission to create the server with [`HttpServer.createServer`](h
 Because starting a server is something that could fail, `createServer` gives us a [Task](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Task) that could result in a Server value, or an error.
 We use [`Task.attempt`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Task#attempt) to turn that into a command that we can send to the [Gren Runtime](/book/applications/runtime/) to perform the task.
 It takes a message that expects a [Result](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Result).
-A Result is a built-in [custom type](/book/syntax/custom_types/) with two variants:
+`Result` is a core [custom type](/book/syntax/custom_types/) with two variants:
 one with the value we want (in our case, a [`Server`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#Server) value if the server started successfully),
 and one with an error value (in our case, a [`ServerError`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#ServerError) if the server failed to start).
 
-We will respond to that message in our `update` function.
+We will handle those two scenarios in our `update` function.
 
 ### Update
 

@@ -146,7 +146,7 @@ init =
 Here we're defining a [type alias](/book/syntax/types/#type-aliases) for our Model.
 
 Your model holds your application state and can be anything.
-Often you will use a record to hold multiple values, but in our case we only care about the current value of the counter, so we're just aliasing an Int.
+Often you will use a [record](/book/syntax/records/) to hold multiple values, but in our case we only care about the current value of the counter, so we're just aliasing an Int.
 
 The `init` function returns the initial value of the model when the program starts.
 In this case, we're starting at zero.
@@ -422,7 +422,7 @@ type Msg
 
 ### Subscriptions
 
-The other difference `element` and `sandbox` is the subscription function:
+The other difference between `element` and `sandbox` is the subscription function:
 
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=65
 subscriptions : Model -> Sub Msg
@@ -441,7 +441,7 @@ You would use this if you need to control the `<title>` tag.
 
 To change the above program to a Document, update your main function to call [`Browser.document`](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser#document):
 
-```elm showLineNumbers=false del={2} ins={3,7}
+```elm showLineNumbers=false del={2} ins={3}
 main =
     Browser.element
     Browser.document

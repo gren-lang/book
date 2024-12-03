@@ -20,3 +20,5 @@ flowchart LR
   Update --> new[New Model]
   new --> View
 ```
+
+In the next sections we'll cover how to write programs that use this architecture.

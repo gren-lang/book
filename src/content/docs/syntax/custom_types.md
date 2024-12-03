@@ -69,7 +69,8 @@ Error ("Oops! Fetch failed.") : StarCount
 ## Type Variables
 
 You can define custom types that hold any type of data by using a type variable.
-A common example is a type built-in to gren called `Maybe`.
+A common example is a core type called [`Maybe`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Maybe).
+It's defined like this:
 
 ```elm
 type Maybe a
@@ -88,7 +89,7 @@ Just "Hello" : Maybe String
 Notice that Gren inferred the generic type here as the concrete type `String`.
 
 You can have more than one type variable.
-Gren's built-in `Result` type has a variable for the error value and one for the success value.
+Gren's core `Result` type has a variable for the error value and one for the success value.
 
 ```elm
 type Result error value
