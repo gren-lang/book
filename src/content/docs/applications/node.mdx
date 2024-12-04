@@ -3,6 +3,8 @@ title: Node Applications
 description: Writing node applications in Gren.
 ---
 
+import { Aside } from '@astrojs/starlight/components';
+
 Gren has a couple different ways you can write applications that run on nodejs.
 We'll go over each one here, starting with simple programs.
 
@@ -298,16 +300,77 @@ In our case, we need to initialize the HTTP server subsystem with [`HttpServer.i
 This gives us permission to create the server with [`HttpServer.createServer`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#createServer).
 Because starting a server is something that could fail, `createServer` gives us a [Task](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Task) that could result in a Server value, or an error.
 We use [`Task.attempt`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Task#attempt) to turn that into a command that we can send to the [Gren Runtime](/book/applications/runtime/) to perform the task.
-It takes a message that expects a [Result](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Result).
-`Result` is a core [custom type](/book/syntax/custom_types/) with two variants:
-one with the value we want (in our case, a [`Server`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#Server) value if the server started successfully),
-and one with an error value (in our case, a [`ServerError`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#ServerError) if the server failed to start).
 
-We will handle those two scenarios in our `update` function.
+It takes a `GotServer` message that we will receive in our `update` function after the server starts.
+We'll explain that in the next section.
 
 ### Update
 
-TODO
+We start by defining our message type:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=42
+type Msg
+    = GotServer (Result HttpServer.ServerError Server)
+    | GotRequest Request Response
+```
+
+This holds all the events that can happen in our system.
+In this case there are two: `GotServer` and `GotRequest`.
+
+We'll receive a `GotServer` message after the server starts because that's what we specified in `init` earlier.
+It will hold a [Result](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Result).
+A Result is a core [custom type](/book/syntax/custom_types/) with two variants:
+one with the value we want (in our case, a [`Server`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#Server) value if the server started successfully),
+and one with an error value (in our case, a [`ServerError`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#ServerError) if the server failed to start).
+
+<Aside>
+Notice the parenthesis around the result type.
+This lets the compiler know that `ServerError` and `Server` are part of `Result`, not `GotServer`.
+</Aside>
+
+We'll also receive a `GotRequest` message whenever there is an Http request because it's what we specified in `subscriptions`, which we'll cover later.
+It will hold a [`Request`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#Request) and a [`Response`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer.Response#Response).
+We'll use those values to send a response back from the server, which we'll look at soon.
+
+Next we define our update function and [match](/book/syntax/pattern_matching/) on that `Msg` type:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=47
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+```
+
+First we handle the `GotServer` message:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=50
+        GotServer result ->
+            case result of
+                Ok server ->
+                    { model = { server = Just server }
+                    , command = Cmd.none
+                    }
+
+                Err _ ->
+                    { model = model
+                    , command =
+                        Task.execute (Node.exitWithCode 1)
+                    }
+```
+
+Rememver when we talked about [Result](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Result)?
+
+If the server started successfully, we'll get the `Ok` variant holding the server value, which we're [capturing](/book/syntax/destructuring/) in a `server` variable.
+We return a new model that updates the `server` key to `Just server`.
+Remember that the `server` key on our model is a `Maybe`, which means it must hold either `Nothing` or `Just something`, which is why we're setting it to `Just server` instead of `server`.
+We'll see how this is used when we cover the `subscriptions` function later.
+
+If the server failed to start, we'll get the `Err` variant holding an error value - in our case will be a [`ServerError`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#ServerError).
+We know that because that's the error type specific in the Task that we get from [`createServer`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#createServer).
+
+We're not using the error value so we call it `_`.
+And we respond with a command that exits the program with a non-zero status code, which is the appropriate way to end a command line program that did not run successfully.
+
+TODO: GotRequest
 
 ### Subscriptions
 
