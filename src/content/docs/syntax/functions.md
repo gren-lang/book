@@ -20,8 +20,8 @@ Functions can take an arbitrary number of arguments, but must return exactly one
 Function arguments can be passed on multiple lines:
 
 ```elm
-addFiveAndTwo =
-    add
+sumOfFiveAndTwo =
+    sumOf
         5
         2
 ```
