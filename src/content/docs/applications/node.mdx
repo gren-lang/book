@@ -357,7 +357,7 @@ First we handle the `GotServer` message:
                     }
 ```
 
-Rememver when we talked about [Result](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Result)?
+Remember when we talked about [Result](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Result)?
 
 If the server started successfully, we'll get the `Ok` variant holding the server value, which we're [capturing](/book/syntax/destructuring/) in a `server` variable.
 We return a new model that updates the `server` key to `Just server`.
@@ -370,7 +370,28 @@ We know that because that's the error type specific in the Task that we get from
 We're not using the error value so we call it `_`.
 And we respond with a command that exits the program with a non-zero status code, which is the appropriate way to end a command line program that did not run successfully.
 
-TODO: GotRequest
+Next we're handling HTTP requests in the `GotRequest` case:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=63
+        GotRequest request response ->
+            { model = model
+            , command =
+                response
+                    |> Response.setBody ("You requested: " ++ request.url.path)
+                    |> Response.send
+            }
+```
+
+We get a `GotRequest` message whenever someone makes an HTTP request to the server (because we [subscribed](#subscriptions) to that event - desribed later).
+We're [destructuring](/book/syntax/destructuring/) it to get the request and response values that are attached to the message.
+
+The [request](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#Request) is a record with all the information about our request.
+We're using it to display the path with [`Response.setBody`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer.Response#setBody).
+But in a real server you may want to use it to route different paths to different functions that handle the logic and response for that request.
+
+The [response](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer.Response#Response) is a value that represents our HTTP response.
+It is created in the Gren runtime and required to call functions that change the response (like `Response.setBody`).
+We turn the response into a command for the runtime to actually send the HTTP response with [`Response.send`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer.Response#send).
 
 ### Subscriptions
 
