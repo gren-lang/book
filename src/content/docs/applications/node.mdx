@@ -395,8 +395,49 @@ We turn the response into a command for the runtime to actually send the HTTP re
 
 ### Subscriptions
 
-TODO
+```elm title="src/Main.gren" showLineNumbers startLineNumber=72
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    case model.server of
+        Just server ->
+            HttpServer.onRequest server GotRequest
+
+        Nothing ->
+            Sub.none
+```
+
+[Subscriptions](/book/applications/subscriptions/) are how we connect to external events.
+When we return a subscription, we're telling the [Gren runtime](/book/applications/runtime/) what messages to send to our `update` function for the events we care about.
+
+In this case, if we successfully started the server, we want to receive a `GotRequest` message whenever there is an HTTP request.
+We're doing that with [`HttpServer.onRequest`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#onRequest),
+which takes the server value we saved to our model (see the `GotServer` branch of our `update` function) and our `GotRequest` message variant.
+
+<Aside>
+Look at the signature for [`HttpServer.onRequest`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#onRequest):
+
+```elm showLineNumbers=false
+onRequest : Server -> (Request -> Response -> msg) -> Sub msg
+```
+
+The part that says `(Request -> Response -> msg)` means the second parameter should be a function that takes a [`Request`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#Request)
+and a [`Response`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer.Response#Response) and returns a message.
+This is why the `GotRequest` variant of our `Msg` type looks like this:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=44
+    | GotRequest Request Response
+```
+
+When you define variants, you're actually defining constructor functions that return an instance of your custom type.
+The first word is the name of your function, and the rest are the types of the parameters that must be passed.
+Here we're defining a `GotRequest` function that takes a `Request` and `Response` and returns a `Msg`.
+Which is exactly what `onRequest` wants so the runtime can call the function to create our message.
+</Aside>
 
 ## More examples
 
-TODO: point to integration tests repo and example projects repo for more complex examples.
+For more examples of node applications, see:
+
+* [The `cat` example project](https://github.com/gren-lang/example-projects/blob/main/cat/src/Main.gren)
+* [The HTTP server example project](https://github.com/gren-lang/example-projects/blob/main/http-server/src/Main.gren)
+* [The HTTP client integration test](https://github.com/gren-lang/integration-tests/blob/main/http-client/src/Main.gren)
