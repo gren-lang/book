@@ -1,0 +1,746 @@
+---
+title: Browser Applications
+description: Writing browser applications in Gren.
+---
+
+Gren has a few different ways you can write browser applications.
+We'll go over each one here, starting with the simplest: sandboxes.
+
+First we need to [init a new project](/book/hello_world/). In an empty directory, run:
+
+```sh
+gren init
+```
+
+This will create a `gren.json` file and a `src` directory to hold your source code.
+
+## Browser.sandbox
+
+A [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) is a simplified type of program that can update HTML and react to user interaction, but not much else.
+We'll go over the other types of programs in later sections.
+
+Below is an example sandbox program with buttons to increase or decrease a number.
+It will look like this:
+
+![Plus and minus buttons with a zero between them](../../../assets/counter.png)
+
+Here's the full program.
+It's ok if you don't understand it yet, we will go through it piece by piece in later sections.
+
+```elm title="src/Main.gren" showLineNumbers
+module Main exposing (main)
+
+import Browser
+import Html exposing (Html)
+import Html.Attributes as Attribute
+import Html.Events as Event
+
+
+main =
+    Browser.sandbox
+        { init = init
+        , update = update
+        , view = view
+        }
+
+
+type alias Model =
+    Int
+
+
+init : Model
+init = 
+    0
+
+
+type Msg
+    = Increment
+    | Decrement
+
+
+update : Msg -> Model -> Model
+update msg model =
+    case msg of
+        Increment ->
+            model + 1
+
+        Decrement ->
+            model - 1
+
+
+view : Model -> Html Msg
+view model = 
+    Html.div []
+        [ Html.button
+            [ Event.onClick Decrement ]
+            [ Html.text "-" ]
+        , Html.text (String.fromInt model)
+        , Html.button
+            [ Event.onClick Increment ]
+            [ Html.text "+" ]
+        ]
+```
+
+### Compile
+
+To run the program you need to compile it.
+First, save the above code in `src/Main.gren`.
+Then compile and open the resulting html file:
+
+```sh
+gren make src/Main.gren
+open index.html
+```
+
+Try clicking the buttons and you should see the number increase and decrease.
+In the following sections we'll go over each part of the program to see how it works.
+
+### Module definition
+
+```elm title="src/Main.gren" showLineNumbers
+module Main exposing (main)
+```
+
+This is our [module declaration](/book/syntax/modules/) and it is exposing our `main` function which has our program definition.
+
+### Imports
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=3
+import Browser
+import Html exposing (Html)
+import Html.Attributes as Attribute
+import Html.Events as Event
+```
+
+Here we're [importing](/book/syntax/modules/#imports) other modules we will need and creating some helpful aliases for the longer ones.
+
+### Main function
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=9
+main =
+    Browser.sandbox
+        { init = init
+        , update = update
+        , view = view
+        }
+```
+
+The `main` function is where Gren expects to find your program definition.
+Here we're defining a [sandbox](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#sandbox) program.
+
+We're defining the program with a [record](/book/syntax/records/) that points to our `init`, `update`, and `view` functions.
+These correspond to the components of [the elm architecture](/book/applications/tea/) and we'll describe them next.
+
+### The Model
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=17
+type alias Model =
+    Int
+
+
+init : Model
+init =
+    0
+```
+
+Here we're defining a [type alias](/book/syntax/types/#type-aliases) for our Model.
+
+Your model holds your application state and can be anything.
+Often you will use a [record](/book/syntax/records/) to hold multiple values, but in our case we only care about the current value of the counter, so we're just aliasing an Int.
+
+The `init` function returns the initial value of the model when the program starts.
+In this case, we're starting at zero.
+
+### Update
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=26
+type Msg
+    = Increment
+    | Decrement
+
+
+update : Msg -> Model -> Model
+update msg model =
+    case msg of
+        Increment ->
+            model + 1
+
+        Decrement ->
+            model - 1
+```
+
+This is the "update" part of [the elm architecture](/book/applications/tea/).
+`Msg` is a [custom type](/book/syntax/custom_types/) holding all the events that can happen in the system.
+When a user triggers one of those messages from [the view](#view), Gren calls `update` to get a new model and will update the view accordingly.
+Here we're [pattern matching](/book/syntax/pattern_matching/) on the message to return a new model that's either incremented or decremented by 1.
+
+### View
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=41
+view : Model -> Html Msg
+view model =
+    Html.div []
+        [ Html.button
+            [ Event.onClick Decrement ]
+            [ Html.text "-" ]
+        , Html.text (String.fromInt model)
+        , Html.button
+            [ Event.onClick Increment ]
+            [ Html.text "+" ]
+        ]
+```
+
+This is the "view" part of [the elm architecture](/book/applications/tea/).
+It's a function that, given the current model, returns a UI: a visual representation of your current application state, with triggers to fire messages that can [update](#update) that state.
+
+For browser applications, the view needs to return HTML.
+The [Html module](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html) has functions for all of the HTML elements.
+Most of them take two parameters: an [array](/book/syntax/arrays/) of [attributes](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html.Attributes), and the contents of the element (for many the contents will be another array of elements).
+
+Our view returns a `div` with three elements.
+
+The first element in the `div` is a [button](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html#button):
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {2-4}
+    Html.div []
+        [ Html.button
+            [ Event.onClick Decrement ]
+            [ Html.text "-" ]
+        , Html.text (String.fromInt model)
+        , Html.button
+            [ Event.onClick Increment ]
+            [ Html.text "+" ]
+        ]
+```
+
+The first parameter passed to the button function is an array holding one attribute: an [onClick event](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html.Events#onClick) so when a user clicks the button, our `update` function will be called with our `Decrement` message.
+The second parameter is another array for the contents of the button.
+In our case that's just some [text](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html#text) with a minus sign.
+
+The second element of our `div` is some more text showing the current count.
+We get that by converting our model (an Int) to a string:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {5}
+    Html.div []
+        [ Html.button
+            [ Event.onClick Decrement ]
+            [ Html.text "-" ]
+        , Html.text (String.fromInt model)
+        , Html.button
+            [ Event.onClick Increment ]
+            [ Html.text "+" ]
+        ]
+```
+
+The third element of our `div` is another button.
+It's similar to the first, but clicking it will send the `Increment` message:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=43 {6-8}
+    Html.div []
+        [ Html.button
+            [ Event.onClick Decrement ]
+            [ Html.text "-" ]
+        , Html.text (String.fromInt model)
+        , Html.button
+            [ Event.onClick Increment ]
+            [ Html.text "+" ]
+        ]
+```
+
+This should be enough to get you started writing browser applications in Gren.
+Always [reach out](https://gren-lang.org/community/) if you have any questions.
+
+## Browser.element
+
+If functions always have the same output for any given input, can't raise exceptions, and can't change anything, how do you do things like get a random number? or make an HTTP call?
+That requires interacting with the [Gren Runtime](/book/applications/runtime/).
+This is what [`Browser.element`](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser#element) allows us to do.
+
+Here's a new program using `Browser.element` that generates random numbers.
+We'll explain it piece by piece in the next sections.
+
+```elm showLineNumbers
+module Main exposing (main)
+
+import Browser
+import Html exposing (Html)
+import Html.Attributes as Attribute
+import Html.Events as Event
+import Random
+
+
+main =
+    Browser.element
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        }
+
+
+type alias Model =
+    Int
+
+
+init : {} -> { model : Model, command : Cmd Msg }
+init _ =
+    { model = 0
+    , command = Cmd.none
+    }
+
+
+type Msg
+    = ClickedButton
+    | GotRandomNumber Int
+
+
+getRandomNumber : Cmd Msg
+getRandomNumber =
+    Random.generate GotRandomNumber (Random.int 0 100)
+
+
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        ClickedButton ->
+            { model = model
+            , command = getRandomNumber
+            }
+
+        GotRandomNumber n ->
+            { model = n
+            , command = Cmd.none
+            }
+
+
+view : Model -> Html Msg
+view model =
+    Html.div []
+        [ Html.button
+            [ Event.onClick ClickedButton ]
+            [ Html.text "Get random number" ]
+        , Html.text " "
+        , Html.text (String.fromInt model)
+        ]
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+```
+
+You can save the above to `src/Main.gren` and [compile and run it](#compile) the same way you did the sandbox program above.
+
+Notice that we changed from a sandbox program to an element:
+
+```elm showLineNumbers=false del={2} ins={3,7}
+main =
+    Browser.sandbox
+    Browser.element
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        }
+```
+
+Unlike a sandbox, elements have the ability to send commands from the init and update functions.
+We'll cover those in the next sections, as well as that new `subscriptions` function.
+
+### Init
+
+One of the places you can send commands is from `init`.
+For now we don't want to do anything on init, so we're sending [`Cmd.none`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Cmd#none):
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=23 {4}
+init : {} -> { model : Model, command : Cmd Msg }
+init _ =
+    { model = 0
+    , command = Cmd.none
+    }
+```
+
+That new parameter to `init` is a [flag](/book/application/flags/).
+We're not using flags in this program so we use `{}` in the type signature and `_` as the name, which is usually what you see for parameters that are required but aren't used.
+
+### Update
+
+The other place we can send commands is `update`.
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=40 {6,11}
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        ClickedButton ->
+            { model = model
+            , command = getRandomNumber
+            }
+
+        GotRandomNumber n ->
+            { model = n
+            , command = Cmd.none
+            }
+```
+
+When the user clicks the button, `update` is called with a `ClickedButton` message, and we respond with a call to another function we wrote, `getRandomNumber` that will give us a command that tells the runtime what kind of random number we want, and what type of message to send it back to us with.
+We'll explain that function in the next section.
+
+The `GotRandomNumber` case will be triggered when we get the random number from the previous case.
+We're [destructuring](/book/syntax/destructuring/) it to get the number and update the model.
+
+### Random Numbers
+
+Because functions must always return the same value for a given input, we can't write a function that returns a random number directly.
+Instead, we write a function that returns a command to the runtime, and the runtime calls our `update` function with a message holding the random value.
+This may seem convoluted at first, but it's a common pattern in Gren that helps keep your code deterministic, and therefore more reliable and easier to reason about.
+
+Here's where we're creating the command to get random numbers:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=35
+getRandomNumber : Cmd Msg
+getRandomNumber =
+    Random.generate GotRandomNumber (Random.int 0 100)
+```
+
+This might look confusing, so we'll take it one step at a time.
+
+`getRandomNumber : Cmd Msg`: The signature tells us this function returns a command, and that command could trigger one of our `Msg` variants.
+
+`Random.generate`: This is [a function in the core package](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Random#generate).
+It takes two parameters: the message we want to receive that will hold our random number, and a generator that says what type of random value we want.
+
+`GotRandomNumber`: This is the message we want to receive from the runtime with our random number.
+It's one of the variants of our `Msg` type [that can hold an integer](/book/syntax/custom_types/#types-with-data):
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=30 {3}
+type Msg
+    = ClickedButton
+    | GotRandomNumber Int
+```
+
+`(Random.int 0 100)`: This creates a [generator](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Random#Generator) that produces random integers between 0 and 100.
+
+### Subscriptions
+
+The other difference between `element` and `sandbox` is the subscription function:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=65
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+```
+
+We're not using subscriptions in this program so we're returning [`Sub.none`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Sub#none).
+
+See [the subscriptions chapter](/book/application/subscriptions/) if you want to know how they work.
+
+## Browser.document
+
+The third type of browser program is a Document.
+You would use this if you need to control the `<title>` tag.
+
+To change the above program to a Document, update your main function to call [`Browser.document`](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser#document):
+
+```elm showLineNumbers=false del={2} ins={3}
+main =
+    Browser.element
+    Browser.document
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        }
+```
+
+And update the view to return a record with the page's title and an array of elements for the body:
+
+```elm showLineNumbers=false del={1} ins={2,4-10}
+view : Model -> Html Msg
+view : Model -> { title : String, body : Array (Html Msg) }
+view model =
+    { title = "Random Number Generator"
+    , body = body
+    }
+
+
+body : Array (Html Msg)
+body =
+    Html.div []
+        [ Html.button
+            [ Event.onClick ClickedButton ]
+            [ Html.text "Get random number" ]
+        , Html.text " "
+        , Html.text (String.fromInt model)
+        ]
+```
+
+## Browser.application
+
+The last type of browser program is an [application](https://packages.gren-lang.org/package/gren-lang/browser/latest/module/Browser#application).
+This is appropriate for single-page applications (SPA) where you want to manage navigation and serve all the pages client-side.
+
+Here's a full application with two pages.
+We'll go through the differences between it and a document program in the next sections.
+
+```elm title="src/Main.gren" showLineNumbers
+module Main exposing (main)
+
+import Browser exposing (Document, UrlRequest(..))
+import Browser.Navigation as Nav
+import Html exposing (Html)
+import Html.Attributes as Attribute
+import Html.Events as Event
+import Url exposing (Url)
+
+
+main =
+    Browser.application
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        , onUrlRequest = UrlRequested
+        , onUrlChange = UrlChanged
+        }
+
+
+type alias Model =
+    { page : Page
+    , navKey : Nav.Key
+    }
+
+
+type Page
+    = Home
+    | About
+    | NotFound
+
+
+pageFromUrl : Url -> Page
+pageFromUrl url =
+    case url.path of
+        "/" -> Home
+        "/about" -> About
+        _ -> NotFound
+
+
+init : {} -> Url -> Nav.Key -> { model : Model, command : Cmd Msg }
+init _ url key =
+    { model = 
+        { page = pageFromUrl url
+        , navKey = key
+        }
+    , command = Cmd.none
+    }
+
+
+type Msg
+    = UrlRequested UrlRequest
+    | UrlChanged Url
+
+
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        UrlRequested urlRequest ->
+            { model = model
+            , command =
+                case urlRequest of
+                    Internal url ->
+                        Nav.pushUrl model.navKey (Url.toString url)
+
+                    External url ->
+                        Nav.load url
+            }
+
+        UrlChanged url ->
+            { model = { model | page = pageFromUrl url }
+            , command = Cmd.none
+            }
+
+
+view : Model -> Document Msg
+view model =
+    case model.page of
+        Home ->
+            { title = "Home"
+            , body = [ Html.text "Welcome to my home page" ]
+            }
+
+        About -> 
+            { title = "About"
+            , body = [ Html.text "This is an example website" ]
+            }
+
+        NotFound ->
+            { title = "Not Found"
+            , body = [ Html.text "Can't find that url" ]
+            }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+```
+
+### Running the application
+
+We'll compile this program just like the others:
+
+```sh
+gren make src/Main.gren
+```
+
+But we also need to install the [url package](https://packages.gren-lang.org/package/gren-lang/url/version/latest/overview) so we can work with URLs:
+
+```sh
+gren package install gren-lang/url
+```
+
+Next, we need a real HTTP server.
+`Browser.application` gives you full control over the URL and address bar, which won't work with the `file:///` URLs we've been using so far.
+We'll use the [serve](https://www.npmjs.com/package/serve) package on npm for that:
+
+```sh
+npm install serve
+```
+
+and run it in SPA-mode, which will direct all URL requests to our `index.html` file:
+
+```
+npx serve -s
+```
+
+Now you can try out the routes:
+
+* http://localhost:3000/
+* http://localhost:3000/about
+* http://localhost:3000/asdf
+
+### Navigation
+
+The biggest difference between an application and a document is an application will capture link clicks and URL changes and send us messages instead of reloading the page, so we can handle them however we want.
+So we need to specify the messages we expect:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=11 {7-8}
+main =
+    Browser.application
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        , onUrlRequest = UrlRequested
+        , onUrlChange = UrlChanged
+        }
+```
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=52 {2-3}
+type Msg
+    = UrlRequested UrlRequest
+    | UrlChanged Url
+```
+
+The `onUrlRequest` message will be triggered when someone clicks a link.
+The `onUrlChange` message will be triggered when we programmatically change the URL.
+We will handle those messages in our `update` function, which we'll cover later.
+
+We also wrote a custom type to track which page we're on, and a function to route [URL](https://packages.gren-lang.org/package/gren-lang/url/version/latest/module/Url) paths to the appropriate page:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=28
+type Page
+    = Home
+    | About
+    | NotFound
+
+
+pageFromUrl : Url -> Page
+pageFromUrl url =
+    case url.path of
+        "/" -> Home
+        "/about" -> About
+        _ -> NotFound
+```
+
+### Init
+
+Our init function is doing more now:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=42
+init : {} -> Url -> Nav.Key -> { model : Model, command : Cmd Msg }
+init _ url key =
+    { model =
+        { page = pageFromUrl url
+        , navKey = key
+        }
+    , command = Cmd.none
+    }
+```
+
+It's receiving the initial URL, which we're using to set the starting page for our site.
+
+It also receives a [navigation key](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser.Navigation#Key).
+We're saving it because it's required to call functions that change the URL.
+This is to make sure only `Browser.application` programs, which are equipped to detect URL changes, can change the URL and affect history.
+
+### Update
+
+This is where we respond to link clicks and URL changes:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=57 {"1":4} {"2":9} {"3":12} {"4":16}
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        UrlRequested urlRequest ->
+            { model = model
+            , command =
+                case urlRequest of
+                    Internal url ->
+                        Nav.pushUrl model.navKey (Url.toString url)
+
+                    External url ->
+                        Nav.load url
+            }
+
+
+        UrlChanged url ->
+            { model = { model | page = pageFromUrl url }
+            , command = Cmd.none
+            }
+```
+
+1. This is the message we receive when someone clicks a link (because we set `onUrlRequest = UrlRequested` in `main`).
+   It holds a [`Browser.UrlRequest`](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser#UrlRequest).
+2. If the URL request is internal - meaning a path on this domain - we send a [pushUrl](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser.Navigation#pushUrl) command to the runtime.
+   This will change the URL and add a new entry to the browser history, but it won't reload the page (instead, we'll get our `UrlChanged` message).
+3. If the URL request is external - meaning a path on a different domain - we send a [load](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Browser.Navigation#load) command.
+   This will make the browser navigate to that URL.
+4. This is the message we receive when the URL changes via `pushUrl` (because we set `onUrlChange = UrlChanged` in `main`).
+   It holds a [`Url`](https://packages.gren-lang.org/package/gren-lang/url/version/latest/module/Url#Url) and we use that to update the page value on our model.
+   The view will handle rendering the appropriate page, all without a page reload!
+
+### View
+
+The view is very similar to the document version, but we're [matching](/book/syntax/pattern_matching/) the page on our model to decide what the title and body should be:
+
+```elm title="src/Main.gren" showLineNumbers startLineNumber=77
+view : Model -> Document Msg
+view model =
+    case model.page of
+        Home ->
+            { title = "Home"
+            , body = [ Html.text "Welcome to my home page" ]
+            }
+
+        About ->
+            { title = "About"
+            , body = [ Html.text "This is an example website" ]
+            }
+
+        NotFound ->
+            { title = "Not Found"
+            , body = [ Html.text "Can't find that url" ]
+            }
+```
+
+If your pages start to become more complicated, you may want to put them in their own modules.
+This is explained on the [nested TEA](/book/applications/nested-tea/) page.
