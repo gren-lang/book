@@ -1,0 +1,94 @@
+---
+title: Ports
+description: Ports provide interop between javascript and your Gren program.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution">
+This page needs more detailed explanations and testing.
+[Reach out](https://gren-lang.org/community/) if you need help or want to contribute.
+</Aside>
+
+Ports provide interop between javascript and your Gren program.
+
+To start using ports, you'll need a program defined with
+[`Browser.element`](/book/applications/browser/#browserelement),
+[`Browser.document`](/book/applications/browser/#browserdocument), or
+[`Browser.application`](/book/applications/browser/#browserapplication).
+
+Change your module to a `port module`:
+
+```elm title="src/Main.gren" showLineNumbers=false del={1} add={2}
+module Main exposing (main)
+port module Main exposing (main)
+```
+
+Define your incoming and outgoing ports.
+Here we're using `String` as the data exchange format, but you may want to use JSON for more power and control.
+See [`Json.Decode`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Json.Decode)
+and [`Json.Encode`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Json.Encode).
+
+```elm title="src/Main.gren" showLineNumbers=false
+port toJs : String -> Cmd msg
+port fromJs : (String -> msg) -> Sub msg
+```
+
+Use commands to send outgoing messages:
+
+```elm title="src/Main.gren" showLineNumbers=false
+init : {} -> { model : Model, command : Cmd Msg }
+init _ =
+    { model = { message = "" }
+    , command = toJs "Hello from Gren!"
+    }
+```
+
+Use subscriptions to receive incoming messages:
+
+```elm title="src/Main.gren" showLineNumbers=false
+type Msg
+    = MessageReceived String
+
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        MessageReceived message ->
+            { model = { model | message = message }
+            , command = Cmd.none
+            }
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+  fromJs MessageReceived
+```
+
+Compile your program to a javascript file:
+
+```sh
+gren make src/Main.gren --output=main.js
+```
+
+Create an html file that starts your program like this:
+
+```html showLineNumbers=false {11-16}
+<html>
+<head>
+  <script src="main.js"></script>
+</head>
+<body>
+  <div id="myapp"></div>
+  <script>
+    var app = Gren.Main.init({
+      node: document.getElementById('myapp'),
+    });
+    // receiving messages from gren:
+    app.ports.toJs.subscribe(function(message) {
+      alert(message); 
+    });
+    // sending messages to gren:
+    app.ports.fromJs.send("Hello from JS!");
+  </script>
+</body>
+</html>
+```
