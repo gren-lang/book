@@ -1,0 +1,45 @@
+---
+title: Flags
+description: Flags let you get values from javascript when your application starts.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution">
+This page needs more detailed explanations and testing.
+[Reach out](https://gren-lang.org/community/) if you need help or want to contribute.
+</Aside>
+
+Flags provide a way to get values from javascript when your application starts.
+
+To start using flags, you'll need a program defined with
+[`Browser.element`](/book/applications/browser/#browserelement),
+[`Browser.document`](/book/applications/browser/#browserdocument), or
+[`Browser.application`](/book/applications/browser/#browserapplication).
+
+Then compile your program to a javascript file:
+
+```sh
+gren make src/Main.gren --output=main.js
+```
+
+And create an html file that starts your program like this:
+
+```html showLineNumbers=false {10}
+<html>
+<head>
+  <script src="main.js"></script>
+</head>
+<body>
+  <div id="myapp"></div>
+  <script>
+  var app = Gren.Main.init({
+    node: document.getElementById('myapp'),
+    flags: Date.now()
+  });
+  </script>
+</body>
+</html>
+```
+
+In this example, the current date will be passed as the first parameter to your program's [`init`](/book/applications/browser/#init) function.

@@ -1,0 +1,346 @@
+---
+title: Nested TEA
+description: A pattern for using stateful components in Gren.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution">
+This page needs more detailed explanations and testing.
+[Reach out](https://gren-lang.org/community/) if you need help or want to contribute.
+</Aside>
+
+If you have a [`Browser.application`](/book/applications/browser/#browserapplication) that is getting large you may want pull some of the logic, such as the logic for a particular page, into its own [module](/book/syntax/modules/).
+This is one common way of doing that.
+
+"Nested TEA" is a way to "nest" [the Elm architecture](/book/applications/tea/) so a module can have its own model/view/update cycle,
+with messages delegated to and from the top-level module.
+
+Let's say you have an application like this:
+
+```elm title="src/Main.gren" showLineNumbers=false
+module Main exposing (main)
+
+import Browser exposing (Document, UrlRequest(..))
+import Browser.Navigation as Nav
+import Html exposing (Html)
+import Html.Attributes as Attribute
+import Html.Events as Event
+import Url exposing (Url)
+
+
+main =
+    Browser.application
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        , onUrlRequest = UrlRequested
+        , onUrlChange = UrlChanged
+        }
+
+
+type alias Model =
+    { page : Page
+    , navKey : Nav.Key
+    , clicked : Bool
+    }
+
+
+type Page
+    = Home
+    | Clicker
+    | NotFound
+
+
+pageFromUrl : Url -> Page
+pageFromUrl url =
+    case url.path of
+        "/" -> Home
+        "/clicker" -> Clicker
+        _ -> NotFound
+
+
+init : {} -> Url -> Nav.Key -> { model : Model, command : Cmd Msg }
+init _ url key =
+    { model =
+        { page = pageFromUrl url
+        , navKey = key
+        , clicked = False
+        }
+    , command = Cmd.none
+    }
+
+
+type Msg
+    = UrlRequested UrlRequest
+    | UrlChanged Url
+    | ButtonClicked
+
+
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        UrlRequested urlRequest ->
+            { model = model
+            , command =
+                case urlRequest of
+                    Internal url ->
+                        Nav.pushUrl model.navKey (Url.toString url)
+
+                    External url ->
+                        Nav.load url
+            }
+
+        UrlChanged url ->
+            { model = { model | page = pageFromUrl url }
+            , command = Cmd.none
+            }
+
+        ButtonClicked ->
+            { model = { model | clicked = True }
+            , command = Cmd.none
+            }
+
+
+view : Model -> Document Msg
+view model =
+    case model.page of
+        Home ->
+            { title = "Home"
+            , body = 
+                [ Html.a
+                    [ Attribute.href "/clicker" ]
+                    [ Html.text "Go click the button" ]
+                ]
+            }
+
+        Clicker ->
+            { title = "Clicker"
+            , body = 
+                [ Html.button
+                    [ Event.onClick ButtonClicked ]
+                    [ Html.text
+                        (if model.clicked then
+                            "You clicked me!"
+                        else
+                            "Click me!"
+                        )
+                    ]
+                ]
+            }
+
+        NotFound ->
+            { title = "Not Found"
+            , body = [ Html.text "Can't find that url" ]
+            }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+```
+
+[Compile and run the application](/book/applications/browser/#running-the-application) and you should see a link to a page with your button.
+Clicking the button will change the text.
+
+If we want to pull our `Clicker` page into its own module, it could look like this (notice we created a `src/Pages` directory for it to live in):
+
+```elm title="src/Pages/Clicker.gren" showLineNumbers=false
+module Pages.Clicker exposing (Model, Msg, init, update, view)
+
+import Html exposing (Html)
+import Html.Attributes as Attribute
+import Html.Events as Event
+
+
+type alias Model =
+    { clicked : Bool
+    }
+
+
+init : Model
+init =
+    { clicked = False }
+
+
+type Msg
+    | ButtonClicked
+
+
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        ButtonClicked ->
+            { model = { model | clicked = True }
+            , command = Cmd.none
+            }
+
+
+view : Model -> Document Msg
+view model =
+    { title = "Clicker"
+    , body =
+        [ Html.button
+            [ Event.onClick ButtonClicked ]
+            [ Html.text
+                (if model.clicked then
+                    "You clicked me!"
+                else
+                    "Click me!"
+                )
+            ]
+        ]
+    }
+```
+
+Then we'd update our `Main` module to delegate to that page's `init`, `update`, and `view`:
+
+```elm title="src/Main.gren" showLineNumbers=false del={26,32,41,51,60,83-86,117-130} add={9,33,42,61,87-102,131-132}
+module Main exposing (main)
+
+import Browser exposing (Document, UrlRequest(..))
+import Browser.Navigation as Nav
+import Html exposing (Html)
+import Html.Attributes as Attribute
+import Html.Events as Event
+import Url exposing (Url)
+import Pages.Clicker
+
+
+main =
+    Browser.application
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        , onUrlRequest = UrlRequested
+        , onUrlChange = UrlChanged
+        }
+
+
+type alias Model =
+    { page : Page
+    , navKey : Nav.Key
+    , clicked : Bool
+    }
+
+
+type Page
+    = Home
+    | Clicker
+    | Clicker Pages.Clicker.Model
+    | NotFound
+
+
+pageFromUrl : Url -> Page
+pageFromUrl url =
+    case url.path of
+        "/" -> Home
+        "/clicker" -> Clicker
+        "/clicker" -> Clicker Pages.Clicker.init
+        _ -> NotFound
+
+
+init : {} -> Url -> Nav.Key -> { model : Model, command : Cmd Msg }
+init _ url key =
+    { model =
+        { page = pageFromUrl url
+        , navKey = key
+        , clicked = False
+        }
+    , command = Cmd.none
+    }
+
+
+type Msg
+    = UrlRequested UrlRequest
+    | UrlChanged Url
+    | ButtonClicked
+    | ClickerMsg Pages.Clicker.Msg
+
+
+update : Msg -> Model -> { model : Model, command : Cmd Msg }
+update msg model =
+    case msg of
+        UrlRequested urlRequest ->
+            { model = model
+            , command =
+                case urlRequest of
+                    Internal url ->
+                        Nav.pushUrl model.navKey (Url.toString url)
+
+                    External url ->
+                        Nav.load url
+            }
+
+        UrlChanged url ->
+            { model = { model | page = pageFromUrl url }
+            , command = Cmd.none
+            }
+
+        ButtonClicked ->
+            { model = { model | clicked = True }
+            , command = Cmd.none
+            }
+        ClickerMsg clickerMsg ->
+            case model.page of
+                Clicker clickerModel ->
+                    let
+                        { model = clickerModel, command = clickerCmd } =
+                            Pages.Clicker.update clickerMsg clickerModel
+                    in
+                    { model = { model | page = Clicker clickerModel }
+                    , command = Cmd.map ClickerMsg clickerCmd
+                    }
+
+                _ ->
+                    -- Should never receive this message on other pages.
+                    { model = model
+                    , command = Cmd.none
+                    }
+
+
+view : Model -> Document Msg
+view model =
+    case model.page of
+        Home ->
+            { title = "Home"
+            , body = 
+                [ Html.a
+                    [ Attribute.href "/clicker" ]
+                    [ Html.text "Go click the button" ]
+                ]
+            }
+
+        Clicker ->
+            { title = "Clicker"
+            , body = 
+                [ Html.button
+                    [ Event.onClick ButtonClicked ]
+                    [ Html.text
+                        (if model.clicked then
+                            "You clicked me!"
+                        else
+                            "Click me!"
+                        )
+                    ]
+                ]
+            }
+        Clicker clickerModel ->
+            Pages.Clicker.view clickerModel
+
+        NotFound ->
+            { title = "Not Found"
+            , body = [ Html.text "Can't find that url" ]
+            }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+```
+
+<Aside type="caution">
+This added quite a bit of complexity to `Main`, so only use this if the module you're extracting is complex enough to be worth that trade off.
+</Aside>
