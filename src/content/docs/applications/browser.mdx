@@ -585,16 +585,16 @@ subscriptions _ =
 
 ### Running the application
 
-We'll compile this program just like the others:
-
-```sh
-gren make src/Main.gren
-```
-
-But we also need to install the [url package](https://packages.gren-lang.org/package/gren-lang/url/version/latest/overview) so we can work with URLs:
+First we need to install the [url package](https://packages.gren-lang.org/package/gren-lang/url/version/latest/overview) that provides the `Url` module we're using:
 
 ```sh
 gren package install gren-lang/url
+```
+
+Then we'll compile this program just like the others:
+
+```sh
+gren make src/Main.gren
 ```
 
 Next, we need a real HTTP server.
