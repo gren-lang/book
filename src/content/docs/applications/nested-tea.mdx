@@ -55,7 +55,7 @@ type Page
 
 pageFromUrl : Url -> Page
 pageFromUrl url =
-    case url.path of
+    when url.path is
         "/" -> Home
         "/clicker" -> Clicker
         _ -> NotFound
@@ -80,11 +80,11 @@ type Msg
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         UrlRequested urlRequest ->
             { model = model
             , command =
-                case urlRequest of
+                when urlRequest is
                     Internal url ->
                         Nav.pushUrl model.navKey (Url.toString url)
 
@@ -105,7 +105,7 @@ update msg model =
 
 view : Model -> Document Msg
 view model =
-    case model.page of
+    when model.page is
         Home ->
             { title = "Home"
             , body = 
@@ -170,7 +170,7 @@ type Msg
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         ButtonClicked ->
             { model = { model | clicked = True }
             , command = Cmd.none
@@ -235,7 +235,7 @@ type Page
 
 pageFromUrl : Url -> Page
 pageFromUrl url =
-    case url.path of
+    when url.path is
         "/" -> Home
         "/clicker" -> Clicker
         "/clicker" -> Clicker Pages.Clicker.init
@@ -262,11 +262,11 @@ type Msg
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         UrlRequested urlRequest ->
             { model = model
             , command =
-                case urlRequest of
+                when urlRequest is
                     Internal url ->
                         Nav.pushUrl model.navKey (Url.toString url)
 
@@ -284,7 +284,7 @@ update msg model =
             , command = Cmd.none
             }
         ClickerMsg clickerMsg ->
-            case model.page of
+            when model.page is
                 Clicker clickerModel ->
                     let
                         { model = clickerModel, command = clickerCmd } =
@@ -303,7 +303,7 @@ update msg model =
 
 view : Model -> Document Msg
 view model =
-    case model.page of
+    when model.page is
         Home ->
             { title = "Home"
             , body = 

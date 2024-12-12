@@ -186,9 +186,9 @@ type Msg
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         GotServer result ->
-            case result of
+            when result is
                 Ok server ->
                     { model = { server = Just server }
                     , command = Cmd.none
@@ -211,7 +211,7 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    case model.server of
+    when model.server is
         Just server ->
             HttpServer.onRequest server GotRequest
 
@@ -337,14 +337,14 @@ Next we define our update function and [match](/book/syntax/pattern_matching/) o
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=47
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
 ```
 
 First we handle the `GotServer` message:
 
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=50
         GotServer result ->
-            case result of
+            when result is
                 Ok server ->
                     { model = { server = Just server }
                     , command = Cmd.none
@@ -398,7 +398,7 @@ We turn the response into a command for the runtime to actually send the HTTP re
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=72
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    case model.server of
+    when model.server is
         Just server ->
             HttpServer.onRequest server GotRequest
 

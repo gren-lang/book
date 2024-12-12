@@ -3,7 +3,7 @@ title: Pattern Matching
 description: Pattern matching in Gren
 ---
 
-When dealing with [custom types](/book/syntax/custom_types/), you likely want to do different things based on the actual value of the custom type. The `case of` expression provides this flexibility.
+When dealing with [custom types](/book/syntax/custom_types/), you likely want to do different things based on the actual value of the custom type. The `when is` expression provides this flexibility.
 
 ```elm
 type Role
@@ -13,7 +13,7 @@ type Role
 
 canEdit : Role -> Bool
 canEdit role =
-    case role of
+    when role is
         Viewer ->
             False
         
@@ -33,7 +33,7 @@ If you don't need to handle all possible cases explicitly, you can use `_` as a 
 ```elm
 canAddUser : Role -> Bool
 canAddUser role =
-    case role of
+    when role is
         Admin -> True
         _ -> False
 ```
@@ -43,7 +43,7 @@ You can use pattern matching on other things than just custom types. Like intege
 ```elm
 isZero : Int -> Bool
 isZero num =
-    case num of
+    when num is
         0 -> True
         _ -> False
 ```
@@ -53,7 +53,7 @@ Or even records:
 ```elm
 combineIngredients : QuantifiedIngredient -> QuantifiedIngredient -> QuantifiedIngredient
 combineIngredients left right =
-    case { leftQty = left.quantity, rightQty = right.quantity } of
+    when { leftQty = left.quantity, rightQty = right.quantity } is
         { leftQty = 0 } ->
             right
 
@@ -75,7 +75,7 @@ If you have a [custom type with data](/book/syntax/custom_types/#types-with-data
 ```elm
 explainHeldItem : Maybe String -> String
 explainHeldItem maybeItem =
-    case maybeItem of
+    when maybeItem is
         Nothing ->
           "You're not holding anything"
 

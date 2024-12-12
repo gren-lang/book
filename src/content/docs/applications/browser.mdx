@@ -60,7 +60,7 @@ type Msg
 
 update : Msg -> Model -> Model
 update msg model =
-    case msg of
+    when msg is
         Increment ->
             model + 1
 
@@ -161,7 +161,7 @@ type Msg
 
 update : Msg -> Model -> Model
 update msg model =
-    case msg of
+    when msg is
         Increment ->
             model + 1
 
@@ -301,7 +301,7 @@ getRandomNumber =
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         ClickedButton ->
             { model = model
             , command = getRandomNumber
@@ -370,7 +370,7 @@ The other place we can send commands is `update`.
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=40 {6,11}
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         ClickedButton ->
             { model = model
             , command = getRandomNumber
@@ -518,7 +518,7 @@ type Page
 
 pageFromUrl : Url -> Page
 pageFromUrl url =
-    case url.path of
+    when url.path is
         "/" -> Home
         "/about" -> About
         _ -> NotFound
@@ -541,11 +541,11 @@ type Msg
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         UrlRequested urlRequest ->
             { model = model
             , command =
-                case urlRequest of
+                when urlRequest is
                     Internal url ->
                         Nav.pushUrl model.navKey (Url.toString url)
 
@@ -561,7 +561,7 @@ update msg model =
 
 view : Model -> Document Msg
 view model =
-    case model.page of
+    when model.page is
         Home ->
             { title = "Home"
             , body = [ Html.text "Welcome to my home page" ]
@@ -655,7 +655,7 @@ type Page
 
 pageFromUrl : Url -> Page
 pageFromUrl url =
-    case url.path of
+    when url.path is
         "/" -> Home
         "/about" -> About
         _ -> NotFound
@@ -689,11 +689,11 @@ This is where we respond to link clicks and URL changes:
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=57 {"1":4} {"2":9} {"3":12} {"4":16}
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         UrlRequested urlRequest ->
             { model = model
             , command =
-                case urlRequest of
+                when urlRequest is
                     Internal url ->
                         Nav.pushUrl model.navKey (Url.toString url)
 
@@ -725,7 +725,7 @@ The view is very similar to the document version, but we're [matching](/book/syn
 ```elm title="src/Main.gren" showLineNumbers startLineNumber=77
 view : Model -> Document Msg
 view model =
-    case model.page of
+    when model.page is
         Home ->
             { title = "Home"
             , body = [ Html.text "Welcome to my home page" ]

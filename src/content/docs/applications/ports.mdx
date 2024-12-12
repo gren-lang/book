@@ -52,7 +52,7 @@ type Msg
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         MessageReceived message ->
             { model = { model | message = message }
             , command = Cmd.none
