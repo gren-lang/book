@@ -42,10 +42,9 @@ main =
 
 init : Environment -> Init.Task (Cmd a)
 init env =
-    "Hello, World!"
-        |> Stream.sendLine env.stdout
-        |> Task.execute
-        |> Node.endWithCmd
+    Stream.writeLineAsBytes "Hello, World!" env.stdout
+        |> Task.onError (\_ -> Task.succeed env.stdout)
+        |> Node.endSimpleProgram
 ```
 
 ### Compile
@@ -106,33 +105,50 @@ All it needs is an init function.
 
 ### Init
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=14 {"1":4} {"2":5} {"3":6}
+```elm title="src/Main.gren" showLineNumbers startLineNumber=14 {"1":3} {"2":4} {"3":5}
 init : Environment -> Init.Task (Cmd a)
 init env =
-    "Hello, World!"
-        |> Stream.sendLine env.stdout
-        |> Task.execute
-        |> Node.endWithCmd
+    Stream.writeLineAsBytes "Hello, World!" env.stdout
+        |> Task.onError (\_ -> Task.succeed env.stdout)
+        |> Node.endSimpleProgram
 ```
 
 Here is the heart of our program.
 
-1. We start with a string being passed to [`Stream.sendLine`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Stream#sendLine).
-   The first argument to `sendLine` is the stream we want to send it to, in our case that's stdout, which is available in the [`Environment`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node#Environment) that's passed in.
-   The result of this call is a [task](/book/applications/tasks/) that tells Gren to output our string on that stream.
-2. Here we are turning the stream task into a [command](/book/applications/commands/) with [`Task.execute`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Task#execute).
-   Commands are how we trigger effects in the [Gren Runtime](/book/applications/runtime/).
-3. Finally, we pass that command to [`Node.endWithCmd`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node#endWithCmd) to end the program.
-   `endWithCmd` is specific to `SimpleProgram`.
-   We'll cover other ways to end programs in a later section.
+1. We start with a string being passed to [`Stream.writeLineAsBytes`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Stream#writeLineAsBytes).
+   It will take a string and write it to a stream as bytes ending in a newline.
+   We pass it the string we want and the stream we want to write to.
+   In this case, it's the `stdout` stream that we get from the node [environment](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node#Environment).
+   That's the stream that's used to display output to the user, or to another program.
+   But this doesn't write to `stdout` directly, it gives us a [task](/book/applications/tasks/) that describes the effect.
+2. Before we can end the program, we need to handle the case where this action fails (maybe the program is being piped to a stream that is closed or doesn't exist).
+   So we're passing the task from the previous function to [`Task.onError`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Task#onError).
+   This will give us a new task.
+    
+   The first parameter to `onError` is a function that takes the error value and returns the task that we want.
+   We're using an [anonymous function](/book/syntax/functions/#anonymous-functions) for this.
+   In our case, we're ignoring the error and returning a task that will always succeed, using [`Task.succeed`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Task#succeed).
+   The result of this task will be the original stream, so if we hit this error case, nothing will happen.
+
+   In a real program, you might want to handle the error by writing to `stderr` and exiting with a [non-zero status code](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node#exitWithCode).
+3. Now we can pass our task to [`Node.endSimpleProgram`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node#endSimpleProgram).
+   This will give us an [init task](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Init) that will run our task and end the program.
+
+<Aside>
+Most languages don't make you handle the potential error condition for simple print statements.
+The explicitness here is one of the things that lets Gren give you confidence that your programs are [correct](/book/#correct).
+But since this is such a common case with the standard io streams, future versions of gren may have helpers to easily print to those streams specifically.
+</Aside>
 
 This should be enough to get you started making simple programs.
-As always, [reach out](https://gren-lang.org/community) if you need help.
-Or read on to learn about creating long-lived programs.
+Scroll through the [packages and docs](https://packages.gren-lang.org/).
+[Reach out](https://gren-lang.org/community) if you need help.
+And read on to learn about creating long-lived programs.
 
 ## Let's make a web server!
 
 For more complex or long-running programs, we'll want a full [`Node.Program`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node#Program).
+This type of program uses the full [Elm architecture](/book/applications/tea/).
 
 Here's an example of using `Node.Program` to create an HTTP server.
 As usual, we'll go through it piece by piece in the next sections.
@@ -144,7 +160,6 @@ import HttpServer exposing (Request, Server)
 import HttpServer.Response as Response exposing (Response)
 import Init
 import Node exposing (Environment)
-import Stream exposing (Stream)
 import Task
 
 
@@ -181,7 +196,7 @@ init env =
 
 type Msg
     = GotServer (Result HttpServer.ServerError Server)
-    | GotRequest Request Response
+    | GotRequest { request: Request, response: Response }
 
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
@@ -200,7 +215,7 @@ update msg model =
                         Task.execute (Node.exitWithCode 1)
                     }
 
-        GotRequest request response ->
+        GotRequest { request, response } ->
             { model = model
             , command =
                 response
@@ -213,7 +228,8 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     when model.server is
         Just server ->
-            HttpServer.onRequest server GotRequest
+            HttpServer.onRequest server
+                (\req res -> GotRequest { request = req, response = res })
 
         Nothing ->
             Sub.none
@@ -233,7 +249,7 @@ Now let's see what's happening.
 
 ### Main
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=11
+```elm title="src/Main.gren" showLineNumbers startLineNumber=10
 main : Node.Program Model Msg
 main =
     Node.defineProgram
@@ -252,7 +268,7 @@ We'll cover those next.
 
 First we define our Model:
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=21
+```elm title="src/Main.gren" showLineNumbers startLineNumber=20
 type alias Model =
     { server : Maybe Server }
 ```
@@ -263,7 +279,7 @@ It's not guaranteed that our server will start (e.g. maybe the port is being use
 
 Next, we define a constant to hold our server configuration:
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=25
+```elm title="src/Main.gren" showLineNumbers startLineNumber=24
 serverConfig =
     { host = "localhost"
     , port_ = 3000
@@ -274,7 +290,7 @@ This will make it easier if we want to change the config, or print it when the s
 
 Next is our `init` function that starts the program:
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=31
+```elm title="src/Main.gren" showLineNumbers startLineNumber=30
 init : Environment -> Init.Task { model : Model, command : Cmd Msg }
 init env =
     Init.await HttpServer.initialize <| \serverPermission ->
@@ -308,10 +324,10 @@ We'll explain that in the next section.
 
 We start by defining our message type:
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=42
+```elm title="src/Main.gren" showLineNumbers startLineNumber=41
 type Msg
     = GotServer (Result HttpServer.ServerError Server)
-    | GotRequest Request Response
+    | GotRequest { request : Request, response : Response }
 ```
 
 This holds all the events that can happen in our system.
@@ -329,12 +345,12 @@ This lets the compiler know that `ServerError` and `Server` are part of `Result`
 </Aside>
 
 We'll also receive a `GotRequest` message whenever there is an Http request because it's what we specified in `subscriptions`, which we'll cover later.
-It will hold a [`Request`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#Request) and a [`Response`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer.Response#Response).
+It will hold a record with a [`Request`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#Request) and a [`Response`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer.Response#Response).
 We'll use those values to send a response back from the server, which we'll look at soon.
 
 Next we define our update function and [match](/book/syntax/pattern_matching/) on that `Msg` type:
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=47
+```elm title="src/Main.gren" showLineNumbers startLineNumber=46
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
     when msg is
@@ -342,7 +358,7 @@ update msg model =
 
 First we handle the `GotServer` message:
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=50
+```elm title="src/Main.gren" showLineNumbers startLineNumber=49
         GotServer result ->
             when result is
                 Ok server ->
@@ -372,8 +388,8 @@ And we respond with a command that exits the program with a non-zero status code
 
 Next we're handling HTTP requests in the `GotRequest` case:
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=63
-        GotRequest request response ->
+```elm title="src/Main.gren" showLineNumbers startLineNumber=62
+        GotRequest { request, response } ->
             { model = model
             , command =
                 response
@@ -395,12 +411,13 @@ We turn the response into a command for the runtime to actually send the HTTP re
 
 ### Subscriptions
 
-```elm title="src/Main.gren" showLineNumbers startLineNumber=72
+```elm title="src/Main.gren" showLineNumbers startLineNumber=71
 subscriptions : Model -> Sub Msg
 subscriptions model =
     when model.server is
         Just server ->
-            HttpServer.onRequest server GotRequest
+            HttpServer.onRequest server
+                (\req res -> GotRequest { request = req, response = res })
 
         Nothing ->
             Sub.none
@@ -409,30 +426,11 @@ subscriptions model =
 [Subscriptions](/book/applications/subscriptions/) are how we connect to external events.
 When we return a subscription, we're telling the [Gren runtime](/book/applications/runtime/) what messages to send to our `update` function for the events we care about.
 
-In this case, if we successfully started the server, we want to receive a `GotRequest` message whenever there is an HTTP request.
-We're doing that with [`HttpServer.onRequest`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#onRequest),
-which takes the server value we saved to our model (see the `GotServer` branch of our `update` function) and our `GotRequest` message variant.
-
-<Aside>
-Look at the signature for [`HttpServer.onRequest`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#onRequest):
-
-```elm showLineNumbers=false
-onRequest : Server -> (Request -> Response -> msg) -> Sub msg
-```
-
-The part that says `(Request -> Response -> msg)` means the second parameter should be a function that takes a [`Request`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#Request)
-and a [`Response`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer.Response#Response) and returns a message.
-This is why the `GotRequest` variant of our `Msg` type looks like this:
-
-```elm title="src/Main.gren" showLineNumbers startLineNumber=44
-    | GotRequest Request Response
-```
-
-When you define variants, you're actually defining constructor functions that return an instance of your custom type.
-The first word is the name of your function, and the rest are the types of the parameters that must be passed.
-Here we're defining a `GotRequest` function that takes a `Request` and `Response` and returns a `Msg`.
-Which is exactly what `onRequest` wants so the runtime can call the function to create our message.
-</Aside>
+Earlier in the book, we've been returning [`Sub.none`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Sub#none) since we haven't had any subscriptions.
+But now, if we successfully started the server, we want to receive a `GotRequest` message whenever there is an HTTP request.
+We do that by calling [`HttpServer.onRequest`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/HttpServer#onRequest),
+which takes the server value we saved to our model (see the `GotServer` branch of our `update` function) and a function that returns a message.
+In our case, we're using an [anonymous function](/book/syntax/functions/#function-pipelines) that returns our `GotRequest` message.
 
 ## More examples
 
