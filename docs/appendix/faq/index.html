@@ -44,13 +44,22 @@
 <li>A git-based package manager. It’s slower, but has access to any github repo that you have, even private ones.</li>
 <li>The default sequential data structure is an immutable array, not a linked list.</li>
 <li>The default unit type is <code dir="auto">{}</code>.</li>
-<li>Extended support for pattern matching on records.</li>
+<li>Extended support for <a href="/book/syntax/pattern_matching/">pattern matching</a> on records.</li>
 <li>Any expression that returns a record can be used for record updates.</li>
 <li>Multiline strings trim leading whitespace on each line.</li>
-<li>Supports running on NodeJS.</li>
+<li>Supports <a href="/book/applications/node/">running on NodeJS</a>.</li>
 <li>No tuples. Check out this <a href="https://youtu.be/Sl9HHo1qDk0?si=wiJjSEMyl0f6HqTn">video on why tuples were removed</a>.</li>
 <li>No automatic constructors for type aliased records.</li>
 <li>No GLSL syntax.</li>
 <li>No reactor.</li>
 <li>Sourcemap support for native integration with the JS debugger.</li>
+</ul>
+<p>As of Gren 0.5.0 there are some more differences:</p>
+<ul>
+<li>Some naming changes to make it more intuitive for people not used to functional programming.
+Like <code dir="auto">when..is</code> instead of <code dir="auto">case..of</code> and <code dir="auto">keepIf</code> instead of <code dir="auto">filter</code>.</li>
+<li><a href="/book/syntax/custom_types/">Custom types</a> are limited to 0 or 1 arguments.
+This is to prepare for the move to <a href="https://github.com/gren-lang/compiler/issues/218">tagged values</a>.</li>
+<li>Support for more cross-platform browser and node APIs like <a href="https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Stream">web streams</a> and <a href="https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Crypto">web crypto</a>.</li>
+<li>No time traveling debugger.</li>
 </ul> </div> <footer class="astro-3yyafb3n"> <div class="meta sl-flex astro-3yyafb3n">   </div> <div class="pagination-links astro-u2l5gyhi" dir="ltr"> <a href="/book/appendix/gren_json/" rel="prev" class="astro-u2l5gyhi"> <svg aria-hidden="true" class="astro-u2l5gyhi astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;"><path d="M17 11H9.41l3.3-3.29a1.004 1.004 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33 1 1 0 0 0 0 .76 1 1 0 0 0 .21.33l5 5a1.002 1.002 0 0 0 1.639-.325 1 1 0 0 0-.219-1.095L9.41 13H17a1 1 0 0 0 0-2Z"/></svg>  <span class="astro-u2l5gyhi"> Previous <br class="astro-u2l5gyhi"> <span class="link-title astro-u2l5gyhi">gren.json</span> </span> </a>  </div>  </footer>  </div> </div>   </main> </div> </div>  </div> </div>  </body></html>
