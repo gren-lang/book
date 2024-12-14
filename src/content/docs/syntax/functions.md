@@ -52,3 +52,23 @@ secondsInYear =
 
 `|>` passes the value on the left as the last argument to the function on the right.
 For example `sumOf 1 2 |> multiply 3` is the same as `multiply 3 (sumOf 1 2)`.
+
+## Anonymous Functions
+
+You can create functions without giving them a name:
+
+```elm
+\first second -> first + second
+```
+
+This is helpful when functions take another function as an argument.
+[`Array.map`](https://packages.gren-lang.org/package/gren-lang/core/version/5.1.1/module/Array#map) for example:
+
+```elm
+[1, 2, 3]
+    |> Array.map (\i -> i + 1)
+    |> Array.map (\i -> i * 2)
+
+-- results in: [4, 6, 8]
+```
+
