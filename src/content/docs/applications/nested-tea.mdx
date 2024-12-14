@@ -55,7 +55,7 @@ type Page
 
 pageFromUrl : Url -> Page
 pageFromUrl url =
-    case url.path of
+    when url.path is
         "/" -> Home
         "/clicker" -> Clicker
         _ -> NotFound
@@ -80,11 +80,11 @@ type Msg
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         UrlRequested urlRequest ->
             { model = model
             , command =
-                case urlRequest of
+                when urlRequest is
                     Internal url ->
                         Nav.pushUrl model.navKey (Url.toString url)
 
@@ -105,7 +105,7 @@ update msg model =
 
 view : Model -> Document Msg
 view model =
-    case model.page of
+    when model.page is
         Home ->
             { title = "Home"
             , body = 
@@ -149,6 +149,7 @@ If we want to pull our `Clicker` page into its own module, it could look like th
 ```elm title="src/Pages/Clicker.gren" showLineNumbers=false
 module Pages.Clicker exposing (Model, Msg, init, update, view)
 
+import Browser exposing (Document)
 import Html exposing (Html)
 import Html.Attributes as Attribute
 import Html.Events as Event
@@ -165,12 +166,12 @@ init =
 
 
 type Msg
-    | ButtonClicked
+    = ButtonClicked
 
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         ButtonClicked ->
             { model = { model | clicked = True }
             , command = Cmd.none
@@ -196,7 +197,7 @@ view model =
 
 Then we'd update our `Main` module to delegate to that page's `init`, `update`, and `view`:
 
-```elm title="src/Main.gren" showLineNumbers=false del={26,32,41,51,60,83-86,117-130} add={9,33,42,61,87-102,131-132}
+```elm title="src/Main.gren" showLineNumbers=false del={26,32,41,51,60,83-86,117,121-129} add={9,33,42,61,87-102,118,130-131}
 module Main exposing (main)
 
 import Browser exposing (Document, UrlRequest(..))
@@ -235,7 +236,7 @@ type Page
 
 pageFromUrl : Url -> Page
 pageFromUrl url =
-    case url.path of
+    when url.path is
         "/" -> Home
         "/clicker" -> Clicker
         "/clicker" -> Clicker Pages.Clicker.init
@@ -262,11 +263,11 @@ type Msg
 
 update : Msg -> Model -> { model : Model, command : Cmd Msg }
 update msg model =
-    case msg of
+    when msg is
         UrlRequested urlRequest ->
             { model = model
             , command =
-                case urlRequest of
+                when urlRequest is
                     Internal url ->
                         Nav.pushUrl model.navKey (Url.toString url)
 
@@ -284,13 +285,13 @@ update msg model =
             , command = Cmd.none
             }
         ClickerMsg clickerMsg ->
-            case model.page of
+            when model.page is
                 Clicker clickerModel ->
                     let
-                        { model = clickerModel, command = clickerCmd } =
+                        { model = newClickerModel, command = clickerCmd } =
                             Pages.Clicker.update clickerMsg clickerModel
                     in
-                    { model = { model | page = Clicker clickerModel }
+                    { model = { model | page = Clicker newClickerModel }
                     , command = Cmd.map ClickerMsg clickerCmd
                     }
 
@@ -303,7 +304,7 @@ update msg model =
 
 view : Model -> Document Msg
 view model =
-    case model.page of
+    when model.page is
         Home ->
             { title = "Home"
             , body = 
@@ -314,6 +315,7 @@ view model =
             }
 
         Clicker ->
+        Clicker clickerModel ->
             { title = "Clicker"
             , body = 
                 [ Html.button
@@ -325,10 +327,10 @@ view model =
                             "Click me!"
                         )
                     ]
+                [ Pages.Clicker.view clickerModel
+                    |> Html.map ClickerMsg
                 ]
             }
-        Clicker clickerModel ->
-            Pages.Clicker.view clickerModel
 
         NotFound ->
             { title = "Not Found"

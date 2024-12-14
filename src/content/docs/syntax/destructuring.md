@@ -5,7 +5,7 @@ description: Destructuring in Gren
 
 Destructuring is a way to extract nested data from values.
 
-In the [pattern matching section](/book/syntax/pattern_matching/#patterns-with-data) you destructured a custom type with case/of:
+In the [pattern matching section](/book/syntax/pattern_matching/#patterns-with-data) you destructured a custom type with when/is:
 
 ```elm
 type User
@@ -13,7 +13,7 @@ type User
 
 welcome : User -> String
 welcome user =
-    case user of
+    when user is
         User name ->
             "Welcome, " ++ name
 ```
@@ -89,7 +89,7 @@ inStock item =
         myItem.name ++ " is out of stock"
 ```
 
-All of these techniques also work with function arguments and [case/of expressions](/book/pattern-matching).
+All of these techniques also work with function arguments and [when/is expressions](/book/pattern-matching).
 
 ## Destructuring Arrays
 
@@ -98,7 +98,7 @@ You can destructure arrays as well:
 ```elm
 run : Array String -> String
 run args =
-    case args of
+    when args is
         [] ->
            "No arguments provided."
             
@@ -120,7 +120,7 @@ let
     command = Array.takeFirst 1 myArray
     options = Array.dropFirst 1 myArray
 in
-case command of
+when command is
     [ "greet" ] ->
         greet options
     
