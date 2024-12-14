@@ -69,5 +69,5 @@ This is helpful when functions take another function as an argument:
     |> Array.map (\i -> i * 2)
 ```
 
-The first parameter of [`Array.map`](https://packages.gren-lang.org/package/gren-lang/core/version/5.1.1/module/Array#map) is a function that takes a value and returns a new value of the same type.
+The first parameter of [`Array.map`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Array#map) is a function that takes a value and returns a new value of the same type.
 We're creating those functions inline to build a [function pipeline](#function-pipelines) that results in `[4, 6, 8]`.
