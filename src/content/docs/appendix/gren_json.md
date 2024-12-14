@@ -20,14 +20,14 @@ The `gren.json` file should look something like the following:
     "source-directories": [
         "src"
     ],
-    "gren-version": "0.3.0",
+    "gren-version": "0.5.0",
     "dependencies": {
         "direct": {
-            "gren-lang/browser": "3.0.0",
-            "gren-lang/core": "4.0.0"
+            "gren-lang/browser": "5.0.0",
+            "gren-lang/core": "6.0.0"
         },
         "indirect": {
-            "gren-lang/url": "3.0.0"
+            "gren-lang/url": "5.0.0"
         }
     }
 }
@@ -47,19 +47,17 @@ The `gren.json` file for packages should look something like this:
 
 ```json
 {
-  "type": "package",
-  "platform": "common",
-  "name": "yarl/stuff",
-  "summary": "Yarl's reusable Gren code",
-  "license": "BSD-3-Clause",
-  "version": "1.0.0",
-  "gren-version": "0.3.0 <= v < 0.4.0",
-  "exposed-modules": {
-    "Primitives": ["ModuleOne", "ModuleTwo"]
-  },
-  "dependencies": {
-    "gren-lang/core": "3.0.0 <= v < 4.0.0"
-  }
+    "type": "package",
+    "platform": "common",
+    "name": "author/project",
+    "summary": "helpful summary of your project, less than 80 characters",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [],
+    "gren-version": "0.5.0 <= v < 0.6.0",
+    "dependencies": {
+        "gren-lang/core": "6.0.0 <= v < 7.0.0"
+    }
 }
 ```
 
