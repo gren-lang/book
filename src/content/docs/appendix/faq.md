@@ -40,5 +40,5 @@ As of Gren 0.5.0 there are some more differences:
   Like `when..is` instead of `case..of` and `keepIf` instead of `filter`.
 * [Custom types](/book/syntax/custom_types/) are limited to 0 or 1 arguments.
   This is to prepare for the move to [tagged values](https://github.com/gren-lang/compiler/issues/218).
-* Support for more cross-platform browser and node APIs like [web streams](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Stream) and [web crypto](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Crypto), among others.
+* Support for more cross-platform browser and node APIs like [web streams](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Stream) and [web crypto](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Crypto).
 * No time traveling debugger.
