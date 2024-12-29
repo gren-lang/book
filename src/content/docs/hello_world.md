@@ -42,7 +42,7 @@ main =
 
 We create a new module, called `Main` and expose the `main` constant from it.
 
-Then, we import the `Html` module. This module contains functions that allows us to define HTML elements. You can see everything that this module contains by reading its [documentation](https://packages.gren-lang.org/package/gren-lang/browser/version/2.0.0/module/Html).
+Then, we import the `Html` module. This module contains functions that allows us to define HTML elements. You can see everything that this module contains by reading its [documentation](https://packages.gren-lang.org/package/gren-lang/browser/version/latest/module/Html).
 
 In our case, we just want to display some text. The `text` function is perfect for that. Our main constant, then, contains the value returned by `Html.text "Hello, world!"`.
 
