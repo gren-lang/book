@@ -89,7 +89,7 @@ inStock item =
         myItem.name ++ " is out of stock"
 ```
 
-All of these techniques also work with function arguments and [when/is expressions](/book/pattern-matching).
+All of these techniques also work with function arguments and [when/is expressions](/book/syntax/pattern_matching/).
 
 ## Destructuring Arrays
 
