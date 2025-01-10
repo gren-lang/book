@@ -12,7 +12,9 @@ This page needs more detailed explanations and testing.
 
 Ports provide interop between javascript and your Gren program.
 
-To start using ports, you'll need a program defined with
+## Browser Ports
+
+To start using ports in the browser, you'll need a program defined with
 [`Browser.element`](/book/applications/browser/#browserelement),
 [`Browser.document`](/book/applications/browser/#browserdocument), or
 [`Browser.application`](/book/applications/browser/#browserapplication).
@@ -91,4 +93,39 @@ Create an html file that starts your program like this:
   </script>
 </body>
 </html>
+```
+
+## Node Ports
+
+To use ports in a node program, you'll need to define it with
+[`Node.defineProgram`](https://packages.gren-lang.org/package/gren-lang/node/version/latest/module/Node#defineProgram)
+like we did in the [webserver](/book/applications/node/#lets-make-a-web-server) section of the book.
+Then define and use your ports in Gren the same way as described in the [browser](#browser-ports) section above.
+
+Then compile it with an explicit output target:
+
+```sh
+gren make src/Main.js --output=main.js
+```
+
+Giving the target a `.js` extension tells the compiler that you want a module to be included in other javascript instead of a program that runs directly.
+That lets us wire up the ports in a new Javascript file that looks like this:
+
+```js title="index.js" showLineNumbers
+const main = require("./main.js");
+const app = main.Gren.Main.init({});
+
+// receiving data from gren:
+app.ports.toJs.subscribe(function(data) {
+  console.log(`Got data from Gren: ${data}`);
+});
+
+// sending data to gren:
+app.ports.fromJs.send("Hello from JS!");
+```
+
+Now you can run it with node:
+
+```sh
+node index.js
 ```
