@@ -108,7 +108,8 @@ Then compile it with an explicit output target:
 gren make src/Main.js --output=main.js
 ```
 
-And create a Javascript file that starts your program like this:
+Giving the target a `.js` extension tells the compiler that you want a module to be included in other javascript instead of a program that runs directly.
+That lets us wire up the ports in a new Javascript file that looks like this:
 
 ```js title="index.js" showLineNumbers
 const main = require("./main.js");
@@ -123,7 +124,7 @@ app.ports.toJs.subscribe(function(data) {
 app.ports.fromJs.send("Hello from JS!");
 ```
 
-And run it with node:
+Now you can run it with node:
 
 ```sh
 node index.js
