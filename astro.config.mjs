@@ -61,7 +61,7 @@ export default defineConfig({
             { label: 'Tasks', link: '/applications/tasks/' },
             { label: 'Subscriptions', link: '/applications/subscriptions/' },
             { label: 'Flags', link: '/applications/flags/' },
-            { label: 'Ports', link: '/applications/ports/' },
+            { label: 'Javascript Interop', link: '/applications/ports/' },
             { label: 'Nested TEA', link: '/applications/nested-tea/' },
           ],
         },
