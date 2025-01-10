@@ -32,7 +32,7 @@ port toJs : String -> Cmd msg
 port fromJs : (String -> msg) -> Sub msg
 ```
 
-Use commands to send outgoing messages:
+Use [commands](/book/applications/commands/) to send outgoing messages:
 
 ```elm title="src/Main.gren" showLineNumbers=false
 init : {} -> { model : Model, command : Cmd Msg }
@@ -42,7 +42,7 @@ init _ =
     }
 ```
 
-Use subscriptions to receive incoming messages:
+Use [subscriptions](/book/applications/subscriptions/) to receive incoming messages:
 
 ```elm title="src/Main.gren" showLineNumbers=false
 type Msg
