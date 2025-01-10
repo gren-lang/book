@@ -1,16 +1,12 @@
 ---
-title: Ports
+title: Javascript Interop
 description: Ports provide interop between javascript and your Gren program.
 ---
 
-import { Aside } from '@astrojs/starlight/components';
-
-<Aside type="caution">
-This page needs more detailed explanations and testing.
-[Reach out](https://gren-lang.org/community/) if you need help or want to contribute.
-</Aside>
-
-Ports provide interop between javascript and your Gren program.
+Javascript interaction happens through something called ports,
+which are boundaries that you define between your Gren program,
+where the compiler can guarantee [safety and correctness](/book/#correct),
+and Javascript, where it can't.
 
 ## Browser Ports
 
