@@ -27,4 +27,36 @@ flowchart LR
   runtime <--> external(External\nSystems)
 ``` 
 
+## Commands, Subscriptions, and Messages
+
+[Commands](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Cmd)
+are values representing an effect you want to perform.
+You can think of an effect as something that doesn't conform to the three properties of Gren code described above:
+- It could fail (like reading from local storage or making an HTTP call)
+- It could change something (like writing to the file system or updating a database)
+- It won't _always_ return the same value for the same input (like reading a file or querying a database)
+
+[Subscriptions](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Sub)
+are values that let you tell the Gren runtime that you want to be notified when something happens.
+Like requests to a web server, or a window being resized.
+
+Messages are values the runtime can send back to your application depending on the results of a command, or events on a subscription.
+
+## Interacting with the Gren Runtime
+
+[The Elm Architecture](/book/applications/tea) provides three points for interaction with the Gren runtime:
+
+
+```mermaid
+flowchart LR
+  init -- commands --> runtime(The Gren\nRuntime)
+  update -- commands --> runtime
+  runtime -- messages --> update
+  subscriptions -- subscriptions --> runtime
+```
+
+- Your `init` function initializes your model when the application starts, but it can also send a command to the runtime if you need an effect right at the start.
+- Your `update` function is the only place you will receive messages from the Gren runtime. In addition to updating the model, you can also kick off new commands in response to the messages you receive.
+- Your `subscriptions` lets you tell the runtime about certainjevents you want to receive messages about.
+  
 In the next sections you will see what this looks like in practice.

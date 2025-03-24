@@ -53,8 +53,8 @@ export default defineConfig({
         {
           label: 'Applications',
           items: [
-            { label: 'The Gren Runtime', link: '/applications/runtime/' },
             { label: 'The Elm Architecture', link: '/applications/tea/' },
+            { label: 'The Gren Runtime', link: '/applications/runtime/' },
             { label: 'Browser Applications', link: '/applications/browser/' },
             { label: 'Node Applications', link: '/applications/node/' },
             { label: 'Commands', link: '/applications/commands/' },
