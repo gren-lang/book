@@ -30,7 +30,7 @@ flowchart LR
 ## Commands, Subscriptions, and Messages
 
 [Commands](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Cmd)
-are values representing an effect you want to perform.
+are values representing an _effect_ you want to perform.
 You can think of an effect as something that doesn't conform to the three properties of Gren code described above:
 - It could fail (like reading from local storage or making an HTTP call)
 - It could change something (like writing to the file system or updating a database)
