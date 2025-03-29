@@ -34,7 +34,7 @@ are values representing an _effect_ you want to perform.
 You can think of an effect as something that doesn't conform to the three properties of Gren code described above:
 - It could fail (like reading from local storage or making an HTTP call)
 - It could change something (like writing to the file system or updating a database)
-- It won't _always_ result in the same value (like reading a file or querying a database)
+- It won't _always_ result in the same value (like reading a file or querying a database), or it might not result in any value at all!
 
 [Subscriptions](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Platform.Sub)
 are values that let you tell the Gren runtime that you want to be notified when something happens.
