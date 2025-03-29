@@ -57,6 +57,6 @@ flowchart LR
 
 - Your `init` function initializes your model when the application starts, but it can also send a command to the runtime if you need an effect right at the start.
 - Your `update` function is the only place you will receive messages from the Gren runtime. In addition to updating the model, you can also kick off new commands in response to the messages you receive.
-- Your `subscriptions` lets you tell the runtime about certainjevents you want to receive messages about.
+- Your `subscriptions` function lets you tell the runtime about certain events you want to receive messages about.
   
 In the next sections you will see what this looks like in practice.
