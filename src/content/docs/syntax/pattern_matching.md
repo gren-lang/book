@@ -88,4 +88,4 @@ holdingSword =
     explainHeldItem (Just "Sword")
 ```
 
-Extracting nested data like this is called [desctructuring](/book/syntax/destructuring).
+Extracting nested data like this is called [destructuring](/book/syntax/destructuring).
