@@ -3,6 +3,8 @@ title: Browser Applications
 description: Writing browser applications in Gren.
 ---
 
+import { Aside } from '@astrojs/starlight/components';
+
 Gren has a few different ways you can write browser applications.
 We'll go over each one here, starting with the simplest: sandboxes.
 
@@ -88,12 +90,16 @@ First, save the above code in `src/Main.gren`.
 Then compile and open the resulting html file:
 
 ```sh
-gren make src/Main.gren
+gren make Main
 open index.html
 ```
 
 Try clicking the buttons and you should see the number increase and decrease.
 In the following sections we'll go over each part of the program to see how it works.
+
+<Aside>
+You can also compile and run your application in a single step with `gren run Main`.
+</Aside>
 
 ### Module definition
 
@@ -594,7 +600,7 @@ gren package install gren-lang/url
 Then we'll compile this program just like the others:
 
 ```sh
-gren make src/Main.gren
+gren make Main
 ```
 
 Next, we need a real HTTP server.
