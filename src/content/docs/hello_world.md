@@ -48,7 +48,7 @@ In our case, we just want to display some text. The `text` function is perfect f
 
 When this Gren program is run in a browser, whatever is returned by the `main` function is displayed on the page.
 
-Compile your program using `gren make src/Main.gren`. This will produce a `index.html` file in your working directory which, when opened, displays `Hello, world!`.
+Compile your program using `gren make Main`. This will produce a `index.html` file in your working directory which, when opened, displays `Hello, world!`.
 
 You can now experiment by returning different HTML values from main. Compile and refresh the page to see what happens.
 
