@@ -1,4 +1,4 @@
-docs: node_modules
+docs: node_modules $(shell find src -name "*.md*")
 	npm run build
 	touch -m docs
 
