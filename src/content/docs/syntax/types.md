@@ -32,6 +32,53 @@ For functions it get's a little bit more complicated. `->` can be read as `to`. 
 
 When reading the type signature of a function, the last `->` points to the return value of the function, while the types before represent the inputs.
 
+While Gren is good at inferring the types for your functions, it's often helpful to put an explicit type declaration on your function. This can serve as documentation as well as helping the compiler give you better error messages.
+
+## Function Types and Partial Application
+
+You may notice that the `->` symbol between function arguments is the same as the symbol before the return type. This is not a coincidence. As covered in the [functions](/book/syntax/functions/#partial-application) section, functions in Gren take their arguments one at a time, which is called curried form.
+
+Type signatures reveal what's really going on. A function like `multiply : Int -> Int -> Int` is actually `multiply : Int -> (Int -> Int)` - a function that takes an `Int` and returns a function of type `Int -> Int`. The first argument has been applied, but not the second so you have a partially applied function.
+
+```elm
+multiply : Int -> (Int -> Int)
+multiply   60
+
+result :           Int -> Int
+                   24
+
+result :                  Int
+                          1440
+```
+
+One place where this might cause confusion is when you accidentally forget an argument. Consider a function like this:
+
+```elm
+validateUser : User -> Email -> DateTime -> Flags -> Status
+```
+
+With that many arguments, you might easily forget one:
+
+```elm
+userStatus = validateUser user currentEmail now
+```
+
+`userStatus` is not a value of type `Status` - it is a function of type `Flags -> Status`. It can be confusing when you go to compare `userStatus` with a `Status` like this `if userStatus == LoggedIn then` and get an error:
+
+```
+TYPE MISMATCH - I need both sides of (==) to be the same type:
+
+1| if userStatus == LoggedIn then
+      #^^^^^^^^^^^^^^^^^^^^#
+The left side of (==) is:
+    #Flags -> Status#
+
+But the right side is:
+    Status
+```
+
+Fortunately Gren's error messages are descriptive so you can work out what has gone wrong.
+
 ## Type Aliases
 
 ```elm
