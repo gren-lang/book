@@ -63,7 +63,10 @@ With that many arguments, you might easily forget one:
 userStatus = validateUser user currentEmail now
 ```
 
-`userStatus` is not a value of type `Status` - it is a function of type `Flags -> Status`. It can be confusing when you go to compare `userStatus` with a `Status` like this `if userStatus == LoggedIn then` and get an error:
+We forgot to pass the `Flags` value, so `userStatus` is not a value of type `Status` - it is a function of type `Flags -> Status`.
+This can be confusing when you go to compare `userStatus` with a `Status` like this `if userStatus == LoggedIn then` and get an error:
+
+Fortunately thanks to Gren's error messages and type safety, we can work out what has gone wrong:
 
 ```
 TYPE MISMATCH - I need both sides of (==) to be the same type:
@@ -77,7 +80,8 @@ But the right side is:
     Status
 ```
 
-Fortunately Gren's error messages are descriptive so you can work out what has gone wrong.
+You can see we are comparing two values that we thought were both `Status`, but one of them is actually a function that returns a `Status`.
+It may seem confusing at first, but you quickly get used to error messages like this and what they mean.
 
 ## Type Aliases
 
