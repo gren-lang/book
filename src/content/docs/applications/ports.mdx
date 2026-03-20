@@ -23,14 +23,17 @@ port module Main exposing (main)
 ```
 
 Define your incoming and outgoing ports.
-Here we're using `String` as the data exchange format, but you may want to use JSON for more power and control.
-See [`Json.Decode`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Json.Decode)
-and [`Json.Encode`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Json.Encode).
 
 ```elm title="src/Main.gren" showLineNumbers=false
 port toJs : String -> Cmd msg
 port fromJs : (String -> msg) -> Sub msg
 ```
+
+Here we're using `String` as the data exchange format, but you can also choose `Bytes` or any value that has
+a direct mapping to JSON. For maximum flexibility, you can use `Json.Value` and define your own JSON encoders
+and decoder.
+See [`Json.Decode`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Json.Decode)
+and [`Json.Encode`](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Json.Encode).
 
 Use [commands](/book/applications/commands/) to send outgoing messages:
 
@@ -125,3 +128,81 @@ Now you can run it with node:
 ```sh
 node index.js
 ```
+
+## Task ports
+
+Commands and subscriptions are useful for one-way communication, but can be a little finicky when you
+want to request some data from JavaSciprt. Since the 0.6.0 version of the compiler, you have one more
+option for JavaScript interop: Task ports.
+
+Task ports allow you to call a async JavaScript function as if it were a Gren `Task`.
+
+You start by defining the `port`:
+
+```elm title="src/Main.gren" showLineNumbers=false
+port jsIntToString : Int -> Task Json.Value String
+```
+
+This creates a function that takes an `Int` and returns a `Task`. If the `Task` fails, we'll have a
+`Json.Value` describing the error. This could be anything, like a JavaScript `Error` object. If the
+`Task` succeeds, on the other hand, then we know that we have a `String`.
+
+A full nodejs example might look like:
+
+```elm
+port module Main exposing (main)
+
+import Init
+import Node exposing (Environment)
+import Stream.Log
+import Task exposing (Task)
+import Json.Decode as Json
+
+
+main : Node.SimpleProgram a
+main =
+    Node.defineSimpleProgram init
+
+
+port jsIntToString : Int -> Task Json.Value String
+
+
+init : Environment -> Init.Task (Cmd a)
+init env =
+    jsIntToString 42
+        |> Task.andThen (Stream.Log.line env.stdout)
+        |> Task.onError (\err -> Stream.Log.line env.stdout (Debug.toString err))
+        |> Node.endSimpleProgram
+```
+
+We'll need to compile it with an explicit output target:
+
+```sh
+gren make Main --output=main.js
+```
+
+Then we need to wire up the port in a new Javascript file:
+
+```js title="index.js" showLineNumbers
+const main = require("./main.js");
+
+const app = main.Gren.Main.init({
+  taskPorts: {
+    jsIntToString: async function(int) {
+      if (int === 42) {
+        return "What was the question?";
+      } else {
+        return int + "";
+      }
+    }
+  }
+});
+```
+
+Now you can run it with node:
+
+```sh
+node index.js
+```
+
+For bonus points, try to throw an exception in the JavaScript port definition and see what happens.
