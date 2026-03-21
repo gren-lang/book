@@ -45,4 +45,4 @@ And create an html file that starts your program like this:
 In this example, the current date will be passed as the first parameter to your program's [`init`](/book/applications/browser/#init) function.
 
 Anything that can be trivially mapped to JSON can be used as flags. Since the 0.6.4 version of the Gren compiler,
-you can also use `DataView` as flags. This will be converted into `Bytes` in Gren.
+you can also pass in [DataView](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView) as flags. This will be received as `Bytes` on the Gren end.
