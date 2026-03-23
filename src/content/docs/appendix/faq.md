@@ -34,7 +34,7 @@ As of Gren 0.3.0, the main differences is that Gren has:
 * No reactor.
 * Sourcemap support for native integration with the JS debugger.
 
-As of Gren 0.5.0 there are some more differences:
+As of Gren 0.5.0:
 
 * Some naming changes to make it more intuitive for people not used to functional programming.
   Like `when..is` instead of `case..of` and `keepIf` instead of `filter`.
@@ -42,3 +42,9 @@ As of Gren 0.5.0 there are some more differences:
   This is to prepare for the move to [tagged values](https://github.com/gren-lang/compiler/issues/218).
 * Support for more cross-platform browser and node APIs like [web streams](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Stream) and [web crypto](https://packages.gren-lang.org/package/gren-lang/core/version/latest/module/Crypto).
 * No time traveling debugger.
+
+As of Gren 0.6.4:
+
+* You can now define ports that return `Task`, in addition to `Cmd` and `Sub`.
+* `Bytes` is now a valid type for flags and ports.
+* Dependencies are stored in a `gren_packages` folder, and can be checked in to git for zero-install packaging.
