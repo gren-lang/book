@@ -17,6 +17,8 @@ pkgs.buildNpmPackage {
   src = ./.;
   npmDepsHash = "sha256-nES18Rz2hKqc5FRRrN3TaG7jNHsF1OaSayyABCTk9bM=";
 
+  ASTRO_TELEMETRY_DISABLED=1;
+
   buildInputs = [
     pkgs.playwright
   ];

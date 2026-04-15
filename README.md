@@ -6,10 +6,13 @@ Built with [Starlight](https://starlight.astro.build).
 
 ## Development
 
-Install [nodejs](https://nodejs.org/) or start a [devbox](https://www.jetify.com/devbox) shell. Then:
+We use [nix](https://nixos.org) for managing our dependencies. You can either install project dependencies
+with `nix-shell` or by using `direnv`.
+
+With `node` and `npm` installed through `nix`, you now want to install the `npm` dependencies.
 
 ```
-npm install
+npm ci
 ```
 
 For local development, start the dev server with:
@@ -31,5 +34,3 @@ To preview the production build locally, after running the build:
 ```
 npm run preview
 ```
-
-Commit the changes to automatically update via github pages.
