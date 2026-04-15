@@ -17,11 +17,11 @@ export default defineConfig({
           pluginLineNumbers()
         ],
       },
-      social: {
-        github: 'https://github.com/gren-lang/book',
-        mastodon: 'https://fosstodon.org/@gren_lang',
-        discord: 'https://discord.gg/Chb9YB9Vmh',
-      },
+      social: [
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/gren-lang/book' },
+        { icon: 'mastodon', label: 'Mastodon', href: 'https://fosstodon.org/@gren_lang' },
+        { icon: 'discord', label: 'Discord', href: 'https://discord.gg/Chb9YB9Vmh' },
+      ],
       sidebar: [
         {
           label: 'Introduction',
