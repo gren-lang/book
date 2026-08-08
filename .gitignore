@@ -1,5 +1,6 @@
 .astro
 .DS_Store
 .envrc
+.direnv
 node_modules/
 docs/

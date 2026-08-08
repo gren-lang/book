@@ -6,6 +6,10 @@ in
 pkgs.mkShellNoCC {
   inputsFrom = [ build ];
 
+  packages = with pkgs; [
+    npins
+  ];
+
   shellHook = ''
     echo "Node version: ''$(node --version)"
   '';

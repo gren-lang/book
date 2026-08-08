@@ -15,7 +15,7 @@ pkgs.buildNpmPackage {
   };
 
   src = ./.;
-  npmDepsHash = "sha256-nES18Rz2hKqc5FRRrN3TaG7jNHsF1OaSayyABCTk9bM=";
+  npmDepsHash = "sha256-eN1p0XDkRLBKdkiUFDa5y2zhXw2Y7peC74EKtiH4U8I=";
 
   ASTRO_TELEMETRY_DISABLED=1;
 
