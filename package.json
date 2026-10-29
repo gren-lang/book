@@ -11,7 +11,7 @@
     "@astrojs/check": "^0.9.8",
     "@astrojs/starlight": "^0.38.3",
     "@expressive-code/plugin-line-numbers": "^0.41.7",
-    "playwright": "^1.59.1",
+    "playwright": "1.59.1",
     "rehype-mermaid": "^3.0.0",
     "sharp": "^0.34.5"
   }

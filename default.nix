@@ -14,14 +14,13 @@ pkgs.buildNpmPackage {
     license = pkgs.lib.licenses.bsd3;
   };
 
+  __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
+
   src = ./.;
-  npmDepsHash = "sha256-eN1p0XDkRLBKdkiUFDa5y2zhXw2Y7peC74EKtiH4U8I=";
+  npmDepsHash = "sha256-0RK6sWnOf0epAKyulooVN/K0wshGYvk2ttbzp9mSPr4=";
 
   ASTRO_TELEMETRY_DISABLED=1;
-
-  buildInputs = [
-    pkgs.playwright
-  ];
 
   installPhase = ''
     cp -r "$src/docs/" $out
